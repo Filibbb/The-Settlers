@@ -1,13 +1,13 @@
 package ch.zhaw.catan.games;
 
-import ch.zhaw.catan.Config;
-import ch.zhaw.catan.Config.Resource;
-import ch.zhaw.catan.Tuple;
-import ch.zhaw.catan.SiedlerGame;
+import ch.zhaw.catan.*;
+import ch.zhaw.catan.board.Resource;
+import ch.zhaw.catan.player.Faction;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -81,96 +81,96 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ThreePlayerStandard {
     public final static int NUMBER_OF_PLAYERS = 3;
 
-    public static final Map<Config.Faction, Tuple<Point, Point>> INITIAL_SETTLEMENT_POSITIONS =
-            Map.of( Config.Faction.values()[0], new Tuple<>(new Point(5, 7), new Point(10, 16)),
-                    Config.Faction.values()[1], new Tuple<>(new Point(11, 13), new Point(8, 4)),
-                    Config.Faction.values()[2], new Tuple<>(new Point(2, 12), new Point(7, 19)));
+    public static final Map<Faction, Tuple<Point, Point>> INITIAL_SETTLEMENT_POSITIONS =
+            Map.of(Faction.values()[0], new Tuple<>(new Point(5, 7), new Point(10, 16)),
+                    Faction.values()[1], new Tuple<>(new Point(11, 13), new Point(8, 4)),
+                    Faction.values()[2], new Tuple<>(new Point(2, 12), new Point(7, 19)));
 
-    public static final Map<Config.Faction, Tuple<Point, Point>> INITIAL_ROAD_ENDPOINTS = Map.of(Config.Faction.values()[0],
-            new Tuple<>(new Point(6, 6), new Point(9, 15)), Config.Faction.values()[1],
-            new Tuple<>(new Point(12, 12), new Point(8, 6)), Config.Faction.values()[2],
+    public static final Map<Faction, Tuple<Point, Point>> INITIAL_ROAD_ENDPOINTS = Map.of(Faction.values()[0],
+            new Tuple<>(new Point(6, 6), new Point(9, 15)), Faction.values()[1],
+            new Tuple<>(new Point(12, 12), new Point(8, 6)), Faction.values()[2],
             new Tuple<>(new Point(2, 10), new Point(8, 18)));
 
-    public static final Map<Config.Faction, Map<Config.Resource, Integer>> INITIAL_PLAYER_CARD_STOCK = Map.of(
-            Config.Faction.values()[0], Map.of(Config.Resource.GRAIN, 0, Config.Resource.WOOL, 1,
-                    Config.Resource.BRICK, 1, Config.Resource.ORE, 0, Config.Resource.LUMBER, 0),
-            Config.Faction.values()[1],
-            Map.of(Config.Resource.GRAIN, 0, Config.Resource.WOOL, 2, Config.Resource.BRICK, 0,
-                    Config.Resource.ORE, 0, Config.Resource.LUMBER, 0),
-            Config.Faction.values()[2],
-            Map.of(Config.Resource.GRAIN, 0, Config.Resource.WOOL, 0, Config.Resource.BRICK, 1,
-                    Config.Resource.ORE, 0, Config.Resource.LUMBER, 0));
+    public static final Map<Faction, Map<Resource, Integer>> INITIAL_PLAYER_CARD_STOCK = Map.of(
+            Faction.values()[0], Map.of(Resource.GRAIN, 0, Resource.WOOL, 1,
+                    Resource.BRICK, 1, Resource.ORE, 0, Resource.LUMBER, 0),
+            Faction.values()[1],
+            Map.of(Resource.GRAIN, 0, Resource.WOOL, 2, Resource.BRICK, 0,
+                    Resource.ORE, 0, Resource.LUMBER, 0),
+            Faction.values()[2],
+            Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
+                    Resource.ORE, 0, Resource.LUMBER, 0));
 
-    public static final Map<Config.Faction, Map<Config.Resource, Integer>> BANK_ALMOST_EMPTY_RESOURCE_CARD_STOCK = Map.of(
-            Config.Faction.values()[0], Map.of(Config.Resource.GRAIN, 8, Config.Resource.WOOL, 9,
-                    Config.Resource.BRICK, 9, Config.Resource.ORE, 7, Config.Resource.LUMBER, 9),
-            Config.Faction.values()[1],
-            Map.of(Config.Resource.GRAIN, 8, Config.Resource.WOOL, 10, Config.Resource.BRICK, 0,
-                    Config.Resource.ORE, 0, Config.Resource.LUMBER, 0),
-            Config.Faction.values()[2],
-            Map.of(Config.Resource.GRAIN, 0, Config.Resource.WOOL, 0, Config.Resource.BRICK, 8,
-                    Config.Resource.ORE, 0, Config.Resource.LUMBER, 9));
+    public static final Map<Faction, Map<Resource, Integer>> BANK_ALMOST_EMPTY_RESOURCE_CARD_STOCK = Map.of(
+            Faction.values()[0], Map.of(Resource.GRAIN, 8, Resource.WOOL, 9,
+                    Resource.BRICK, 9, Resource.ORE, 7, Resource.LUMBER, 9),
+            Faction.values()[1],
+            Map.of(Resource.GRAIN, 8, Resource.WOOL, 10, Resource.BRICK, 0,
+                    Resource.ORE, 0, Resource.LUMBER, 0),
+            Faction.values()[2],
+            Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 8,
+                    Resource.ORE, 0, Resource.LUMBER, 9));
 
-    public static final Map<Config.Faction, Map<Config.Resource, Integer>> PLAYER_ONE_READY_TO_BUILD_FIFTH_SETTLEMENT_RESOURCE_CARD_STOCK = Map.of(
-            Config.Faction.values()[0], Map.of(Config.Resource.GRAIN, 2, Config.Resource.WOOL, 2,
-                    Config.Resource.BRICK, 3, Config.Resource.ORE, 0, Config.Resource.LUMBER, 3),
-            Config.Faction.values()[1],
-            Map.of(Config.Resource.GRAIN, 0, Config.Resource.WOOL, 5, Config.Resource.BRICK, 0,
-                    Config.Resource.ORE, 0, Config.Resource.LUMBER, 0),
-            Config.Faction.values()[2],
-            Map.of(Config.Resource.GRAIN, 0, Config.Resource.WOOL, 0, Config.Resource.BRICK, 1,
-                    Config.Resource.ORE, 0, Config.Resource.LUMBER, 0));
+    public static final Map<Faction, Map<Resource, Integer>> PLAYER_ONE_READY_TO_BUILD_FIFTH_SETTLEMENT_RESOURCE_CARD_STOCK = Map.of(
+            Faction.values()[0], Map.of(Resource.GRAIN, 2, Resource.WOOL, 2,
+                    Resource.BRICK, 3, Resource.ORE, 0, Resource.LUMBER, 3),
+            Faction.values()[1],
+            Map.of(Resource.GRAIN, 0, Resource.WOOL, 5, Resource.BRICK, 0,
+                    Resource.ORE, 0, Resource.LUMBER, 0),
+            Faction.values()[2],
+            Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
+                    Resource.ORE, 0, Resource.LUMBER, 0));
 
-    public static final Map<Integer, Map<Config.Faction, List<Resource>>> INITIAL_DICE_THROW_PAYOUT = Map.of(
+    public static final Map<Integer, Map<Faction, List<Resource>>> INITIAL_DICE_THROW_PAYOUT = Map.of(
             2, Map.of(
-                    Config.Faction.values()[0], List.of(Resource.GRAIN),
-                    Config.Faction.values()[1], List.of(),
-                    Config.Faction.values()[2], List.of()),
+                    Faction.values()[0], List.of(Resource.GRAIN),
+                    Faction.values()[1], List.of(),
+                    Faction.values()[2], List.of()),
             3, Map.of(
-                    Config.Faction.values()[0], List.of(),
-                    Config.Faction.values()[1], List.of(Resource.WOOL),
-                    Config.Faction.values()[2], List.of()),
+                    Faction.values()[0], List.of(),
+                    Faction.values()[1], List.of(Resource.WOOL),
+                    Faction.values()[2], List.of()),
             4, Map.of(
-                    Config.Faction.values()[0], List.of(Resource.ORE),
-                    Config.Faction.values()[1], List.of(),
-                    Config.Faction.values()[2], List.of(Resource.BRICK)),
+                    Faction.values()[0], List.of(Resource.ORE),
+                    Faction.values()[1], List.of(),
+                    Faction.values()[2], List.of(Resource.BRICK)),
             5, Map.of(
-                    Config.Faction.values()[0], List.of(),
-                    Config.Faction.values()[1], List.of(),
-                    Config.Faction.values()[2], List.of(Resource.LUMBER)),
+                    Faction.values()[0], List.of(),
+                    Faction.values()[1], List.of(),
+                    Faction.values()[2], List.of(Resource.LUMBER)),
             6, Map.of(
-                    Config.Faction.values()[0], List.of(Resource.LUMBER),
-                    Config.Faction.values()[1], List.of(),
-                    Config.Faction.values()[2], List.of()),
+                    Faction.values()[0], List.of(Resource.LUMBER),
+                    Faction.values()[1], List.of(),
+                    Faction.values()[2], List.of()),
             8, Map.of(
-                    Config.Faction.values()[0], List.of(),
-                    Config.Faction.values()[1], List.of(Resource.WOOL),
-                    Config.Faction.values()[2], List.of()),
+                    Faction.values()[0], List.of(),
+                    Faction.values()[1], List.of(Resource.WOOL),
+                    Faction.values()[2], List.of()),
             9, Map.of(
-                    Config.Faction.values()[0], List.of(),
-                    Config.Faction.values()[1], List.of(Resource.GRAIN),
-                    Config.Faction.values()[2], List.of()),
+                    Faction.values()[0], List.of(),
+                    Faction.values()[1], List.of(Resource.GRAIN),
+                    Faction.values()[2], List.of()),
             10, Map.of(
-                    Config.Faction.values()[0], List.of(),
-                    Config.Faction.values()[1], List.of(),
-                    Config.Faction.values()[2], List.of()),
+                    Faction.values()[0], List.of(),
+                    Faction.values()[1], List.of(),
+                    Faction.values()[2], List.of()),
             11, Map.of(
-                    Config.Faction.values()[0], List.of(Resource.BRICK),
-                    Config.Faction.values()[1], List.of(),
-                    Config.Faction.values()[2], List.of()),
+                    Faction.values()[0], List.of(Resource.BRICK),
+                    Faction.values()[1], List.of(),
+                    Faction.values()[2], List.of()),
             12, Map.of(
-                    Config.Faction.values()[0], List.of(Resource.WOOL),
-                    Config.Faction.values()[1], List.of(Resource.WOOL),
-                    Config.Faction.values()[2], List.of()));
+                    Faction.values()[0], List.of(Resource.WOOL),
+                    Faction.values()[1], List.of(Resource.WOOL),
+                    Faction.values()[2], List.of()));
 
     public static final Map<Resource, Integer> RESOURCE_CARDS_IN_BANK_AFTER_STARTUP_PHASE = Map.of(Resource.LUMBER, 19,
             Resource.BRICK, 17, Resource.WOOL, 16, Resource.GRAIN, 19, Resource.ORE, 19);
 
     public static final Point PLAYER_ONE_READY_TO_BUILD_FIFTH_SETTLEMENT_FIFTH_SETTLEMENT_POSITION = new Point(9, 13);
     public static final List<Point> playerOneReadyToBuildFifthSettlementAllSettlementPositions =
-            List.of(INITIAL_SETTLEMENT_POSITIONS.get(Config.Faction.values()[0]).first,
-                    INITIAL_SETTLEMENT_POSITIONS.get(Config.Faction.values()[0]).second,
-                    new Point(7, 7),new Point(6, 4), PLAYER_ONE_READY_TO_BUILD_FIFTH_SETTLEMENT_FIFTH_SETTLEMENT_POSITION);
+            List.of(INITIAL_SETTLEMENT_POSITIONS.get(Faction.values()[0]).first,
+                    INITIAL_SETTLEMENT_POSITIONS.get(Faction.values()[0]).second,
+                    new Point(7, 7), new Point(6, 4), PLAYER_ONE_READY_TO_BUILD_FIFTH_SETTLEMENT_FIFTH_SETTLEMENT_POSITION);
 
     /**
      * Returns a siedler game after the setup phase in the setup
@@ -183,14 +183,14 @@ public class ThreePlayerStandard {
     public static SiedlerGame getAfterSetupPhase(int winpoints) {
         SiedlerGame model = new SiedlerGame(winpoints, NUMBER_OF_PLAYERS);
         for (int i = 0; i < model.getPlayerFactions().size(); i++) {
-            Config.Faction f = model.getCurrentPlayerFaction();
+            Faction f = model.getCurrentPlayerFaction();
             assertTrue(model.placeInitialSettlement(INITIAL_SETTLEMENT_POSITIONS.get(f).first, false));
             assertTrue(model.placeInitialRoad(INITIAL_SETTLEMENT_POSITIONS.get(f).first, INITIAL_ROAD_ENDPOINTS.get(f).first));
             model.switchToNextPlayer();
         }
         for (int i = 0; i < model.getPlayerFactions().size(); i++) {
             model.switchToPreviousPlayer();
-            Config.Faction f = model.getCurrentPlayerFaction();
+            Faction f = model.getCurrentPlayerFaction();
             assertTrue(model.placeInitialSettlement(INITIAL_SETTLEMENT_POSITIONS.get(f).second, true));
             assertTrue(model.placeInitialRoad(INITIAL_SETTLEMENT_POSITIONS.get(f).second, INITIAL_ROAD_ENDPOINTS.get(f).second));
         }
@@ -200,7 +200,7 @@ public class ThreePlayerStandard {
     /**
      * Returns a siedler game after the setup phase in the setup
      * described in {@link ThreePlayerStandard} and with the bank almost empty.
-     *
+     * <p>
      * The following resource cards should be in the stock of the bank:
      * <ul>
      * <li>LUMBER: 1</li>
@@ -209,7 +209,7 @@ public class ThreePlayerStandard {
      * <li>ORE: 13</li>
      * <li>WOOL: 0</li>
      * </ul>
-     *
+     * <p>
      * The stocks of the players should contain:
      * <br>
      * Player 1:
@@ -341,15 +341,15 @@ public class ThreePlayerStandard {
 
         model.switchToNextPlayer();
         model.switchToNextPlayer();
-        model.buildRoad(new Point(2,12), new Point(3,13));
-        buildRoad(model, List.of(new Point(2,10), new Point(3,9), new Point(3,7)));
-        model.buildRoad(new Point(8,18), new Point(8,16));
-        buildRoad(model, List.of(new Point(7,19), new Point(6,18), new Point(6,16)));
+        model.buildRoad(new Point(2, 12), new Point(3, 13));
+        buildRoad(model, List.of(new Point(2, 10), new Point(3, 9), new Point(3, 7)));
+        model.buildRoad(new Point(8, 18), new Point(8, 16));
+        buildRoad(model, List.of(new Point(7, 19), new Point(6, 18), new Point(6, 16)));
         model.switchToNextPlayer();
-        model.buildRoad(new Point(10,16), new Point(11,15));
-        model.buildRoad(new Point(10,16), new Point(10,18));
-        buildRoad(model, List.of(new Point(9,15), new Point(9,13), new Point(10,12)));
-        buildRoad(model, List.of(new Point(5,7), new Point(5,9), new Point(4,10), new Point(3, 9)));
+        model.buildRoad(new Point(10, 16), new Point(11, 15));
+        model.buildRoad(new Point(10, 16), new Point(10, 18));
+        buildRoad(model, List.of(new Point(9, 15), new Point(9, 13), new Point(10, 12)));
+        buildRoad(model, List.of(new Point(5, 7), new Point(5, 9), new Point(4, 10), new Point(3, 9)));
 
         throwDiceMultipleTimes(model, 6, 6);
         throwDiceMultipleTimes(model, 11, 6);
@@ -367,9 +367,8 @@ public class ThreePlayerStandard {
     }
 
 
-
     private static SiedlerGame throwDiceMultipleTimes(SiedlerGame model, int diceValue, int numberOfTimes) {
-        for(int i=0; i<numberOfTimes; i++) {
+        for (int i = 0; i < numberOfTimes; i++) {
             model.throwDice(diceValue);
         }
         return model;
@@ -379,8 +378,8 @@ public class ThreePlayerStandard {
      * Returns a siedler game after building four additional roads and two
      * settlements after the setup phase with the resource cards and roads
      * for player one ready to build a fifth settlement at {@link #PLAYER_ONE_READY_TO_BUILD_FIFTH_SETTLEMENT_FIFTH_SETTLEMENT_POSITION}
-     *<p></p>
-     *<p>The game board should look as follows:
+     * <p></p>
+     * <p>The game board should look as follows:
      * <pre>
      *                                 (  )            (  )            (  )            (  )
      *                              //      \\      //      \\      //      \\      //      \\
@@ -460,20 +459,21 @@ public class ThreePlayerStandard {
         throwDiceMultipleTimes(model, 11, 7);
         throwDiceMultipleTimes(model, 2, 4);
         throwDiceMultipleTimes(model, 12, 3);
-        model.buildRoad(new Point(6,6), new Point(7,7));
-        model.buildRoad(new Point(6,6), new Point(6,4));
-        model.buildRoad(new Point(9,15), new Point(9,13));
+        model.buildRoad(new Point(6, 6), new Point(7, 7));
+        model.buildRoad(new Point(6, 6), new Point(6, 4));
+        model.buildRoad(new Point(9, 15), new Point(9, 13));
         model.buildSettlement(playerOneReadyToBuildFifthSettlementAllSettlementPositions.get(2));
         model.buildSettlement(playerOneReadyToBuildFifthSettlementAllSettlementPositions.get(3));
         return model;
     }
+
     private static void buildSettlement(SiedlerGame model, Point position, List<Point> roads) {
         buildRoad(model, roads);
         assertTrue(model.buildSettlement(position));
     }
 
     private static void buildRoad(SiedlerGame model, List<Point> roads) {
-        for (int i = 0; i < roads.size()-1; i++) {
+        for (int i = 0; i < roads.size() - 1; i++) {
             assertTrue(model.buildRoad(roads.get(i), roads.get(i + 1)));
         }
     }
