@@ -1,8 +1,12 @@
 package ch.zhaw.catan;
 
+import ch.zhaw.catan.board.GameBoard;
+import ch.zhaw.catan.board.Land;
+import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.games.ThreePlayerStandard;
 
 
+import ch.zhaw.catan.player.Faction;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -59,10 +63,10 @@ public class SiedlerGameTestBasic {
     @Test
     public void requirementLandPlacementTest() {
         SiedlerGame model = new SiedlerGame(DEFAULT_WINPOINTS, DEFAULT_NUMBER_OF_PLAYERS);
-        assertTrue(Config.getStandardLandPlacement().size() == model.getBoard().getFields().size(),
+        assertTrue(GameBoard.getDefaultLandPlacement().size() == model.getBoard().getFields().size(),
                 "Check if explicit init must be done (violates spec): "
                         + "modify initializeSiedlerGame accordingly.");
-        for (Map.Entry<Point, Land> e : Config.getStandardLandPlacement().entrySet()) {
+        for (Map.Entry<Point, Land> e : GameBoard.getDefaultLandPlacement().entrySet()) {
             assertEquals(e.getValue(), model.getBoard().getField(e.getKey()),
                     "Land placement does not match default placement.");
         }

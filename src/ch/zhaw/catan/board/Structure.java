@@ -1,4 +1,4 @@
-package ch.zhaw.catan;
+package ch.zhaw.catan.board;
 
 import java.util.List;
 import java.util.Map;

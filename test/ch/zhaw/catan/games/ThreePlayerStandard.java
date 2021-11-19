@@ -1,6 +1,8 @@
 package ch.zhaw.catan.games;
 
 import ch.zhaw.catan.*;
+import ch.zhaw.catan.board.Resource;
+import ch.zhaw.catan.player.Faction;
 
 import java.awt.*;
 import java.util.List;

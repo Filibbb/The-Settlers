@@ -1,4 +1,4 @@
-package ch.zhaw.catan;
+package ch.zhaw.catan.board;
 
 /**
  * This {@link Enum} specifies the available resource types in the game.

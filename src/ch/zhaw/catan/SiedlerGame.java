@@ -1,5 +1,10 @@
 package ch.zhaw.catan;
 
+import ch.zhaw.catan.board.GameBoard;
+import ch.zhaw.catan.board.Resource;
+import ch.zhaw.catan.board.SiedlerBoard;
+import ch.zhaw.catan.player.Faction;
+
 import java.awt.Point;
 import java.util.Collections;
 import java.util.List;
@@ -130,7 +135,7 @@ public class SiedlerGame {
      * A key action is the payout of the resource cards to the players
      * according to the payout rules of the game. This includes the
      * "negative payout" in case a 7 is thrown and a player has more than
-     * {@link Config#MAX_CARDS_IN_HAND_NO_DROP} resource cards.
+     * {@link GameBoard#MAX_CARDS_IN_HAND_NO_DROP} resource cards.
      * <p>
      * If a player does not get resource cards, the list for this players'
      * {@link Faction} is <b>an empty list (not null)</b>!.

@@ -1,4 +1,4 @@
-package ch.zhaw.catan;
+package ch.zhaw.catan.board;
 
 /**
  * This {@link Enum} specifies the available lands in the game. Some land types

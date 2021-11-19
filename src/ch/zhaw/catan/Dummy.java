@@ -1,5 +1,7 @@
 package ch.zhaw.catan;
 
+import ch.zhaw.catan.board.Land;
+import ch.zhaw.catan.board.SiedlerBoard;
 import ch.zhaw.hexboard.Label;
 
 import java.awt.Point;

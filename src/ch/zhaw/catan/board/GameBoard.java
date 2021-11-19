@@ -1,4 +1,4 @@
-package ch.zhaw.catan;
+package ch.zhaw.catan.board;
 
 import java.awt.Point;
 import java.util.Collections;
@@ -18,7 +18,7 @@ import java.util.Map;
  *
  * @author tebe
  */
-public class Config {
+public class GameBoard {
     // Minimum number of players
     // Note: The max. number is equal to the number of factions (see Faction enum)
     public static final int MIN_NUMBER_OF_PLAYERS = 2;
@@ -32,14 +32,12 @@ public class Config {
 
     public static final int MAX_CARDS_IN_HAND_NO_DROP = 7;
 
-    // STANDARD FIXED DICE NUMBER TO FIELD SETUP
-
     /**
-     * Returns a mapping of the dice values per field.
+     * Returns the defaults mapping of the dice values per field.
      *
      * @return the dice values per field
      */
-    public static final Map<Point, Integer> getStandardDiceNumberPlacement() {
+    public static Map<Point, Integer> getDefaultDiceNumberPlacement() {
         Map<Point, Integer> assignment = new HashMap<>();
         assignment.put(new Point(4, 8), 2);
         assignment.put(new Point(7, 5), 3);
@@ -65,8 +63,6 @@ public class Config {
         return Collections.unmodifiableMap(assignment);
     }
 
-    // STANDARD FIXED LAND SETUP
-
     /**
      * Returns the field (coordinate) to {@link Land} mapping for the <a href=
      * "https://www.catan.de/files/downloads/4002051693602_catan_-_das_spiel_0.pdf">standard
@@ -74,7 +70,7 @@ public class Config {
      *
      * @return the field to {@link Land} mapping for the standard setup
      */
-    public static final Map<Point, Land> getStandardLandPlacement() {
+    public static Map<Point, Land> getDefaultLandPlacement() {
         Map<Point, Land> assignment = new HashMap<>();
         Point[] water = {new Point(4, 2), new Point(6, 2), new Point(8, 2), new Point(10, 2),
                 new Point(3, 5), new Point(11, 5), new Point(2, 8), new Point(12, 8), new Point(1, 11),

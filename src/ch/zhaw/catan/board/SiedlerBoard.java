@@ -1,5 +1,6 @@
-package ch.zhaw.catan;
+package ch.zhaw.catan.board;
 
+import ch.zhaw.catan.board.Land;
 import ch.zhaw.hexboard.HexBoard;
 
 import java.awt.*;

@@ -1,4 +1,4 @@
-package ch.zhaw.catan;
+package ch.zhaw.catan.player;
 
 /**
  * This {@link Enum} specifies the available factions in the game.
