@@ -20,5 +20,6 @@ public class GameSetup {
 
     private void setupNewGame() {
         int numberOfPlayers = textIO.newIntInputReader().withMinVal(2).withMaxVal(4).read("Please enter the number of players. 2, 3 or 4 players are supported.");
-        SiedlerGame game = new SiedlerGame(WINPOINTS,numberOfPlayers);}
+        SiedlerGame game = new SiedlerGame(WINPOINTS,numberOfPlayers);
+   }
 }
