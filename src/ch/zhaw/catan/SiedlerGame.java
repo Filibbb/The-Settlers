@@ -4,6 +4,9 @@ import ch.zhaw.catan.board.GameBoard;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SiedlerBoard;
 import ch.zhaw.catan.player.Faction;
+import org.beryx.textio.TextIO;
+import org.beryx.textio.TextIoFactory;
+import org.beryx.textio.TextTerminal;
 
 import java.awt.Point;
 import java.util.Collections;
@@ -21,7 +24,8 @@ import java.util.Map;
 public class SiedlerGame {
     static final int FOUR_TO_ONE_TRADE_OFFER = 4;
     static final int FOUR_TO_ONE_TRADE_WANT = 1;
-
+    TextIO textIO = TextIoFactory.getTextIO();
+    TextTerminal<?> textTerminal = textIO.getTextTerminal();
     /**
      * Constructs a SiedlerGame game state object.
      *
@@ -31,7 +35,7 @@ public class SiedlerGame {
      *                                  three or players is not between two and four
      */
     public SiedlerGame(int winPoints, int numberOfPlayers) {
-        // TODO: Implement
+        textTerminal.println("I am running. Winpoints: "+winPoints +" NumberofPlayers: "+numberOfPlayers);
     }
 
     /**
