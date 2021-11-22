@@ -4,7 +4,11 @@ import ch.zhaw.catan.board.GameBoard;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SiedlerBoard;
 import ch.zhaw.catan.player.Faction;
+
 import ch.zhaw.catan.player.Player;
+import org.beryx.textio.TextIO;
+import org.beryx.textio.TextIoFactory;
+import org.beryx.textio.TextTerminal;
 
 import java.awt.Point;
 import java.util.*;
@@ -24,6 +28,7 @@ public class SiedlerGame {
     private final Set<Player> players;
     private final List<Faction> availableFactions = new ArrayList<>();
     private Player currentPlayer; //TODO set this to the player who has the highest dice throw.
+
 
     /**
      * Constructs a SiedlerGame game state object.
