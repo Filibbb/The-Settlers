@@ -4,14 +4,14 @@ import ch.zhaw.catan.board.GameBoard;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SiedlerBoard;
 import ch.zhaw.catan.player.Faction;
+
+import ch.zhaw.catan.player.Player;
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
 import org.beryx.textio.TextTerminal;
 
 import java.awt.Point;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -22,10 +22,14 @@ import java.util.Map;
  * @author TODO
  */
 public class SiedlerGame {
-    static final int FOUR_TO_ONE_TRADE_OFFER = 4;
-    static final int FOUR_TO_ONE_TRADE_WANT = 1;
-    TextIO textIO = TextIoFactory.getTextIO();
-    TextTerminal<?> textTerminal = textIO.getTextTerminal();
+    private static final int FOUR_TO_ONE_TRADE_OFFER = 4;
+    private static final int FOUR_TO_ONE_TRADE_WANT = 1;
+
+    private final Set<Player> players;
+    private final List<Faction> availableFactions = new ArrayList<>();
+    private Player currentPlayer; //TODO set this to the player who has the highest dice throw.
+
+
     /**
      * Constructs a SiedlerGame game state object.
      *
@@ -35,7 +39,23 @@ public class SiedlerGame {
      *                                  three or players is not between two and four
      */
     public SiedlerGame(int winPoints, int numberOfPlayers) {
-        // TODO: Game logic here
+        availableFactions.addAll(Arrays.asList(Faction.values()));
+        players = new HashSet<>(numberOfPlayers);
+        addPlayersToGame(numberOfPlayers);
+    }
+
+    private void addPlayersToGame(int numberOfPlayers) {
+        for (int playerNumber = 1; playerNumber <= numberOfPlayers; playerNumber++) {
+            players.add(new Player(getRandomAvailableFaction()));
+        }
+    }
+
+    private Faction getRandomAvailableFaction() {
+        Random randomizer = new Random();
+        final int randomFactionIndex = randomizer.nextInt(availableFactions.size());
+        final Faction selectedFaction = availableFactions.get(randomFactionIndex);
+        availableFactions.remove(selectedFaction);
+        return selectedFaction;
     }
 
     /**
@@ -43,6 +63,7 @@ public class SiedlerGame {
      */
     public void switchToNextPlayer() {
         // TODO: Implement
+
     }
 
     /**
