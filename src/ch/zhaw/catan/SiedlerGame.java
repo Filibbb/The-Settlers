@@ -35,7 +35,7 @@ public class SiedlerGame {
      *                                  three or players is not between two and four
      */
     public SiedlerGame(int winPoints, int numberOfPlayers) {
-        textTerminal.println("I am running. Winpoints: "+winPoints +" NumberofPlayers: "+numberOfPlayers);
+        // TODO: Game logic here
     }
 
     /**
