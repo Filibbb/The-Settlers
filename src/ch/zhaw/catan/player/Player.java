@@ -3,7 +3,9 @@ package ch.zhaw.catan.player;
 import ch.zhaw.catan.board.Resource;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This class manages the player data and faction.
@@ -13,6 +15,7 @@ import java.util.Map;
 public class Player {
     private final Faction playerFaction;
     private int winningPoints = 0;
+    private final Set<OccupiedResourceField> allOccupiedResourceFields = new HashSet<>();
     private final Map<Resource, Integer> resourceCards = new HashMap<>();
 
     /**
@@ -106,6 +109,26 @@ public class Player {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Checks if the Player occupies a field with the number thrown.
+     * @param diceValue the number thrown.
+     * @return          true if the player occupies a field with the number thrown.
+     * @author fupat002
+     */
+    public boolean playerOccupiesField(int diceValue){
+        Object[] occupiedResourceFields = allOccupiedResourceFields.toArray();
+        for(int i = 0; i < occupiedResourceFields.length; i++){
+            Object occupiedField = occupiedResourceFields[i];
+            if(occupiedField.getDiceValue){
+
+            }
+        }
+    }
+
+    public Resource getResourceByDiceValue(int diceValue){
+
     }
 
     public Faction getPlayerFaction() {

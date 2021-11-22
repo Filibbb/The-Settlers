@@ -47,12 +47,10 @@ public class ThrowDice {
 
     }
 
-    private void handOutResources(Map<Faction, List<Resource>> playerStatus){
-
-    }
-
-    private List<Resource> getResourcesForDiceValue(int diceValue){
-        return null;
+    private void handOutResources(Player player, int diceValue){
+        if(player.playerOccupiesField(diceValue)){
+            player.addResourceCardToHand();//parameter methode --> getResourceByDiceValue
+        }
     }
 
     private int dice(){
