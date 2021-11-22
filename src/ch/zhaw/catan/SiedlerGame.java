@@ -4,11 +4,10 @@ import ch.zhaw.catan.board.GameBoard;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SiedlerBoard;
 import ch.zhaw.catan.player.Faction;
+import ch.zhaw.catan.player.Player;
 
 import java.awt.Point;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -19,8 +18,11 @@ import java.util.Map;
  * @author TODO
  */
 public class SiedlerGame {
-    static final int FOUR_TO_ONE_TRADE_OFFER = 4;
-    static final int FOUR_TO_ONE_TRADE_WANT = 1;
+    private static final int FOUR_TO_ONE_TRADE_OFFER = 4;
+    private static final int FOUR_TO_ONE_TRADE_WANT = 1;
+
+    private final Set<Player> players;
+
 
     /**
      * Constructs a SiedlerGame game state object.
@@ -32,6 +34,7 @@ public class SiedlerGame {
      */
     public SiedlerGame(int winPoints, int numberOfPlayers) {
         // TODO: Implement
+        players = new HashSet<>(numberOfPlayers);
     }
 
     /**
