@@ -10,12 +10,14 @@ public class Start {
 
    public void startGame(){
        printIntroduction();
-       int numberOfPlayers = textIO.newIntInputReader().withMinVal(2).withMaxVal(4).read("Please enter the number of players. 2, 3 or 4 players are supported.");
-       int winPoints = textIO.newIntInputReader().withMinVal(3).withMaxVal(12).read("Please enter the win points needed to win.");
-       SiedlerGame game = new SiedlerGame(winPoints,numberOfPlayers);
+       setupNewGame();
    }
 
     private void printIntroduction(){
         textTerminal.println("Welcome to The Settlers!");
     }
+
+    private void setupNewGame() { int numberOfPlayers = textIO.newIntInputReader().withMinVal(2).withMaxVal(4).read("Please enter the number of players. 2, 3 or 4 players are supported.");
+        int winPoints = textIO.newIntInputReader().withMinVal(3).withMaxVal(12).read("Please enter the win points needed to win.");
+        SiedlerGame game = new SiedlerGame(winPoints,numberOfPlayers);}
 }
