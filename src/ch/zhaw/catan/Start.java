@@ -2,7 +2,6 @@ package ch.zhaw.catan;
 
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
-import org.beryx.textio.InputReader;
 import org.beryx.textio.TextTerminal;
 
 public class Start {
