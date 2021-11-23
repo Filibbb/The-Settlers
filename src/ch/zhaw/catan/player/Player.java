@@ -12,7 +12,7 @@ import java.util.*;
 public class Player {
     private final Faction playerFaction;
     private int winningPoints = 0;
-    private final Set<OccupiedResourceField> allOccupiedResourceFields = new HashSet<>();
+    private final Set<OccupiedResourceField> allOccupiedResourceFields = new HashSet<>();//TODO: wenn ein neues Dorf platziert wird ein Set-Eintrag adden.
     private final Map<Resource, Integer> resourceCards = new HashMap<>();
 
     /**

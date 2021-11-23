@@ -3,7 +3,7 @@ package ch.zhaw.catan.player;
 import java.util.Random;
 import java.util.Set;
 
-public class ThrowDice {
+public class Dice {
     Random random = new Random();
 
     /**
