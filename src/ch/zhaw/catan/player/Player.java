@@ -2,10 +2,7 @@ package ch.zhaw.catan.player;
 
 import ch.zhaw.catan.board.Resource;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class manages the player data and faction.
@@ -118,17 +115,21 @@ public class Player {
      * @author fupat002
      */
     public boolean playerOccupiesField(int diceValue){
-        Object[] occupiedResourceFields = allOccupiedResourceFields.toArray();
-        for(int i = 0; i < occupiedResourceFields.length; i++){
-            Object occupiedField = occupiedResourceFields[i];
-            if(occupiedField.getDiceValue){
-
+        for (OccupiedResourceField occupiedField : allOccupiedResourceFields) {
+            if (occupiedField.getDiceValue() == diceValue) {
+                return true;
             }
         }
+        return false;
     }
 
     public Resource getResourceByDiceValue(int diceValue){
-
+        for (OccupiedResourceField occupiedField : allOccupiedResourceFields) {
+            if (occupiedField.getDiceValue() == diceValue) {
+                return occupiedField.getResource();
+            }
+        }
+        return null;
     }
 
     public Faction getPlayerFaction() {

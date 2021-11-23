@@ -27,5 +27,7 @@ public class OccupiedResourceField {
         return diceValue;
     }
 
-
+    public Resource getResource() {
+        return resource;
+    }
 }

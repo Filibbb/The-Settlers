@@ -37,19 +37,22 @@ public class ThrowDice {
     }
 
     /**
-     * The player with the highest number can start.
+     * The player with the highest number has to start.
      */
     public void highRoll(){
 
     }
 
-    public void throwDice(){
-
+    public void throwDice(Player player){
+        int diceValue = dice();
+        //TODO: if dice == 7 -> ...
+        handOutResourcesAfterDiceThrow(player, diceValue);
     }
 
-    private void handOutResources(Player player, int diceValue){
+    private void handOutResourcesAfterDiceThrow(Player player, int diceValue){
+        //TODO: check if settlement or city for one ore two resources.
         if(player.playerOccupiesField(diceValue)){
-            player.addResourceCardToHand();//parameter methode --> getResourceByDiceValue
+            player.addResourceCardToHand(player.getResourceByDiceValue(diceValue));
         }
     }
 
