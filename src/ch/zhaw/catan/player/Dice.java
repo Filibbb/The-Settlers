@@ -13,7 +13,7 @@ public class Dice {
      * @author fupat002
      */
     public Player highRoll(Set<Player> participants){
-        Player[] players = (Player[]) participants.toArray();
+        Object[] players = participants.toArray();
         int[] diceThrows = new int[players.length];
         for(int i = 0; i < players.length; i++){
             diceThrows[i] = dice();
@@ -22,7 +22,7 @@ public class Dice {
         if(highestValueIsDouble(diceThrows, highestDiceValue)){
             return highRoll(participants);
         }else{
-            return players[indexOfPlayerWithHighestRoll(diceThrows, highestDiceValue)];
+            return (Player) players[indexOfPlayerWithHighestRoll(diceThrows, highestDiceValue)];
         }
     }
 
