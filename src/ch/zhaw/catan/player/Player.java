@@ -136,7 +136,7 @@ public class Player {
         int resourceCounter = 0;
         for (OccupiedResourceField occupiedField : allOccupiedResourceFields) {
             if (occupiedField.getDiceValue() == diceValue) {
-                if(occupiedField.isCity()){
+                if(occupiedField.isOccupiedWithCity()){
                     resourceCounter += 2;
                 }else{
                     resourceCounter++;

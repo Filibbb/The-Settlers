@@ -5,22 +5,22 @@ import ch.zhaw.catan.board.Resource;
 public class OccupiedResourceField {
     private final Resource resource;
     private final int diceValue;
-    private boolean settlement;
-    private boolean city;
+    private boolean occupiedWithSettlement;
+    private boolean occupiedWithCity;
 
     public OccupiedResourceField(Resource resource, int diceValue) {
         this.resource = resource;
         this.diceValue = diceValue;
-        this.settlement = true;
-        this.city = false;
+        this.occupiedWithSettlement = true;
+        this.occupiedWithCity = false;
     }
 
     /**
      * A player can upgrade a settlement to a City.
      */
     public void upgradeToCity(){
-        settlement = false;
-        city = true;
+        occupiedWithSettlement = false;
+        occupiedWithCity = true;
     }
 
     public int getDiceValue() {
@@ -31,7 +31,7 @@ public class OccupiedResourceField {
         return resource;
     }
 
-    public boolean isCity() {
-        return city;
+    public boolean isOccupiedWithCity() {
+        return occupiedWithCity;
     }
 }
