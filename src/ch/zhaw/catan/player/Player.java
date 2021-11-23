@@ -132,6 +132,20 @@ public class Player {
         return null;
     }
 
+    public int countWinningPointsOnRolledFields(int diceValue){
+        int resourceCounter = 0;
+        for (OccupiedResourceField occupiedField : allOccupiedResourceFields) {
+            if (occupiedField.getDiceValue() == diceValue) {
+                if(occupiedField.isCity()){
+                    resourceCounter += 2;
+                }else{
+                    resourceCounter++;
+                }
+            }
+        }
+        return resourceCounter;
+    }
+
     public Faction getPlayerFaction() {
         return playerFaction;
     }

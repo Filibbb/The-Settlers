@@ -1,11 +1,8 @@
 package ch.zhaw.catan.player;
 
-import ch.zhaw.catan.board.GameBoard;
-import ch.zhaw.catan.board.Resource;
-
-import java.util.List;
-import java.util.Map;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 
 public class ThrowDice {
     Random random = new Random();
@@ -17,16 +14,20 @@ public class ThrowDice {
 
     }
 
-    public void throwDice(Player player){
+    public void throwDice(Set<Player> players){
         int diceValue = dice();
-        //TODO: if dice == 7 -> ...
-        handOutResourcesAfterDiceThrow(player, diceValue);
+        if(diceValue == 7){
+            //TODO: if dice == 7 -> ...
+        }else{
+            for (Player player : players) {
+                handOutResourcesAfterDiceThrow(player, diceValue);
+            }
+        }
     }
 
     private void handOutResourcesAfterDiceThrow(Player player, int diceValue){
-        //TODO: check if settlement or city for one ore two resources.
         if(player.playerOccupiesField(diceValue)){
-            player.addResourceCardToHand(player.getResourceByDiceValue(diceValue));
+            player.addResourceCardToHand(player.getResourceByDiceValue(diceValue), player.countWinningPointsOnRolledFields(diceValue));
         }
     }
 

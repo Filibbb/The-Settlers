@@ -16,7 +16,7 @@ public class OccupiedResourceField {
     }
 
     /**
-     * A player can upgrade a settlement to a
+     * A player can upgrade a settlement to a City.
      */
     public void upgradeToCity(){
         settlement = false;
@@ -29,5 +29,9 @@ public class OccupiedResourceField {
 
     public Resource getResource() {
         return resource;
+    }
+
+    public boolean isCity() {
+        return city;
     }
 }
