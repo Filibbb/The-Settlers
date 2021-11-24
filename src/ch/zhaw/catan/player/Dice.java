@@ -13,6 +13,7 @@ public class Dice {
      * @return the player with the highest firs throw.
      * @author fupat002
      */
+    //TODO let the players roll the dice themselves!
     public Player highRoll(Set<Player> participants) {
         Object[] players = participants.toArray();
         int[] diceThrows = new int[players.length];
@@ -20,7 +21,7 @@ public class Dice {
             diceThrows[i] = dice();
         }
         int highestDiceValue = getMaxDiceValue(diceThrows);
-        if (highestValueIsDouble(diceThrows, highestDiceValue)) {
+        if (highestValueIsDuplicated(diceThrows, highestDiceValue)) {
             return highRoll(participants);
         } else {
             return (Player) players[indexOfPlayerWithHighestRoll(diceThrows, highestDiceValue)];
@@ -36,7 +37,7 @@ public class Dice {
         return 0;
     }
 
-    private boolean highestValueIsDouble(int[] diceThrows, int highestDiceValue) {
+    private boolean highestValueIsDuplicated(int[] diceThrows, int highestDiceValue) {
         int highestValueCounter = 0;
         for (int diceThrow : diceThrows) {
             if (diceThrow == highestDiceValue) {
@@ -46,11 +47,11 @@ public class Dice {
         return highestDiceValue < 1;
     }
 
-    private int getMaxDiceValue(int[] inputArray) {
-        int maxValue = inputArray[0];
-        for (int i = 1; i < inputArray.length; i++) {
-            if (inputArray[i] > maxValue) {
-                maxValue = inputArray[i];
+    private int getMaxDiceValue(int[] diceThrows) {
+        int maxValue = diceThrows[0];
+        for (int i = 1; i < diceThrows.length; i++) {
+            if (diceThrows[i] > maxValue) {
+                maxValue = diceThrows[i];
             }
         }
         return maxValue;
@@ -76,14 +77,14 @@ public class Dice {
     private void splitResourcesOfPlayersWithMoreThanSeven(Set<Player> players) {
         for (Player player : players) {
             if (player.playerHasMoreThanSevenResources()) {
-                player.handOverHalfOfResources();
+                player.deletesHalfOfResources();
             }
         }
     }
 
     private void handOutResourcesAfterDiceThrow(Player player, int diceValue) {
         if (player.playerOccupiesField(diceValue)) {
-            player.addResourceCardToHand(player.getResourceByDiceValue(diceValue), player.countWinningPointsOnRolledFields(diceValue));
+            player.addResourceCardToHand(player.getResourceByDiceValue(diceValue), player.countResourcePointsOnRolledFields(diceValue));
         }
     }
 

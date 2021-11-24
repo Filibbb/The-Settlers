@@ -59,11 +59,11 @@ public class Player {
     /**
      * Deletes half of the resources.
      */
-    public void handOverHalfOfResources() {
-        int cardsToGiveUp = (getTotalResourceCardCount() + 1) / 2;
+    public void deletesHalfOfResources() {
+        int cardsToGiveUp = getTotalResourceCardCount() / 2;
         while (cardsToGiveUp != 0) {
             for (Resource card : resourceCards.keySet()) {
-                if ((cardsToGiveUp != 0) && (resourceCards.get(card) > 0)) {
+                if (cardsToGiveUp != 0 && resourceCards.get(card) > 0) {
                     int cardCountWithOneRemoved = resourceCards.get(card) - 1;
                     resourceCards.put(card, cardCountWithOneRemoved);
                     cardsToGiveUp--;
@@ -174,7 +174,7 @@ public class Player {
      * @return the amount of winning points on a resource field.
      * @author fupat002
      */
-    public int countWinningPointsOnRolledFields(int diceValue) {
+    public int countResourcePointsOnRolledFields(int diceValue) {
         int resourceCounter = 0;
         for (OccupiedResourceField occupiedField : allOccupiedResourceFields) {
             if (occupiedField.getDiceValue() == diceValue) {
