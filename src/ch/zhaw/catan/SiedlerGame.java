@@ -103,7 +103,7 @@ public class SiedlerGame {
      *
      * @return the faction of the current player
      */
-    public static Faction getCurrentPlayerFaction() {
+    public Faction getCurrentPlayerFaction() {
         // TODO: Implement
         return null;
     }
