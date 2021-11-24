@@ -73,9 +73,9 @@ public class Dice {
         }
     }
 
-    private void splitResourcesOfPlayersWithMoreThanSeven(Set<Player> players){
-        for (Player player : players){
-            if(player.playerHasMoreThanSevenResources()){
+    private void splitResourcesOfPlayersWithMoreThanSeven(Set<Player> players) {
+        for (Player player : players) {
+            if (player.playerHasMoreThanSevenResources()) {
                 player.handOverHalfOfResources();
             }
         }

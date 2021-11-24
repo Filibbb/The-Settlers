@@ -70,8 +70,6 @@ public class Player {
                 }
             }
         }
-
-
     }
 
     /**
@@ -152,6 +150,14 @@ public class Player {
         return false;
     }
 
+    /**
+     * Returns the resource of a field with the dice value from a player that he has occupied.
+     *
+     * @param diceValue number between 2 and 12. Dice value of the field.
+     * @return the resource of the field with the dice value.
+     * @author fupat002
+     */
+    //TODO: Wenn zwei Ressourcenfelder den gleichen Würfelwert haben funktioniert es noch nicht so wie gewollt.
     public Resource getResourceByDiceValue(int diceValue) {
         for (OccupiedResourceField occupiedField : allOccupiedResourceFields) {
             if (occupiedField.getDiceValue() == diceValue) {
@@ -161,6 +167,13 @@ public class Player {
         return null;
     }
 
+    /**
+     * Counts the winning points of a field with a specific dice value.
+     *
+     * @param diceValue number between 2 and 12. Dice value of the field.
+     * @return the amount of winning points on a resource field.
+     * @author fupat002
+     */
     public int countWinningPointsOnRolledFields(int diceValue) {
         int resourceCounter = 0;
         for (OccupiedResourceField occupiedField : allOccupiedResourceFields) {
@@ -173,6 +186,17 @@ public class Player {
             }
         }
         return resourceCounter;
+    }
+
+    /**
+     * Adds a resource field to the set.
+     *
+     * @param resource  the resource of the field.
+     * @param diceValue the dice value of the field.
+     * @author fupat002
+     */
+    public void addResourceField(Resource resource, int diceValue) {
+        allOccupiedResourceFields.add(new OccupiedResourceField(resource, diceValue));
     }
 
     public Faction getPlayerFaction() {
