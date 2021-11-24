@@ -149,13 +149,13 @@ public class Player {
         Map<Structure, Integer> builtStructures = currentPlayer.getBuiltStructures();
         switch (structure) {
             case ROAD -> {
-                if (builtStructures.get(Structure.ROAD) < Structure.ROAD.getStockPerPlayer()) return true;
+                return(builtStructures.get(Structure.ROAD) < Structure.ROAD.getStockPerPlayer());
             }
             case SETTLEMENT -> {
-                if (builtStructures.get(Structure.SETTLEMENT) < Structure.SETTLEMENT.getStockPerPlayer()) return true;
+                return(builtStructures.get(Structure.SETTLEMENT) < Structure.SETTLEMENT.getStockPerPlayer());
             }
             case CITY -> {
-                if (builtStructures.get(Structure.CITY) < Structure.CITY.getStockPerPlayer()) return true;
+                return(builtStructures.get(Structure.CITY) < Structure.CITY.getStockPerPlayer());
             }
         }
         return false;
@@ -165,16 +165,13 @@ public class Player {
         Map<Resource, Integer> resourceCards = currentPlayer.getResourceCards();
         switch (structure) {
             case CITY -> {
-                if ((resourceCards.get(Resource.ORE) >= 3) && (resourceCards.get(Resource.GRAIN) >= 2))
-                    return true;
+                return((resourceCards.get(Resource.ORE) >= 3) && (resourceCards.get(Resource.GRAIN) >= 2));
             }
             case ROAD -> {
-                if ((resourceCards.get(Resource.LUMBER) >= 1) && (resourceCards.get(Resource.BRICK) >= 1))
-                    return true;
+                return((resourceCards.get(Resource.LUMBER) >= 1) && (resourceCards.get(Resource.BRICK) >= 1));
             }
             case SETTLEMENT -> {
-                if ((resourceCards.get(Resource.LUMBER) >= 1) && (resourceCards.get(Resource.GRAIN) >= 1) && (resourceCards.get(Resource.BRICK) >= 1) && (resourceCards.get(Resource.WOOL) >= 1))
-                    return true;
+                return((resourceCards.get(Resource.LUMBER) >= 1) && (resourceCards.get(Resource.GRAIN) >= 1) && (resourceCards.get(Resource.BRICK) >= 1) && (resourceCards.get(Resource.WOOL) >= 1));
             }
         }
         return false;
