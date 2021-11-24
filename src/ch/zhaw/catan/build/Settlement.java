@@ -1,9 +1,12 @@
 package ch.zhaw.catan.build;
 
+import ch.zhaw.catan.board.Land;
 import ch.zhaw.catan.board.Structure;
 import ch.zhaw.catan.player.Player;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Settlement extends AbstractInfrastructure {
 
