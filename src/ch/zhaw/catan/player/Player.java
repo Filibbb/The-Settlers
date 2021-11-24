@@ -47,6 +47,34 @@ public class Player {
     }
 
     /**
+     * Checks if the player has more than 7 resource cards.
+     *
+     * @return true if the player has more than 7 resource cards.
+     * @author fupat002
+     */
+    public boolean playerHasMoreThanSevenResources() {
+        return getTotalResourceCardCount() > 7;
+    }
+
+    /**
+     * Deletes half of the resources.
+     */
+    public void handOverHalfOfResources() {
+        int cardsToGiveUp = (getTotalResourceCardCount() + 1) / 2;
+        while (cardsToGiveUp != 0) {
+            for (Resource card : resourceCards.keySet()) {
+                if ((cardsToGiveUp != 0) && (resourceCards.get(card) > 0)) {
+                    int cardCountWithOneRemoved = resourceCards.get(card) - 1;
+                    resourceCards.put(card, cardCountWithOneRemoved);
+                    cardsToGiveUp--;
+                }
+            }
+        }
+
+
+    }
+
+    /**
      * Adds exactly one of the specified resource to the hand of the player
      *
      * @param resource the resource type you want to add to the hand.
@@ -110,11 +138,12 @@ public class Player {
 
     /**
      * Checks if the Player occupies a field with the number thrown.
+     *
      * @param diceValue the number thrown.
-     * @return          true if the player occupies a field with the number thrown.
+     * @return true if the player occupies a field with the number thrown.
      * @author fupat002
      */
-    public boolean playerOccupiesField(int diceValue){
+    public boolean playerOccupiesField(int diceValue) {
         for (OccupiedResourceField occupiedField : allOccupiedResourceFields) {
             if (occupiedField.getDiceValue() == diceValue) {
                 return true;
@@ -123,7 +152,7 @@ public class Player {
         return false;
     }
 
-    public Resource getResourceByDiceValue(int diceValue){
+    public Resource getResourceByDiceValue(int diceValue) {
         for (OccupiedResourceField occupiedField : allOccupiedResourceFields) {
             if (occupiedField.getDiceValue() == diceValue) {
                 return occupiedField.getResource();
@@ -132,13 +161,13 @@ public class Player {
         return null;
     }
 
-    public int countWinningPointsOnRolledFields(int diceValue){
+    public int countWinningPointsOnRolledFields(int diceValue) {
         int resourceCounter = 0;
         for (OccupiedResourceField occupiedField : allOccupiedResourceFields) {
             if (occupiedField.getDiceValue() == diceValue) {
-                if(occupiedField.isOccupiedWithCity()){
+                if (occupiedField.isOccupiedWithCity()) {
                     resourceCounter += 2;
-                }else{
+                } else {
                     resourceCounter++;
                 }
             }

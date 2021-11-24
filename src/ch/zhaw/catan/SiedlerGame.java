@@ -3,6 +3,7 @@ package ch.zhaw.catan;
 import ch.zhaw.catan.board.GameBoard;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SiedlerBoard;
+import ch.zhaw.catan.player.Dice;
 import ch.zhaw.catan.player.Faction;
 
 import ch.zhaw.catan.player.Player;
@@ -25,9 +26,10 @@ public class SiedlerGame {
     private static final int FOUR_TO_ONE_TRADE_OFFER = 4;
     private static final int FOUR_TO_ONE_TRADE_WANT = 1;
 
+    private final Dice dice = new Dice();
     private final Set<Player> players;
     private final List<Faction> availableFactions = new ArrayList<>();
-    private Player currentPlayer; //TODO set this to the player who has the highest dice throw.
+    private Player currentPlayer;
 
 
     /**
@@ -42,6 +44,7 @@ public class SiedlerGame {
         availableFactions.addAll(Arrays.asList(Faction.values()));
         players = new HashSet<>(numberOfPlayers);
         addPlayersToGame(numberOfPlayers);
+        this.currentPlayer = dice.highRoll(players);
     }
 
     private void addPlayersToGame(int numberOfPlayers) {
