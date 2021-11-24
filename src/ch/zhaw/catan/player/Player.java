@@ -15,7 +15,7 @@ public class Player {
     private final Faction playerFaction;
     private int winningPoints = 0;
     private final Map<Resource, Integer> resourceCards = new HashMap<>();
-    public Map<Structure, Integer> builtStructures = new HashMap<>();
+    public Map<Structure, Integer> builtStructures = new HashMap<>(Map.of(Structure.ROAD, 0, Structure.SETTLEMENT, 0, Structure.CITY, 0));
 
     /**
      * Creates a player object with the related faction.
