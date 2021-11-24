@@ -1,6 +1,7 @@
 package ch.zhaw.catan.player;
 
 import ch.zhaw.catan.board.Resource;
+import ch.zhaw.catan.board.Structure;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -118,5 +119,20 @@ public class Player {
 
     public Map<Resource, Integer> getResourceCards() {
         return resourceCards;
+    }
+
+    public boolean checkLiquidity(Player currentPlayer, Structure structure) {
+        Map<Resource, Integer> resourceCards = currentPlayer.getResourceCards();
+        switch (structure) {
+            case ROAD -> {
+                if ((resourceCards.get(Resource.LUMBER) >= 1) && (resourceCards.get(Resource.BRICK) >= 1))
+                    return true;
+            }
+            case SETTLEMENT -> {
+                if ((resourceCards.get(Resource.LUMBER) >= 1) && (resourceCards.get(Resource.GRAIN) >= 1) && (resourceCards.get(Resource.BRICK) >= 1) && (resourceCards.get(Resource.WOOL) >= 1))
+                    return true;
+            }
+        }
+        return false;
     }
 }
