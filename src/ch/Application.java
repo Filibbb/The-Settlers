@@ -1,4 +1,4 @@
-package ch.zhaw;
+package ch;
 
 import ch.zhaw.catan.GameSetup;
 
