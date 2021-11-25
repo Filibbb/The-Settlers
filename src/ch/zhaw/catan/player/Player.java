@@ -1,5 +1,6 @@
 package ch.zhaw.catan.player;
 
+import ch.zhaw.catan.board.Structure;
 import ch.zhaw.catan.board.Resource;
 
 import java.util.HashMap;
@@ -14,6 +15,7 @@ public class Player {
     private final Faction playerFaction;
     private int winningPoints = 0;
     private final Map<Resource, Integer> resourceCards = new HashMap<>();
+    public Map<Structure, Integer> builtStructures = new HashMap<>(Map.of(Structure.ROAD, 0, Structure.SETTLEMENT, 0, Structure.CITY, 0));
 
     /**
      * Creates a player object with the related faction.
@@ -119,4 +121,60 @@ public class Player {
     public Map<Resource, Integer> getResourceCards() {
         return resourceCards;
     }
+
+    public Map<Structure, Integer> getBuiltStructures() {
+        return builtStructures;
+    }
+
+    public void increaseBuiltStructures(Player currentPlayer, Structure structure) {
+        Map<Structure, Integer> builtStructures = currentPlayer.getBuiltStructures();
+        switch (structure) {
+            case ROAD -> {
+                Integer builtRoads = builtStructures.get(Structure.ROAD);
+                builtStructures.put(Structure.ROAD, builtRoads++);
+            }
+            case SETTLEMENT -> {
+                Integer builtSettlements = builtStructures.get(Structure.SETTLEMENT);
+                builtStructures.put(Structure.SETTLEMENT, builtSettlements++);
+            }
+            case CITY -> {
+                Integer builtCities = builtStructures.get(Structure.CITY);
+                builtStructures.put(Structure.CITY, builtCities++);
+            }
+        }
+
+    }
+
+    public static boolean checkStructureStock(Player currentPlayer, Structure structure) {
+        Map<Structure, Integer> builtStructures = currentPlayer.getBuiltStructures();
+        switch (structure) {
+            case ROAD -> {
+                return(builtStructures.get(Structure.ROAD) < Structure.ROAD.getStockPerPlayer());
+            }
+            case SETTLEMENT -> {
+                return(builtStructures.get(Structure.SETTLEMENT) < Structure.SETTLEMENT.getStockPerPlayer());
+            }
+            case CITY -> {
+                return(builtStructures.get(Structure.CITY) < Structure.CITY.getStockPerPlayer());
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkLiquidity(Player currentPlayer, Structure structure) {
+        Map<Resource, Integer> resourceCards = currentPlayer.getResourceCards();
+        switch (structure) {
+            case CITY -> {
+                return((resourceCards.get(Resource.ORE) >= 3) && (resourceCards.get(Resource.GRAIN) >= 2));
+            }
+            case ROAD -> {
+                return((resourceCards.get(Resource.LUMBER) >= 1) && (resourceCards.get(Resource.BRICK) >= 1));
+            }
+            case SETTLEMENT -> {
+                return((resourceCards.get(Resource.LUMBER) >= 1) && (resourceCards.get(Resource.GRAIN) >= 1) && (resourceCards.get(Resource.BRICK) >= 1) && (resourceCards.get(Resource.WOOL) >= 1));
+            }
+        }
+        return false;
+    }
+
 }
