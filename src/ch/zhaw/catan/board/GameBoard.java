@@ -1,6 +1,6 @@
 package ch.zhaw.catan.board;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

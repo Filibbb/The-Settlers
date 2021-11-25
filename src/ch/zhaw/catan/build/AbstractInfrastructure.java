@@ -4,12 +4,22 @@ import ch.zhaw.catan.player.Player;
 
 import java.awt.*;
 
+/**
+ * AbstractClass that contains the logic regarding a Infrastructure.
+ *
+ * @author weberph5
+ * @version 1.0.0
+ */
 public abstract class AbstractInfrastructure {
-    private Player owner;
-    private Point position;
+    private final Player owner;
+    private final Point position;
 
-
-    public AbstractInfrastructure(Player owner, Point position){
+    /**
+     * @param owner    player owner
+     * @param position position where the infrastructure is being set to.
+     * @author weberph5
+     */
+    protected AbstractInfrastructure(Player owner, Point position) {
         this.owner = owner;
         this.position = position;
     }

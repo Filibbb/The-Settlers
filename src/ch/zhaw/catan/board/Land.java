@@ -16,8 +16,8 @@ public enum Land {
     WATER("~~"),
     DESERT("--");
 
-    private Resource resource = null;
     private final String representation;
+    private Resource resource = null;
 
     Land(Resource resource) {
         this(resource.toString());

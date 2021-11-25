@@ -1,12 +1,16 @@
 package ch.zhaw.catan;
 
-import ch.zhaw.catan.player.Player;
 import ch.zhaw.catan.board.GameBoard;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SiedlerBoard;
 import ch.zhaw.catan.player.Faction;
+import ch.zhaw.catan.player.Player;
+import org.beryx.textio.TextIO;
+import org.beryx.textio.TextIoFactory;
+import org.beryx.textio.TextTerminal;
 
-import java.awt.Point;
+import java.awt.*;
+import java.util.List;
 import java.util.*;
 
 
@@ -20,27 +24,43 @@ import java.util.*;
 public class SiedlerGame {
     private static final int FOUR_TO_ONE_TRADE_OFFER = 4;
     private static final int FOUR_TO_ONE_TRADE_WANT = 1;
-
-    private final Set<Player> players;
     private final List<Faction> availableFactions = new ArrayList<>();
+    private final GameBoard gameBoard = new GameBoard();
+    TextIO textIO = TextIoFactory.getTextIO();
+    TextTerminal<?> textTerminal = textIO.getTextTerminal();
+    private int requiredPointsToWin = 0;
+    private Set<Player> players;
     private Player currentPlayer; //TODO set this to the player who has the highest dice throw.
-
+    private List<Player> playerTurnOrder = new ArrayList<>();
 
     /**
      * Constructs a SiedlerGame game state object.
      *
-     * @param winPoints       the number of points required to win the game
-     * @param numberOfPlayers the number of players
+     * @param winPoints the number of points required to win the game
      * @throws IllegalArgumentException if winPoints is lower than
      *                                  three or players is not between two and four
      */
-    public SiedlerGame(int winPoints, int numberOfPlayers) {
+    public SiedlerGame(int winPoints) {
+        requiredPointsToWin = winPoints;
         availableFactions.addAll(Arrays.asList(Faction.values()));
-        players = new HashSet<>(numberOfPlayers);
+    }
+
+    public void start() {
+        printIntroduction();
+        setupNewGame();
+    }
+
+    private void printIntroduction() {
+        textTerminal.println("Welcome to The Settlers!");
+    }
+
+    private void setupNewGame() {
+        int numberOfPlayers = textIO.newIntInputReader().withMinVal(2).withMaxVal(4).read("Please enter the number of players. 2, 3 or 4 players are supported.");
         addPlayersToGame(numberOfPlayers);
     }
 
-    private void addPlayersToGame(int numberOfPlayers) {
+    public void addPlayersToGame(int numberOfPlayers) {
+        players = new HashSet<>(numberOfPlayers);
         for (int playerNumber = 1; playerNumber <= numberOfPlayers; playerNumber++) {
             players.add(new Player(getRandomAvailableFaction()));
         }
