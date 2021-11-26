@@ -1,5 +1,6 @@
 package ch.zhaw.hexboard;
 
+import ch.zhaw.catan.infrastructure.Road;
 import ch.zhaw.catan.infrastructure.Settlement;
 
 import java.awt.*;
@@ -77,14 +78,14 @@ import java.util.Map.Entry;
  * </pre>
  *
  * @param <F> Data type for the field data objects
- * @param <Settlement>> Data type for the settlement data objects
- * @param <Road> Data type for the edge road objects
+ * @param <C>> Data type for the corner data objects
+ * @param <E> Data type for the edge  objects
  * @param <A> Data type for the annotation data objects
  *
  * @author tebe
  *
  */
-public class HexBoard<F, Settlement, Road, A> {
+public class HexBoard<F, C, E, A> {
     private final Map<Point, F> field;
     private final Map<Point, Settlement> corner;
     private final Map<Edge, Road> edge;
