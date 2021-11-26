@@ -1,6 +1,6 @@
 package ch.zhaw;
 
-import ch.zhaw.catan.SiedlerGame;
+import ch.zhaw.catan.SettlersGame;
 
 /**
  * Simple main class to start the game.
@@ -17,7 +17,7 @@ public class Application {
      * @param args none needed.
      */
     public static void main(String[] args) {
-        SiedlerGame siedlerGame = new SiedlerGame(WIN_POINTS);
-        siedlerGame.start();
+        SettlersGame settlersGame = new SettlersGame(WIN_POINTS);
+        settlersGame.start();
     }
 }
