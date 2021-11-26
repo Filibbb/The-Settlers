@@ -125,7 +125,7 @@ public class SiedlerGame {
      *
      * @return current player
      */
-    protected Player getCurrentPlayer() {
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 

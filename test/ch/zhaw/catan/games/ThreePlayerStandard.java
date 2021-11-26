@@ -185,14 +185,14 @@ public class ThreePlayerStandard {
         SiedlerGame model = new SiedlerGame(winpoints);
         model.addPlayersToGame(NUMBER_OF_PLAYERS);
         for (int i = 0; i < model.getPlayerFactions().size(); i++) {
-            Faction f = model.getCurrentPlayerFaction();
+            Faction f = model.getCurrentPlayer().getPlayerFaction();
             assertTrue(model.placeInitialSettlement(INITIAL_SETTLEMENT_POSITIONS.get(f).first, false));
             assertTrue(model.placeInitialRoad(INITIAL_SETTLEMENT_POSITIONS.get(f).first, INITIAL_ROAD_ENDPOINTS.get(f).first));
             model.switchToNextPlayer();
         }
         for (int i = 0; i < model.getPlayerFactions().size(); i++) {
             model.switchToPreviousPlayer();
-            Faction f = model.getCurrentPlayerFaction();
+            Faction f = model.getCurrentPlayer().getPlayerFaction();
             assertTrue(model.placeInitialSettlement(INITIAL_SETTLEMENT_POSITIONS.get(f).second, true));
             assertTrue(model.placeInitialRoad(INITIAL_SETTLEMENT_POSITIONS.get(f).second, INITIAL_ROAD_ENDPOINTS.get(f).second));
         }
