@@ -184,13 +184,13 @@ public class ThreePlayerStandard {
     public static SiedlerGame getAfterSetupPhase(int winpoints) {
         SiedlerGame model = new SiedlerGame(winpoints);
         model.addPlayersToGame(NUMBER_OF_PLAYERS);
-        for (int i = 0; i < model.getPlayerFactions().size(); i++) {
+        for (int i = 0; i < model.getPlayers().size(); i++) {
             Faction f = model.getCurrentPlayer().getPlayerFaction();
             assertTrue(model.placeInitialSettlement(INITIAL_SETTLEMENT_POSITIONS.get(f).first, false));
             assertTrue(model.placeInitialRoad(INITIAL_SETTLEMENT_POSITIONS.get(f).first, INITIAL_ROAD_ENDPOINTS.get(f).first));
             model.switchToNextPlayer();
         }
-        for (int i = 0; i < model.getPlayerFactions().size(); i++) {
+        for (int i = 0; i < model.getPlayers().size(); i++) {
             model.switchToPreviousPlayer();
             Faction f = model.getCurrentPlayer().getPlayerFaction();
             assertTrue(model.placeInitialSettlement(INITIAL_SETTLEMENT_POSITIONS.get(f).second, true));

@@ -10,7 +10,6 @@ import org.beryx.textio.TextTerminal;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -105,9 +104,8 @@ public class SiedlerGame {
      *
      * @return the list with player's factions
      */
-    public List<Faction> getPlayerFactions() {
-        // TODO: Implement
-        return Collections.emptyList();
+    public List<Player> getPlayers() {
+        return players;
     }
 
     /**

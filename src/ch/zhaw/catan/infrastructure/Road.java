@@ -29,7 +29,7 @@ public class Road extends AbstractInfrastructure {
     }
 
     /**
-     * Build method for building a new Settlement.
+     * Build method for building a new road.
      *
      * @param owner      player to whom the building should be assigned to.
      * @param startPoint startpoint where the road is being set to.

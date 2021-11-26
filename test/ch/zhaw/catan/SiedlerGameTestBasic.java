@@ -42,7 +42,7 @@ public class SiedlerGameTestBasic {
     public void requirementPlayerSwitching(int numberOfPlayers) {
         SiedlerGame model = new SiedlerGame(DEFAULT_WINPOINTS);
         model.addPlayersToGame(numberOfPlayers);
-        assertTrue(numberOfPlayers == model.getPlayerFactions().size(),
+        assertTrue(numberOfPlayers == model.getPlayers().size(),
                 "Wrong number of players returned by getPlayers()");
         //Switching forward
         final Player currentPlayer = model.getCurrentPlayer();
@@ -84,12 +84,12 @@ public class SiedlerGameTestBasic {
     @Test
     public void requirementSettlementAndRoadPositionsOccupiedThreePlayerStandard() {
         SiedlerGame model = getAfterSetupPhase(DEFAULT_WINPOINTS);
-        assertEquals(DEFAULT_NUMBER_OF_PLAYERS, model.getPlayerFactions().size());
-        for (Faction f : model.getPlayerFactions()) {
-            assertTrue(model.getBoard().getCorner(ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS.get(f).first) != null);
-            assertTrue(model.getBoard().getCorner(ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS.get(f).second) != null);
-            assertTrue(model.getBoard().getEdge(ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS.get(f).first, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(f).first) != null);
-            assertTrue(model.getBoard().getEdge(ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS.get(f).second, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(f).second) != null);
+        assertEquals(DEFAULT_NUMBER_OF_PLAYERS, model.getPlayers().size());
+        for (Player f : model.getPlayers()) {
+            assertTrue(model.getBoard().getCorner(ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS.get(f.getPlayerFaction()).first) != null);
+            assertTrue(model.getBoard().getCorner(ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS.get(f.getPlayerFaction()).second) != null);
+            assertTrue(model.getBoard().getEdge(ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS.get(f.getPlayerFaction()).first, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(f).first) != null);
+            assertTrue(model.getBoard().getEdge(ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS.get(f.getPlayerFaction()).second, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(f).second) != null);
         }
     }
 
