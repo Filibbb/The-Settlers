@@ -2,6 +2,7 @@ package ch.zhaw.catan;
 
 import ch.zhaw.catan.board.Land;
 import ch.zhaw.catan.board.SiedlerBoard;
+import ch.zhaw.catan.board.SiedlerBoardTextView;
 import ch.zhaw.hexboard.Label;
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;

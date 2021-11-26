@@ -1,6 +1,5 @@
 package ch.zhaw.catan;
 
-import ch.zhaw.catan.board.GameBoard;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SiedlerBoard;
 import ch.zhaw.catan.player.Faction;
@@ -25,13 +24,12 @@ public class SiedlerGame {
     private static final int FOUR_TO_ONE_TRADE_OFFER = 4;
     private static final int FOUR_TO_ONE_TRADE_WANT = 1;
     private final List<Faction> availableFactions = new ArrayList<>();
-    private final GameBoard gameBoard = new GameBoard();
-    TextIO textIO = TextIoFactory.getTextIO();
-    TextTerminal<?> textTerminal = textIO.getTextTerminal();
+    private final TextIO textIO = TextIoFactory.getTextIO();
+    private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
     private int requiredPointsToWin = 0;
     private Set<Player> players;
     private Player currentPlayer; //TODO set this to the player who has the highest dice throw.
-    private List<Player> playerTurnOrder = new ArrayList<>();
+    private final List<Player> playerTurnOrder = new ArrayList<>();
 
     /**
      * Constructs a SiedlerGame game state object.
@@ -93,7 +91,7 @@ public class SiedlerGame {
      * Returns the {@link Faction}s of the active players.
      *
      * <p>The order of the player's factions in the list must
-     * correspond to the oder in which they play.
+     * correspond to the order in which they play.
      * Hence, the player that sets the first settlement must be
      * at position 0 in the list etc.
      *
@@ -124,8 +122,7 @@ public class SiedlerGame {
      * @return the faction of the current player
      */
     public Faction getCurrentPlayerFaction() {
-        // TODO: Implement
-        return null;
+        return currentPlayer.getPlayerFaction();
     }
 
     /**
@@ -136,8 +133,7 @@ public class SiedlerGame {
      * @return the number of resource cards of this type
      */
     public int getCurrentPlayerResourceStock(Resource resource) {
-        // TODO: Implement
-        return 0;
+        return currentPlayer.getResourceCardCountFor(resource);
     }
 
     /**
@@ -176,7 +172,7 @@ public class SiedlerGame {
      * A key action is the payout of the resource cards to the players
      * according to the payout rules of the game. This includes the
      * "negative payout" in case a 7 is thrown and a player has more than
-     * {@link GameBoard#MAX_CARDS_IN_HAND_NO_DROP} resource cards.
+     * {@link SiedlerBoard#MAX_CARDS_IN_HAND_NO_DROP} resource cards.
      * <p>
      * If a player does not get resource cards, the list for this players'
      * {@link Faction} is <b>an empty list (not null)</b>!.

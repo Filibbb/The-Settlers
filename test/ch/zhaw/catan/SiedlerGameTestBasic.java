@@ -1,11 +1,9 @@
 package ch.zhaw.catan;
 
-import ch.zhaw.catan.board.GameBoard;
 import ch.zhaw.catan.board.Land;
 import ch.zhaw.catan.board.Resource;
+import ch.zhaw.catan.board.SiedlerBoardTextView;
 import ch.zhaw.catan.games.ThreePlayerStandard;
-
-
 import ch.zhaw.catan.player.Faction;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -16,7 +14,10 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static ch.zhaw.catan.board.SiedlerBoard.getDefaultLandPlacement;
+import static ch.zhaw.catan.games.ThreePlayerStandard.getAfterSetupPhase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * This class contains some basic tests for the {@link SiedlerGame} class
@@ -38,7 +39,8 @@ public class SiedlerGameTestBasic {
     @ParameterizedTest
     @ValueSource(ints = {2, 3, 4})
     public void requirementPlayerSwitching(int numberOfPlayers) {
-        SiedlerGame model = new SiedlerGame(DEFAULT_WINPOINTS, numberOfPlayers);
+        SiedlerGame model = new SiedlerGame(DEFAULT_WINPOINTS);
+        model.addPlayersToGame(numberOfPlayers);
         assertTrue(numberOfPlayers == model.getPlayerFactions().size(),
                 "Wrong number of players returned by getPlayers()");
         //Switching forward
@@ -62,11 +64,12 @@ public class SiedlerGameTestBasic {
      */
     @Test
     public void requirementLandPlacementTest() {
-        SiedlerGame model = new SiedlerGame(DEFAULT_WINPOINTS, DEFAULT_NUMBER_OF_PLAYERS);
-        assertTrue(GameBoard.getDefaultLandPlacement().size() == model.getBoard().getFields().size(),
+        SiedlerGame model = new SiedlerGame(DEFAULT_WINPOINTS);
+        model.addPlayersToGame(DEFAULT_NUMBER_OF_PLAYERS);
+        assertTrue(getDefaultLandPlacement().size() == model.getBoard().getFields().size(),
                 "Check if explicit init must be done (violates spec): "
                         + "modify initializeSiedlerGame accordingly.");
-        for (Map.Entry<Point, Land> e : GameBoard.getDefaultLandPlacement().entrySet()) {
+        for (Map.Entry<Point, Land> e : getDefaultLandPlacement().entrySet()) {
             assertEquals(e.getValue(), model.getBoard().getField(e.getKey()),
                     "Land placement does not match default placement.");
         }
@@ -78,7 +81,7 @@ public class SiedlerGameTestBasic {
      */
     @Test
     public void requirementSettlementAndRoadPositionsOccupiedThreePlayerStandard() {
-        SiedlerGame model = ThreePlayerStandard.getAfterSetupPhase(DEFAULT_WINPOINTS);
+        SiedlerGame model = getAfterSetupPhase(DEFAULT_WINPOINTS);
         assertEquals(DEFAULT_NUMBER_OF_PLAYERS, model.getPlayerFactions().size());
         for (Faction f : model.getPlayerFactions()) {
             assertTrue(model.getBoard().getCorner(ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS.get(f).first) != null);
@@ -101,7 +104,7 @@ public class SiedlerGameTestBasic {
     @ParameterizedTest
     @ValueSource(ints = {2, 3, 4, 5, 6, 8, 9, 10, 11, 12})
     public void requirementDiceThrowResourcePayoutThreePlayerStandardTest(int diceValue) {
-        SiedlerGame model = ThreePlayerStandard.getAfterSetupPhase(DEFAULT_WINPOINTS);
+        SiedlerGame model = getAfterSetupPhase(DEFAULT_WINPOINTS);
         Map<Faction, List<Resource>> expectd = ThreePlayerStandard.INITIAL_DICE_THROW_PAYOUT.get(diceValue);
         Map<Faction, List<Resource>> actual = model.throwDice(diceValue);
         assertEquals(ThreePlayerStandard.INITIAL_DICE_THROW_PAYOUT.get(diceValue), model.throwDice(diceValue));
@@ -113,7 +116,7 @@ public class SiedlerGameTestBasic {
      */
     @Test
     public void requirementPlayerResourceCardStockAfterSetupPhase() {
-        SiedlerGame model = ThreePlayerStandard.getAfterSetupPhase(DEFAULT_WINPOINTS);
+        SiedlerGame model = getAfterSetupPhase(DEFAULT_WINPOINTS);
         assertPlayerResourceCardStockEquals(model, ThreePlayerStandard.INITIAL_PLAYER_CARD_STOCK);
     }
 
@@ -143,7 +146,7 @@ public class SiedlerGameTestBasic {
      */
     @Test
     public void requirementDiceThrowPlayerResourceCardStockUpdateTest() {
-        SiedlerGame model = ThreePlayerStandard.getAfterSetupPhase(DEFAULT_WINPOINTS);
+        SiedlerGame model = getAfterSetupPhase(DEFAULT_WINPOINTS);
         for (int i : List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
             model.throwDice(i);
         }
@@ -199,7 +202,7 @@ public class SiedlerGameTestBasic {
      */
     @Test
     public void requirementTwoSettlementsSamePlayerSameFieldResourceCardPayout() {
-        SiedlerGame model = ThreePlayerStandard.getAfterSetupPhase(DEFAULT_WINPOINTS);
+        SiedlerGame model = getAfterSetupPhase(DEFAULT_WINPOINTS);
         for (int diceValue : List.of(2, 6, 6, 11)) {
             model.throwDice(diceValue);
         }
@@ -250,7 +253,7 @@ public class SiedlerGameTestBasic {
     @Disabled
     @Test
     public void print() {
-        SiedlerGame model = ThreePlayerStandard.getAfterSetupPhase(DEFAULT_WINPOINTS);
+        SiedlerGame model = getAfterSetupPhase(DEFAULT_WINPOINTS);
         model.getBoard().addFieldAnnotation(new Point(6, 8), new Point(6, 6), "N ");
         model.getBoard().addFieldAnnotation(new Point(6, 8), new Point(5, 7), "NE");
         model.getBoard().addFieldAnnotation(new Point(6, 8), new Point(5, 9), "SE");

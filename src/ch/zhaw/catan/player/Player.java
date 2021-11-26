@@ -181,6 +181,17 @@ public class Player {
         return false;
     }
 
+    /**
+     * Gets the resource card count for the specified resource
+     *
+     * @param resource the resource the player wants to know the count for.
+     * @return the current count of resource cards of specified type.
+     */
+    public int getResourceCardCountFor(Resource resource) {
+        final Integer cardCount = resourceCardsInHand.get(resource);
+        return cardCount != null ? cardCount : 0;
+    }
+
     public Map<Resource, Integer> getResourceCardsInHand() {
         return resourceCardsInHand;
     }

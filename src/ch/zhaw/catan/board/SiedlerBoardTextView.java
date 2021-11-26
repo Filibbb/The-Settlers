@@ -1,7 +1,5 @@
-package ch.zhaw.catan;
+package ch.zhaw.catan.board;
 
-import ch.zhaw.catan.board.Land;
-import ch.zhaw.catan.board.SiedlerBoard;
 import ch.zhaw.hexboard.HexBoardTextView;
 
 public class SiedlerBoardTextView extends HexBoardTextView<Land, String, String, String> {
