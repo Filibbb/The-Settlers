@@ -1,6 +1,7 @@
 package ch.zhaw.catan.games;
 
-import ch.zhaw.catan.*;
+import ch.zhaw.catan.SiedlerGame;
+import ch.zhaw.catan.Tuple;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.player.Faction;
 
@@ -181,7 +182,8 @@ public class ThreePlayerStandard {
      * @return the siedler game
      */
     public static SiedlerGame getAfterSetupPhase(int winpoints) {
-        SiedlerGame model = new SiedlerGame(winpoints, NUMBER_OF_PLAYERS);
+        SiedlerGame model = new SiedlerGame(winpoints);
+        model.addPlayersToGame(NUMBER_OF_PLAYERS);
         for (int i = 0; i < model.getPlayerFactions().size(); i++) {
             Faction f = model.getCurrentPlayerFaction();
             assertTrue(model.placeInitialSettlement(INITIAL_SETTLEMENT_POSITIONS.get(f).first, false));
