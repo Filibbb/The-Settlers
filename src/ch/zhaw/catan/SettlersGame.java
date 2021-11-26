@@ -30,7 +30,7 @@ public class SettlersGame {
     private final List<Player> playerTurnOrder = new ArrayList<>();
     private int requiredPointsToWin = 0;
     private ArrayList<Player> players;
-    private static SettlersBoard settlersBoard;
+    private SettlersBoard settlersBoard;
     private Player currentPlayer; //TODO set this to the player who has the highest dice throw.
 
     /**
@@ -119,7 +119,7 @@ public class SettlersGame {
      *
      * @return the game board
      */
-    public static SettlersBoard getBoard() {
+    public SettlersBoard getBoard() {
         return settlersBoard;
     }
 
