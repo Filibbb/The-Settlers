@@ -43,6 +43,6 @@ public class Settlement extends AbstractInfrastructure {
     }
 
     private boolean canBuild(Player owner, Point coordinates, SettlersBoard board) {
-        return (board.hasCorner(coordinates) && (board.getNeighboursOfCorner(coordinates).isEmpty() && (!board.getAdjacentEdges(coordinates).isEmpty()) && (owner.checkLiquidity(Structure.SETTLEMENT) && (owner.checkStructureStock(Structure.SETTLEMENT)))));//TODO: check ownership of adjacent road
+        return (board.hasCorner(coordinates) && (board.getCorner(coordinates) == null) && (board.getNeighboursOfCorner(coordinates).isEmpty() && (!board.getAdjacentEdges(coordinates).isEmpty()) && (owner.checkLiquidity(Structure.SETTLEMENT) && (owner.checkStructureStock(Structure.SETTLEMENT)))));//TODO: check ownership of adjacent road
     }
 }

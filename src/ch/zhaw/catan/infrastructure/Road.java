@@ -1,5 +1,6 @@
 package ch.zhaw.catan.infrastructure;
 
+import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.board.Structure;
 import ch.zhaw.catan.player.Player;
 
@@ -32,17 +33,20 @@ public class Road extends AbstractInfrastructure {
      * Build method for building a new road.
      *
      * @param owner      player to whom the building should be assigned to.
-     * @param startPoint startpoint where the road is being set to.
-     * @param endPoint   endpoint where the road is being set to.
+     * @param startPoint start point where the road is being set to.
+     * @param endPoint   end point where the road is being set to.
      * @return a Road Object
      * @author weberph5
      */
-    public Road build(Player owner, Point startPoint, Point endPoint) {
-        if (owner.checkLiquidity(Structure.ROAD)) {
-            if (owner.checkStructureStock(Structure.ROAD)) {
-                return new Road(owner, startPoint, endPoint);
-            }
-        }
-        return null;
+    public boolean build(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
+        if (canBuild(owner, startPoint, endPoint, board)) {
+            board.setEdge(startPoint, endPoint, new Road(owner, startPoint, endPoint));
+            return true;
+
+        } else return false;
+    }
+
+    private boolean canBuild(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
+        return ((owner.checkLiquidity(Structure.ROAD)) && (owner.checkStructureStock(Structure.ROAD) && (board.hasEdge(startPoint, endPoint)) && (board.getEdge(startPoint, endPoint) == null) && (!board.getAdjacentEdges(startPoint).isEmpty()))); //TODO check ownership of adjacent road
     }
 }
