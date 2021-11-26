@@ -5,6 +5,7 @@ import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SiedlerBoardTextView;
 import ch.zhaw.catan.games.ThreePlayerStandard;
 import ch.zhaw.catan.player.Faction;
+import ch.zhaw.catan.player.Player;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -44,17 +45,18 @@ public class SiedlerGameTestBasic {
         assertTrue(numberOfPlayers == model.getPlayerFactions().size(),
                 "Wrong number of players returned by getPlayers()");
         //Switching forward
+        final Player currentPlayer = model.getCurrentPlayer();
         for (int i = 0; i < numberOfPlayers; i++) {
-            assertEquals(Faction.values()[i], model.getCurrentPlayerFaction(),
+            assertEquals(Faction.values()[i], currentPlayer.getPlayerFaction(),
                     "Player order does not match order of Faction.values()");
             model.switchToNextPlayer();
         }
-        assertEquals(Faction.values()[0], model.getCurrentPlayerFaction(),
+        assertEquals(Faction.values()[0], currentPlayer.getPlayerFaction(),
                 "Player wrap-around from last player to first player did not work.");
         //Switching backward
         for (int i = numberOfPlayers - 1; i >= 0; i--) {
             model.switchToPreviousPlayer();
-            assertEquals(Faction.values()[i], model.getCurrentPlayerFaction(),
+            assertEquals(Faction.values()[i], currentPlayer.getPlayerFaction(),
                     "Switching players in reverse order does not work as expected.");
         }
     }
@@ -165,9 +167,10 @@ public class SiedlerGameTestBasic {
 
     private void assertPlayerResourceCardStockEquals(SiedlerGame model, Map<Faction, Map<Resource, Integer>> expected) {
         for (int i = 0; i < expected.keySet().size(); i++) {
-            Faction f = model.getCurrentPlayerFaction();
+            final Player currentPlayer = model.getCurrentPlayer();
+            Faction f = currentPlayer.getPlayerFaction();
             for (Resource r : Resource.values()) {
-                assertEquals(expected.get(f).get(r), model.getCurrentPlayerResourceStock(r),
+                assertEquals(expected.get(f).get(r), currentPlayer.getResourceCardCountFor(r),
                         "Resource card stock of player " + i + " [faction " + f + "] for resource type " + r + " does not match.");
             }
             model.switchToNextPlayer();
@@ -208,7 +211,7 @@ public class SiedlerGameTestBasic {
         }
         assertTrue(model.buildRoad(new Point(6, 6), new Point(7, 7)));
         assertTrue(model.buildSettlement(new Point(7, 7)));
-        assertEquals(List.of(Resource.ORE, Resource.ORE), model.throwDice(4).get(model.getCurrentPlayerFaction()));
+        assertEquals(List.of(Resource.ORE, Resource.ORE), model.throwDice(4).get(model.getCurrentPlayer().getPlayerFaction()));
     }
 
     /**
@@ -231,16 +234,17 @@ public class SiedlerGameTestBasic {
         SiedlerGame model = ThreePlayerStandard.getAfterSetupPhaseAlmostEmptyBank(DEFAULT_WINPOINTS);
         model.switchToNextPlayer();
 
-        Map<Resource, Integer> expectedResourceCards = ThreePlayerStandard.BANK_ALMOST_EMPTY_RESOURCE_CARD_STOCK.get(model.getCurrentPlayerFaction());
-        assertEquals(expectedResourceCards.get(Resource.WOOL), model.getCurrentPlayerResourceStock(Resource.WOOL));
-        assertEquals(expectedResourceCards.get(Resource.LUMBER), model.getCurrentPlayerResourceStock(Resource.LUMBER));
+        final Player currentPlayer = model.getCurrentPlayer();
+        Map<Resource, Integer> expectedResourceCards = ThreePlayerStandard.BANK_ALMOST_EMPTY_RESOURCE_CARD_STOCK.get(currentPlayer.getPlayerFaction());
+        assertEquals(expectedResourceCards.get(Resource.WOOL), currentPlayer.getResourceCardCountFor(Resource.WOOL));
+        assertEquals(expectedResourceCards.get(Resource.LUMBER), currentPlayer.getResourceCardCountFor((Resource.LUMBER)));
 
         model.tradeWithBankFourToOne(Resource.WOOL, Resource.LUMBER);
 
         int cardsOffered = 4;
         int cardsReceived = 1;
-        assertEquals(expectedResourceCards.get(Resource.WOOL) - cardsOffered, model.getCurrentPlayerResourceStock(Resource.WOOL));
-        assertEquals(expectedResourceCards.get(Resource.LUMBER) + cardsReceived, model.getCurrentPlayerResourceStock(Resource.LUMBER));
+        assertEquals(expectedResourceCards.get(Resource.WOOL) - cardsOffered, currentPlayer.getResourceCardCountFor(Resource.WOOL));
+        assertEquals(expectedResourceCards.get(Resource.LUMBER) + cardsReceived, currentPlayer.getResourceCardCountFor(Resource.LUMBER));
     }
 
     /***

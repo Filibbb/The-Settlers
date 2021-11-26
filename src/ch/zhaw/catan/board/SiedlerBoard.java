@@ -12,12 +12,8 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 
     // Initial thief position (on the desert field)
     public static final Point INITIAL_THIEF_POSITION = new Point(7, 11);
-
-    // RESOURCE CARD DECK
-    public static final Map<Resource, Integer> INITIAL_RESOURCE_CARDS_BANK = Map.of(Resource.LUMBER, 19,
-            Resource.BRICK, 19, Resource.WOOL, 19, Resource.GRAIN, 19, Resource.ORE, 19);
-
-    public static final int MAX_CARDS_IN_HAND_NO_DROP = 7;
+    private static final int FOUR_TO_ONE_TRADE_OFFER = 4;
+    private static final int FOUR_TO_ONE_TRADE_WANT = 1;
 
     /**
      * Returns the fields associated with the specified dice value.

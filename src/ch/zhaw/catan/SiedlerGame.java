@@ -12,6 +12,8 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
+import static ch.zhaw.catan.player.FactionsUtil.getRandomAvailableFaction;
+
 
 /**
  * This class performs all actions related to modifying the game state.
@@ -21,9 +23,7 @@ import java.util.*;
  * @author TODO
  */
 public class SiedlerGame {
-    private static final int FOUR_TO_ONE_TRADE_OFFER = 4;
-    private static final int FOUR_TO_ONE_TRADE_WANT = 1;
-    private final List<Faction> availableFactions = new ArrayList<>();
+
     private final TextIO textIO = TextIoFactory.getTextIO();
     private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
     private int requiredPointsToWin = 0;
@@ -40,7 +40,6 @@ public class SiedlerGame {
      */
     public SiedlerGame(int winPoints) {
         requiredPointsToWin = winPoints;
-        availableFactions.addAll(Arrays.asList(Faction.values()));
     }
 
     public void start() {
@@ -62,14 +61,6 @@ public class SiedlerGame {
         for (int playerNumber = 1; playerNumber <= numberOfPlayers; playerNumber++) {
             players.add(new Player(getRandomAvailableFaction()));
         }
-    }
-
-    private Faction getRandomAvailableFaction() {
-        Random randomizer = new Random();
-        final int randomFactionIndex = randomizer.nextInt(availableFactions.size());
-        final Faction selectedFaction = availableFactions.get(randomFactionIndex);
-        availableFactions.remove(selectedFaction);
-        return selectedFaction;
     }
 
     /**
@@ -105,7 +96,6 @@ public class SiedlerGame {
         return Collections.emptyList();
     }
 
-
     /**
      * Returns the game board.
      *
@@ -117,23 +107,12 @@ public class SiedlerGame {
     }
 
     /**
-     * Returns the {@link Faction} of the current player.
+     * This method mainly exists to make sure the pre-existing tests can be executed.
      *
-     * @return the faction of the current player
+     * @return current player
      */
-    public Faction getCurrentPlayerFaction() {
-        return currentPlayer.getPlayerFaction();
-    }
-
-    /**
-     * Returns how many resource cards of the specified type
-     * the current player owns.
-     *
-     * @param resource the resource type
-     * @return the number of resource cards of this type
-     */
-    public int getCurrentPlayerResourceStock(Resource resource) {
-        return currentPlayer.getResourceCardCountFor(resource);
+    protected Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     /**
