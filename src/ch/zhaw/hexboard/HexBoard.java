@@ -1,5 +1,7 @@
 package ch.zhaw.hexboard;
 
+import ch.zhaw.catan.infrastructure.Settlement;
+
 import java.awt.*;
 import java.util.List;
 import java.util.*;
@@ -75,17 +77,17 @@ import java.util.Map.Entry;
  * </pre>
  *
  * @param <F> Data type for the field data objects
- * @param <C> Data type for the corner data objects
- * @param <E> Data type for the edge data objects
+ * @param <Settlement>> Data type for the settlement data objects
+ * @param <Road> Data type for the edge road objects
  * @param <A> Data type for the annotation data objects
  *
  * @author tebe
  *
  */
-public class HexBoard<F, C, E, A> {
+public class HexBoard<F, Settlement, Road, A> {
     private final Map<Point, F> field;
-    private final Map<Point, C> corner;
-    private final Map<Edge, E> edge;
+    private final Map<Point, Settlement> corner;
+    private final Map<Edge, Road> edge;
     private final Map<FieldAnnotationPosition, A> annotation;
     private int maxCoordinateX = 0;
     private int maxCoordinateY = 0;
@@ -304,9 +306,9 @@ public class HexBoard<F, C, E, A> {
      *
      * @return the non-null corner data elements
      */
-    public List<C> getCorners() {
-        List<C> result = new LinkedList<>();
-        for (C c : this.corner.values()) {
+    public List<Settlement> getCorners() {
+        List<Settlement> result = new LinkedList<>();
+        for (Settlement c : this.corner.values()) {
             if (c != null) {
                 result.add(c);
             }
@@ -377,7 +379,7 @@ public class HexBoard<F, C, E, A> {
      * @param p2 second point
      * @return the stored data (or null)
      */
-    public E getEdge(Point p1, Point p2) {
+    public Road getEdge(Point p1, Point p2) {
         Edge e = new Edge(p1, p2);
         if (edge.containsKey(e)) {
             return edge.get(e);
@@ -391,14 +393,14 @@ public class HexBoard<F, C, E, A> {
      *
      * @param p1   first point
      * @param p2   second point
-     * @param data the data to be stored
+     * @param road the road object to be stored
      * @throws IllegalArgumentException if the two points do not identify an
      *                                  EXISTING edge of the field
      */
-    public void setEdge(Point p1, Point p2, E data) {
+    public void setEdge(Point p1, Point p2, Road road) {
         Edge e = new Edge(p1, p2);
         if (edge.containsKey(e)) {
-            edge.put(e, data);
+            edge.put(e, road);
         } else {
             throw new IllegalArgumentException("Edge does not exist => no data can be stored: " + e);
         }
@@ -411,7 +413,7 @@ public class HexBoard<F, C, E, A> {
      * @return the data stored for this node (or null)
      * @throws IllegalArgumentException if the requested corner does not exist
      */
-    public C getCorner(Point location) {
+    public Settlement getCorner(Point location) {
         if (corner.containsKey(location)) {
             return corner.get(location);
         } else {
@@ -423,14 +425,14 @@ public class HexBoard<F, C, E, A> {
      * Stores the data for the edge denoted by the two points.
      *
      * @param location the location of the corner
-     * @param data     the data to be stored
+     * @param settlement     the settlement to be stored
      * @return the old data entry (or null)
      * @throws IllegalArgumentException if there is no corner at this location
      */
-    public C setCorner(Point location, C data) {
-        C old = corner.get(location);
+    public Settlement setCorner(Point location, Settlement settlement) {
+        Settlement old = corner.get(location);
         if (corner.containsKey(location)) {
-            corner.put(location, data);
+            corner.put(location, settlement);
             return old;
         } else {
             throw new IllegalArgumentException(
@@ -450,10 +452,10 @@ public class HexBoard<F, C, E, A> {
      *               neighbors
      * @return list with non-null corner data elements
      */
-    public List<C> getNeighboursOfCorner(Point center) {
-        List<C> result = new LinkedList<>();
+    public List<Settlement> getNeighboursOfCorner(Point center) {
+        List<Settlement> result = new LinkedList<>();
         for (Point c : HexBoard.getAdjacentCorners(center)) {
-            C temp = corner.get(c);
+            Settlement temp = corner.get(c);
             if (temp != null) {
                 result.add(temp);
             }
@@ -473,9 +475,9 @@ public class HexBoard<F, C, E, A> {
      * @return list with non-null edge data elements of edges connecting to the
      * specified edge
      */
-    public List<E> getAdjacentEdges(Point corner) {
-        List<E> result = new LinkedList<>();
-        for (Entry<Edge, E> e : this.edge.entrySet()) {
+    public List<Road> getAdjacentEdges(Point corner) {
+        List<Road> result = new LinkedList<>();
+        for (Entry<Edge, Road> e : this.edge.entrySet()) {
             if (e.getKey().isEdgePoint(corner)
                     && e.getValue() != null) {
                 result.add(e.getValue());
@@ -490,10 +492,10 @@ public class HexBoard<F, C, E, A> {
      * @param center the location of the field
      * @return list with non-null corner data elements
      */
-    public List<C> getCornersOfField(Point center) {
-        List<C> result = new LinkedList<>();
+    public List<Settlement> getSettlementsOfField(Point center) {
+        List<Settlement> result = new LinkedList<>();
         for (Point c : getCornerCoordinatesOfField(center)) {
-            C temp = getCorner(c);
+            Settlement temp = getCorner(c);
             if (temp != null) {
                 result.add(temp);
             }

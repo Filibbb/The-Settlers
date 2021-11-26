@@ -30,7 +30,7 @@ public class SettlersGame {
     private final List<Player> playerTurnOrder = new ArrayList<>();
     private int requiredPointsToWin = 0;
     private ArrayList<Player> players;
-    private SettlersBoard settlersBoard;
+    private static SettlersBoard settlersBoard;
     private Player currentPlayer; //TODO set this to the player who has the highest dice throw.
 
     /**
@@ -119,9 +119,8 @@ public class SettlersGame {
      *
      * @return the game board
      */
-    public SettlersBoard getBoard() {
-        // TODO: Implement
-        return null;
+    public static SettlersBoard getBoard() {
+        return settlersBoard;
     }
 
     /**
@@ -169,7 +168,7 @@ public class SettlersGame {
      * A key action is the payout of the resource cards to the players
      * according to the payout rules of the game. This includes the
      * "negative payout" in case a 7 is thrown and a player has more than
-     * {@link SettlersBoard#MAX_CARDS_IN_HAND_NO_DROP} resource cards.
+     *  resource cards.
      * <p>
      * If a player does not get resource cards, the list for this players'
      * {@link Faction} is <b>an empty list (not null)</b>!.
@@ -246,8 +245,8 @@ public class SettlersGame {
 
 
     /**
-     * Trades in {@link #FOUR_TO_ONE_TRADE_OFFER} resource cards of the
-     * offered type for {@link #FOUR_TO_ONE_TRADE_WANT} resource cards of the wanted type.
+     * Trades in  resource cards of the
+     * offered type for  resource cards of the wanted type.
      * <p>
      * The trade only works when bank and player possess the resource cards
      * for the trade before the trade is executed.
