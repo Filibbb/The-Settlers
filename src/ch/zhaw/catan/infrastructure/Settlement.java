@@ -1,4 +1,4 @@
-package ch.zhaw.catan.build;
+package ch.zhaw.catan.infrastructure;
 
 import ch.zhaw.catan.board.Structure;
 import ch.zhaw.catan.player.Player;
