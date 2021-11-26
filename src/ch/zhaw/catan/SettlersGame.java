@@ -1,15 +1,23 @@
 package ch.zhaw.catan;
 
-import ch.zhaw.catan.board.GameBoard;
 import ch.zhaw.catan.board.Resource;
-import ch.zhaw.catan.board.SiedlerBoard;
 import ch.zhaw.catan.gamelogic.Dice;
+import ch.zhaw.catan.board.SettlersBoard;
+import ch.zhaw.catan.board.SettlersBoardTextView;
 import ch.zhaw.catan.player.Faction;
-
 import ch.zhaw.catan.player.Player;
+import ch.zhaw.catan.gamelogic.Dice;
 
-import java.awt.Point;
-import java.util.*;
+import org.beryx.textio.TextIO;
+import org.beryx.textio.TextIoFactory;
+import org.beryx.textio.TextTerminal;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static ch.zhaw.catan.player.FactionsUtil.getRandomAvailableFaction;
 
 
 /**
@@ -19,43 +27,62 @@ import java.util.*;
  *
  * @author TODO
  */
-public class SiedlerGame {
-    private static final int FOUR_TO_ONE_TRADE_OFFER = 4;
-    private static final int FOUR_TO_ONE_TRADE_WANT = 1;
-
-    private final Dice dice = new Dice();
-    private final Set<Player> players;
-    private final List<Faction> availableFactions = new ArrayList<>();
-    private Player currentPlayer;
-
+public class SettlersGame {
+    private final TextIO textIO = TextIoFactory.getTextIO();
+    private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
+    private final List<Player> playerTurnOrder = new ArrayList<>();
+    private int requiredPointsToWin = 0;
+    private ArrayList<Player> players;
+    private SettlersBoard settlersBoard;
+    private Player currentPlayer; //TODO set this to the player who has the highest dice throw.
 
     /**
      * Constructs a SiedlerGame game state object.
      *
-     * @param winPoints       the number of points required to win the game
-     * @param numberOfPlayers the number of players
+     * @param winPoints the number of points required to win the game
      * @throws IllegalArgumentException if winPoints is lower than
      *                                  three or players is not between two and four
      */
-    public SiedlerGame(int winPoints, int numberOfPlayers) {
-        availableFactions.addAll(Arrays.asList(Faction.values()));
-        players = new HashSet<>(numberOfPlayers);
-        addPlayersToGame(numberOfPlayers);
-        this.currentPlayer = dice.highRoll(players);
+    public SettlersGame(int winPoints) {
+        requiredPointsToWin = winPoints;
     }
 
-    private void addPlayersToGame(int numberOfPlayers) {
-        for (int playerNumber = 1; playerNumber <= numberOfPlayers; playerNumber++) {
-            players.add(new Player(getRandomAvailableFaction()));
+    public void start() {
+        printIntroduction();
+        setupNewGame();
+
+        while (!hasWinner()) {
+            //TODO turn logic
         }
     }
 
-    private Faction getRandomAvailableFaction() {
-        Random randomizer = new Random();
-        final int randomFactionIndex = randomizer.nextInt(availableFactions.size());
-        final Faction selectedFaction = availableFactions.get(randomFactionIndex);
-        availableFactions.remove(selectedFaction);
-        return selectedFaction;
+    private boolean hasWinner() {
+        for (Player player : players) {
+            if (player.getWinningPoints() == requiredPointsToWin) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void printIntroduction() {
+        textTerminal.println("Welcome to The Settlers!");
+    }
+
+    private void setupNewGame() {
+        int numberOfPlayers = textIO.newIntInputReader().withMinVal(2).withMaxVal(4).read("Please enter the number of players. 2, 3 or 4 players are supported.");
+        addPlayersToGame(numberOfPlayers);
+        settlersBoard = new SettlersBoard();
+        SettlersBoardTextView view = new SettlersBoardTextView(settlersBoard);
+        textTerminal.println(view.toString());
+    }
+
+
+    public void addPlayersToGame(int numberOfPlayers) {
+        players = new ArrayList<>(numberOfPlayers);
+        for (int playerNumber = 1; playerNumber <= numberOfPlayers; playerNumber++) {
+            players.add(new Player(getRandomAvailableFaction()));
+        }
     }
 
     /**
@@ -77,7 +104,7 @@ public class SiedlerGame {
      * Returns the {@link Faction}s of the active players.
      *
      * <p>The order of the player's factions in the list must
-     * correspond to the oder in which they play.
+     * correspond to the order in which they play.
      * Hence, the player that sets the first settlement must be
      * at position 0 in the list etc.
      *
@@ -86,42 +113,27 @@ public class SiedlerGame {
      *
      * @return the list with player's factions
      */
-    public List<Faction> getPlayerFactions() {
-        // TODO: Implement
-        return Collections.emptyList();
+    public List<Player> getPlayers() {
+        return players;
     }
-
 
     /**
      * Returns the game board.
      *
      * @return the game board
      */
-    public SiedlerBoard getBoard() {
+    public SettlersBoard getBoard() {
         // TODO: Implement
         return null;
     }
 
     /**
-     * Returns the {@link Faction} of the current player.
+     * This method mainly exists to make sure the pre-existing tests can be executed.
      *
-     * @return the faction of the current player
+     * @return current player
      */
-    public Faction getCurrentPlayerFaction() {
-        // TODO: Implement
-        return null;
-    }
-
-    /**
-     * Returns how many resource cards of the specified type
-     * the current player owns.
-     *
-     * @param resource the resource type
-     * @return the number of resource cards of this type
-     */
-    public int getCurrentPlayerResourceStock(Resource resource) {
-        // TODO: Implement
-        return 0;
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     /**
@@ -160,7 +172,7 @@ public class SiedlerGame {
      * A key action is the payout of the resource cards to the players
      * according to the payout rules of the game. This includes the
      * "negative payout" in case a 7 is thrown and a player has more than
-     * {@link GameBoard#MAX_CARDS_IN_HAND_NO_DROP} resource cards.
+     * {@link SettlersBoard#MAX_CARDS_IN_HAND_NO_DROP} resource cards.
      * <p>
      * If a player does not get resource cards, the list for this players'
      * {@link Faction} is <b>an empty list (not null)</b>!.
@@ -277,5 +289,4 @@ public class SiedlerGame {
         //TODO: Implement (or longest road functionality)
         return false;
     }
-
 }

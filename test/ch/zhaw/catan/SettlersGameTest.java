@@ -1,7 +1,8 @@
 package ch.zhaw.catan;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 /***
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Test;
  * to get several different game states.
  *
  */
-public class SiedlerGameTest {
+public class SettlersGameTest {
 
     @Test
     public void dummyTestMethod() {
