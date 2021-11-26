@@ -1,8 +1,8 @@
 package ch.zhaw.catan;
 
 import ch.zhaw.catan.board.Land;
-import ch.zhaw.catan.board.SiedlerBoard;
-import ch.zhaw.catan.board.SiedlerBoardTextView;
+import ch.zhaw.catan.board.SettlersBoard;
+import ch.zhaw.catan.board.SettlersBoardTextView;
 import ch.zhaw.hexboard.Label;
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
@@ -26,7 +26,7 @@ public class Dummy {
         TextIO textIO = TextIoFactory.getTextIO();
         TextTerminal<?> textTerminal = textIO.getTextTerminal();
 
-        SiedlerBoard board = new SiedlerBoard();
+        SettlersBoard board = new SettlersBoard();
         board.addField(new Point(2, 2), Land.FOREST);
         board.setCorner(new Point(3, 3), "RR");
         board.setEdge(new Point(2, 0), new Point(3, 1), "r");
@@ -34,7 +34,7 @@ public class Dummy {
 
         Map<Point, Label> lowerFieldLabel = new HashMap<>();
         lowerFieldLabel.put(new Point(2, 2), new Label('0', '9'));
-        SiedlerBoardTextView view = new SiedlerBoardTextView(board);
+        SettlersBoardTextView view = new SettlersBoardTextView(board);
 
         for (Map.Entry<Point, Label> e : lowerFieldLabel.entrySet()) {
             view.setLowerFieldLabel(e.getKey(), e.getValue());

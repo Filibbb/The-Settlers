@@ -1,6 +1,6 @@
 package ch.zhaw.catan.games;
 
-import ch.zhaw.catan.SiedlerGame;
+import ch.zhaw.catan.SettlersGame;
 import ch.zhaw.catan.Tuple;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.player.Faction;
@@ -181,8 +181,8 @@ public class ThreePlayerStandard {
      * @param winpoints the number of points required to win the game
      * @return the siedler game
      */
-    public static SiedlerGame getAfterSetupPhase(int winpoints) {
-        SiedlerGame model = new SiedlerGame(winpoints);
+    public static SettlersGame getAfterSetupPhase(int winpoints) {
+        SettlersGame model = new SettlersGame(winpoints);
         model.addPlayersToGame(NUMBER_OF_PLAYERS);
         for (int i = 0; i < model.getPlayers().size(); i++) {
             Faction f = model.getCurrentPlayer().getPlayerFaction();
@@ -242,8 +242,8 @@ public class ThreePlayerStandard {
      * @param winpoints the number of points required to win the game
      * @return the siedler game
      */
-    public static SiedlerGame getAfterSetupPhaseAlmostEmptyBank(int winpoints) {
-        SiedlerGame model = getAfterSetupPhase(winpoints);
+    public static SettlersGame getAfterSetupPhaseAlmostEmptyBank(int winpoints) {
+        SettlersGame model = getAfterSetupPhase(winpoints);
         throwDiceMultipleTimes(model, 6, 9);
         throwDiceMultipleTimes(model, 11, 8);
         throwDiceMultipleTimes(model, 2, 8);
@@ -256,7 +256,7 @@ public class ThreePlayerStandard {
 
 
     /**
-     * Returns a {@link SiedlerGame} with several roads added but none longer than
+     * Returns a {@link SettlersGame} with several roads added but none longer than
      * 4 elements. Hence, no player meets the longest road criteria yet. Furthermore,
      * players one and three have enough resource cards to build additional roads and settlements.
      *
@@ -333,8 +333,8 @@ public class ThreePlayerStandard {
      * @param winpoints the number of points required to win the game
      * @return the siedler game
      */
-    public static SiedlerGame getAfterSetupPhaseSomeRoads(int winpoints) {
-        SiedlerGame model = getAfterSetupPhase(winpoints);
+    public static SettlersGame getAfterSetupPhaseSomeRoads(int winpoints) {
+        SettlersGame model = getAfterSetupPhase(winpoints);
         throwDiceMultipleTimes(model, 6, 7);
         throwDiceMultipleTimes(model, 11, 6);
         throwDiceMultipleTimes(model, 4, 5);
@@ -369,7 +369,7 @@ public class ThreePlayerStandard {
     }
 
 
-    private static SiedlerGame throwDiceMultipleTimes(SiedlerGame model, int diceValue, int numberOfTimes) {
+    private static SettlersGame throwDiceMultipleTimes(SettlersGame model, int diceValue, int numberOfTimes) {
         for (int i = 0; i < numberOfTimes; i++) {
             model.throwDice(diceValue);
         }
@@ -454,8 +454,8 @@ public class ThreePlayerStandard {
      * @param winpoints the number of points required to win the game
      * @return the siedler game
      */
-    public static SiedlerGame getPlayerOneReadyToBuildFifthSettlement(int winpoints) {
-        SiedlerGame model = getAfterSetupPhase(winpoints);
+    public static SettlersGame getPlayerOneReadyToBuildFifthSettlement(int winpoints) {
+        SettlersGame model = getAfterSetupPhase(winpoints);
         //generate resources to build four roads and four settlements.
         throwDiceMultipleTimes(model, 6, 8);
         throwDiceMultipleTimes(model, 11, 7);
@@ -469,12 +469,12 @@ public class ThreePlayerStandard {
         return model;
     }
 
-    private static void buildSettlement(SiedlerGame model, Point position, List<Point> roads) {
+    private static void buildSettlement(SettlersGame model, Point position, List<Point> roads) {
         buildRoad(model, roads);
         assertTrue(model.buildSettlement(position));
     }
 
-    private static void buildRoad(SiedlerGame model, List<Point> roads) {
+    private static void buildRoad(SettlersGame model, List<Point> roads) {
         for (int i = 0; i < roads.size() - 1; i++) {
             assertTrue(model.buildRoad(roads.get(i), roads.get(i + 1)));
         }
