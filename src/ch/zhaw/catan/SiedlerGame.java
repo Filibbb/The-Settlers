@@ -9,8 +9,10 @@ import org.beryx.textio.TextIoFactory;
 import org.beryx.textio.TextTerminal;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
 
 import static ch.zhaw.catan.player.FactionsUtil.getRandomAvailableFaction;
 
@@ -23,11 +25,10 @@ import static ch.zhaw.catan.player.FactionsUtil.getRandomAvailableFaction;
  * @author TODO
  */
 public class SiedlerGame {
-
     private final TextIO textIO = TextIoFactory.getTextIO();
     private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
     private int requiredPointsToWin = 0;
-    private Set<Player> players;
+    private ArrayList<Player> players;
     private Player currentPlayer; //TODO set this to the player who has the highest dice throw.
     private final List<Player> playerTurnOrder = new ArrayList<>();
 
@@ -45,6 +46,19 @@ public class SiedlerGame {
     public void start() {
         printIntroduction();
         setupNewGame();
+
+        while (!hasWinner()) {
+            //TODO turn logic
+        }
+    }
+
+    private boolean hasWinner() {
+        for (Player player : players) {
+            if (player.getWinningPoints() == requiredPointsToWin) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void printIntroduction() {
@@ -57,7 +71,7 @@ public class SiedlerGame {
     }
 
     public void addPlayersToGame(int numberOfPlayers) {
-        players = new HashSet<>(numberOfPlayers);
+        players = new ArrayList<>(numberOfPlayers);
         for (int playerNumber = 1; playerNumber <= numberOfPlayers; playerNumber++) {
             players.add(new Player(getRandomAvailableFaction()));
         }
