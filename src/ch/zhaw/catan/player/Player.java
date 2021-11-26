@@ -1,7 +1,7 @@
 package ch.zhaw.catan.player;
 
-import ch.zhaw.catan.board.Structure;
 import ch.zhaw.catan.board.Resource;
+import ch.zhaw.catan.board.Structure;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,9 +13,9 @@ import java.util.Map;
  */
 public class Player {
     private final Faction playerFaction;
+    private final Map<Structure, Integer> builtStructuresCounter = new HashMap<>(Map.of(Structure.ROAD, 0, Structure.SETTLEMENT, 0, Structure.CITY, 0));
+    private final Map<Resource, Integer> resourceCardsInHand = new HashMap<>();
     private int winningPoints = 0;
-    private final Map<Resource, Integer> resourceCards = new HashMap<>();
-    public Map<Structure, Integer> builtStructures = new HashMap<>(Map.of(Structure.ROAD, 0, Structure.SETTLEMENT, 0, Structure.CITY, 0));
 
     /**
      * Creates a player object with the related faction.
@@ -34,6 +34,77 @@ public class Player {
     }
 
     /**
+     * Check if the current player has enough structures remaining of that type to build specified structure
+     *
+     * @param structure the structure the player wanted to build
+     * @return true if player has enough remaining structures, false otherwise.
+     * @throws RuntimeException if unknown structure type is entered.
+     * @author weberph5
+     */
+    public boolean checkStructureStock(Structure structure) {
+        switch (structure) {
+            case ROAD -> {
+                return (builtStructuresCounter.get(Structure.ROAD) < Structure.ROAD.getStockPerPlayer());
+            }
+            case SETTLEMENT -> {
+                return (builtStructuresCounter.get(Structure.SETTLEMENT) < Structure.SETTLEMENT.getStockPerPlayer());
+            }
+            case CITY -> {
+                return (builtStructuresCounter.get(Structure.CITY) < Structure.CITY.getStockPerPlayer());
+            }
+            default -> {
+                throw new RuntimeException("Unknown structure type " + structure);
+            }
+        }
+    }
+
+    /**
+     * Check if the current player has enough resources to build specified structure
+     *
+     * @param structure the structure the player wanted to build
+     * @return true if player has enough resources, false otherwise.
+     * @author weberph5
+     */
+    public boolean checkLiquidity(Structure structure) {
+        Map<Resource, Integer> resourceCards = getResourceCardsInHand();
+        switch (structure) {
+            case CITY -> {
+                return ((resourceCards.get(Resource.ORE) >= 3) && (resourceCards.get(Resource.GRAIN) >= 2));
+            }
+            case ROAD -> {
+                return ((resourceCards.get(Resource.LUMBER) >= 1) && (resourceCards.get(Resource.BRICK) >= 1));
+            }
+            case SETTLEMENT -> {
+                return ((resourceCards.get(Resource.LUMBER) >= 1) && (resourceCards.get(Resource.GRAIN) >= 1) && (resourceCards.get(Resource.BRICK) >= 1) && (resourceCards.get(Resource.WOOL) >= 1));
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Increases the build counter for the structure by one.
+     *
+     * @param structure the structure the player built.
+     * @author weberph5
+     */
+    public void increaseBuiltStructures(Structure structure) {
+        switch (structure) {
+            case ROAD -> {
+                Integer builtRoads = builtStructuresCounter.get(Structure.ROAD);
+                builtStructuresCounter.put(Structure.ROAD, builtRoads++);
+            }
+            case SETTLEMENT -> {
+                Integer builtSettlements = builtStructuresCounter.get(Structure.SETTLEMENT);
+                builtStructuresCounter.put(Structure.SETTLEMENT, builtSettlements++);
+            }
+            case CITY -> {
+                Integer builtCities = builtStructuresCounter.get(Structure.CITY);
+                builtStructuresCounter.put(Structure.CITY, builtCities++);
+            }
+        }
+    }
+
+    /**
      * Counts the total resource cards a player holds.
      *
      * @return the total number of resource cards of all resources the player holds
@@ -41,7 +112,7 @@ public class Player {
      */
     public int getTotalResourceCardCount() {
         int totalCount = 0;
-        for (Map.Entry<Resource, Integer> card : resourceCards.entrySet()) {
+        for (Map.Entry<Resource, Integer> card : resourceCardsInHand.entrySet()) {
             int cardCount = card.getValue() != null ? card.getValue() : 0;
             totalCount += cardCount;
         }
@@ -70,11 +141,11 @@ public class Player {
     }
 
     private void addResource(Resource resource, int count) {
-        if (resourceCards.containsKey(resource)) {
-            final Integer cardCount = resourceCards.get(resource);
-            resourceCards.put(resource, cardCount + count);
+        if (resourceCardsInHand.containsKey(resource)) {
+            final Integer cardCount = resourceCardsInHand.get(resource);
+            resourceCardsInHand.put(resource, cardCount + count);
         } else {
-            resourceCards.put(resource, count);
+            resourceCardsInHand.put(resource, count);
         }
     }
 
@@ -102,12 +173,27 @@ public class Player {
     }
 
     private boolean removeResource(Resource resource, int count) {
-        if (resourceCards.containsKey(resource)) {
-            final Integer cardCount = resourceCards.get(resource);
-            resourceCards.put(resource, cardCount - count);
+        if (resourceCardsInHand.containsKey(resource)) {
+            final Integer cardCount = resourceCardsInHand.get(resource);
+            resourceCardsInHand.put(resource, cardCount - count);
             return true;
         }
         return false;
+    }
+
+    /**
+     * Gets the resource card count for the specified resource
+     *
+     * @param resource the resource the player wants to know the count for.
+     * @return the current count of resource cards of specified type.
+     */
+    public int getResourceCardCountFor(Resource resource) {
+        final Integer cardCount = resourceCardsInHand.get(resource);
+        return cardCount != null ? cardCount : 0;
+    }
+
+    public Map<Resource, Integer> getResourceCardsInHand() {
+        return resourceCardsInHand;
     }
 
     public Faction getPlayerFaction() {
@@ -118,63 +204,8 @@ public class Player {
         return winningPoints;
     }
 
-    public Map<Resource, Integer> getResourceCards() {
-        return resourceCards;
-    }
-
-    public Map<Structure, Integer> getBuiltStructures() {
-        return builtStructures;
-    }
-
-    public void increaseBuiltStructures(Player currentPlayer, Structure structure) {
-        Map<Structure, Integer> builtStructures = currentPlayer.getBuiltStructures();
-        switch (structure) {
-            case ROAD -> {
-                Integer builtRoads = builtStructures.get(Structure.ROAD);
-                builtStructures.put(Structure.ROAD, builtRoads++);
-            }
-            case SETTLEMENT -> {
-                Integer builtSettlements = builtStructures.get(Structure.SETTLEMENT);
-                builtStructures.put(Structure.SETTLEMENT, builtSettlements++);
-            }
-            case CITY -> {
-                Integer builtCities = builtStructures.get(Structure.CITY);
-                builtStructures.put(Structure.CITY, builtCities++);
-            }
-        }
-
-    }
-
-    public static boolean checkStructureStock(Player currentPlayer, Structure structure) {
-        Map<Structure, Integer> builtStructures = currentPlayer.getBuiltStructures();
-        switch (structure) {
-            case ROAD -> {
-                return(builtStructures.get(Structure.ROAD) < Structure.ROAD.getStockPerPlayer());
-            }
-            case SETTLEMENT -> {
-                return(builtStructures.get(Structure.SETTLEMENT) < Structure.SETTLEMENT.getStockPerPlayer());
-            }
-            case CITY -> {
-                return(builtStructures.get(Structure.CITY) < Structure.CITY.getStockPerPlayer());
-            }
-        }
-        return false;
-    }
-
-    public static boolean checkLiquidity(Player currentPlayer, Structure structure) {
-        Map<Resource, Integer> resourceCards = currentPlayer.getResourceCards();
-        switch (structure) {
-            case CITY -> {
-                return((resourceCards.get(Resource.ORE) >= 3) && (resourceCards.get(Resource.GRAIN) >= 2));
-            }
-            case ROAD -> {
-                return((resourceCards.get(Resource.LUMBER) >= 1) && (resourceCards.get(Resource.BRICK) >= 1));
-            }
-            case SETTLEMENT -> {
-                return((resourceCards.get(Resource.LUMBER) >= 1) && (resourceCards.get(Resource.GRAIN) >= 1) && (resourceCards.get(Resource.BRICK) >= 1) && (resourceCards.get(Resource.WOOL) >= 1));
-            }
-        }
-        return false;
+    public Map<Structure, Integer> getBuiltStructuresCounter() {
+        return builtStructuresCounter;
     }
 
 }
