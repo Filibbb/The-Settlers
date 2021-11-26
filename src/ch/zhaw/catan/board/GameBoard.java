@@ -1,6 +1,8 @@
 package ch.zhaw.catan.board;
 
-import java.awt.Point;
+import ch.zhaw.hexboard.HexBoard;
+
+import java.awt.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,19 +21,23 @@ import java.util.Map;
  * @author tebe
  */
 public class GameBoard {
-    // Minimum number of players
-    // Note: The max. number is equal to the number of factions (see Faction enum)
-    public static final int MIN_NUMBER_OF_PLAYERS = 2;
-
-    // Initial thief position (on the desert field)
-    public static final Point INITIAL_THIEF_POSITION = new Point(7, 11);
-
-    // RESOURCE CARD DECK
-    public static final Map<Resource, Integer> INITIAL_RESOURCE_CARDS_BANK = Map.of(Resource.LUMBER, 19,
+  public static final Point INITIAL_THIEF_POSITION = new Point(7, 11);
+  public static final Map<Resource, Integer> INITIAL_RESOURCE_CARDS_BANK = Map.of(Resource.LUMBER, 19,
             Resource.BRICK, 19, Resource.WOOL, 19, Resource.GRAIN, 19, Resource.ORE, 19);
 
-    public static final int MAX_CARDS_IN_HAND_NO_DROP = 7;
+  public GameBoard(){
+        boardInit();
+      }
 
+
+public static HexBoard boardInit(){
+    HexBoard board = new HexBoard();
+    Map<Point, Land> landPlacement= getDefaultLandPlacement();
+    for (Point key : landPlacement.keySet()) {
+        board.addField(key, landPlacement.get(key));
+    }
+    return board;
+}
     /**
      * Returns the defaults mapping of the dice values per field.
      *

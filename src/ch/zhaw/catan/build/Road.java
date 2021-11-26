@@ -1,9 +1,7 @@
 package ch.zhaw.catan.build;
 
-import ch.zhaw.catan.board.GameBoard;
-import ch.zhaw.catan.board.SiedlerBoard;
-import ch.zhaw.catan.player.Player;
 import ch.zhaw.catan.board.Structure;
+import ch.zhaw.catan.player.Player;
 
 import java.awt.*;
 
