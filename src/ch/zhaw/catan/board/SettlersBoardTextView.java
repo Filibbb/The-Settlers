@@ -30,6 +30,4 @@ public class SettlersBoardTextView extends HexBoardTextView<Land, String, String
             setLowerFieldLabel(gameField.getKey(), convertToFieldValueToLabel(gameField.getValue()));
         }
     }
-
-
 }
