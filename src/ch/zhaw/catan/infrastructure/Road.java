@@ -35,7 +35,7 @@ public class Road extends AbstractInfrastructure {
      * @param owner      player to whom the building should be assigned to.
      * @param startPoint start point where the road is being set to.
      * @param endPoint   end point where the road is being set to.
-     * @return a Road Object
+     * @return true if successfully built, false if not.
      * @author weberph5
      */
     public boolean build(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {

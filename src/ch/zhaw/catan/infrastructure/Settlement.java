@@ -32,7 +32,7 @@ public class Settlement extends AbstractInfrastructure {
      *
      * @param owner       player to whom the building should be assigned to.
      * @param coordinates position where the settlement is being set to.
-     * @return a Settlement Object
+     * @return true if successfully built, false if not.
      * @author weberph5
      */
     public boolean build(Player owner, Point coordinates, SettlersBoard board) {
