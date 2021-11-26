@@ -1,10 +1,19 @@
-package ch.zhaw.catan.player;
+package ch.zhaw.catan.gamelogic;
+
+import ch.zhaw.catan.player.Player;
+import ch.zhaw.catan.gamelogic.Commands;
+
+import org.beryx.textio.TextIO;
+import org.beryx.textio.TextIoFactory;
+import org.beryx.textio.TextTerminal;
 
 import java.util.Random;
 import java.util.Set;
 
 public class Dice {
     Random random = new Random();
+    TextIO textIO = TextIoFactory.getTextIO();
+    TextTerminal<?> textTerminal = textIO.getTextTerminal();
 
     /**
      * The player with the highest number has to start.
@@ -16,6 +25,7 @@ public class Dice {
     //TODO let the players roll the dice themselves!
     public Player highRoll(Set<Player> participants) {
         Object[] players = participants.toArray();
+
         int[] diceThrows = new int[players.length];
         for (int i = 0; i < players.length; i++) {
             diceThrows[i] = dice();
@@ -86,6 +96,12 @@ public class Dice {
         if (player.playerOccupiesField(diceValue)) {
             player.addResourceCardToHand(player.getResourceByDiceValue(diceValue), player.countResourcePointsOnRolledFields(diceValue));
         }
+    }
+
+    private int playerThrowDice(){
+        textTerminal.println("It's your turn. Roll the dice with: " + Commands.getCommandByRepresentation("ROLLDICE"));
+        //TODO:!!!
+        return 0;
     }
 
     private int dice() {

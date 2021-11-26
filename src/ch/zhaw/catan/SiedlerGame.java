@@ -3,13 +3,10 @@ package ch.zhaw.catan;
 import ch.zhaw.catan.board.GameBoard;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SiedlerBoard;
-import ch.zhaw.catan.player.Dice;
+import ch.zhaw.catan.gamelogic.Dice;
 import ch.zhaw.catan.player.Faction;
 
 import ch.zhaw.catan.player.Player;
-import org.beryx.textio.TextIO;
-import org.beryx.textio.TextIoFactory;
-import org.beryx.textio.TextTerminal;
 
 import java.awt.Point;
 import java.util.*;
