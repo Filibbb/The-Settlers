@@ -3,8 +3,7 @@ package ch.zhaw.catan.player;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.Structure;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class manages the player data and faction.
@@ -120,6 +119,32 @@ public class Player {
     }
 
     /**
+     * Checks if the player has more than 7 resource cards.
+     *
+     * @return true if the player has more than 7 resource cards.
+     * @author fupat002
+     */
+    public boolean playerHasMoreThanSevenResources() {
+        return getTotalResourceCardCount() > 7;
+    }
+
+    /**
+     * Deletes half of the resources.
+     */
+    public void deletesHalfOfResources() {
+        int cardsToGiveUp = getTotalResourceCardCount() / 2;
+        while (cardsToGiveUp != 0) {
+            for (Resource card : resourceCardsInHand.keySet()) {
+                if (cardsToGiveUp != 0 && resourceCardsInHand.get(card) > 0) {
+                    int cardCountWithOneRemoved = resourceCardsInHand.get(card) - 1;
+                    resourceCardsInHand.put(card, cardCountWithOneRemoved);
+                    cardsToGiveUp--;
+                }
+            }
+        }
+    }
+
+    /**
      * Adds exactly one of the specified resource to the hand of the player
      *
      * @param resource the resource type you want to add to the hand.
@@ -207,5 +232,4 @@ public class Player {
     public Map<Structure, Integer> getBuiltStructuresCounter() {
         return builtStructuresCounter;
     }
-
 }

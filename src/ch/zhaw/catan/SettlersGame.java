@@ -1,10 +1,13 @@
 package ch.zhaw.catan;
 
 import ch.zhaw.catan.board.Resource;
+import ch.zhaw.catan.gamelogic.Dice;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.board.SettlersBoardTextView;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
+import ch.zhaw.catan.gamelogic.Dice;
+
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
 import org.beryx.textio.TextTerminal;
@@ -27,6 +30,7 @@ import static ch.zhaw.catan.player.FactionsUtil.getRandomAvailableFaction;
 public class SettlersGame {
     private final TextIO textIO = TextIoFactory.getTextIO();
     private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
+    private final Dice dice = new Dice();
     private final List<Player> playerTurnOrder = new ArrayList<>();
     private int requiredPointsToWin = 0;
     private ArrayList<Player> players;
@@ -47,6 +51,7 @@ public class SettlersGame {
     public void start() {
         printIntroduction();
         setupNewGame();
+        decidePlayerOneWithHighRoll();
 
         while (!hasWinner()) {
             //TODO turn logic
@@ -286,4 +291,8 @@ public class SettlersGame {
         return false;
     }
 
+    private void decidePlayerOneWithHighRoll(){
+        textTerminal.println("We decide the lucky starter of this round with the highest number rolled. So let's go.");
+        this.currentPlayer = dice.highRoll(players);
+    }
 }
