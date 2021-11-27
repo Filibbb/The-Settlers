@@ -16,9 +16,6 @@ public class Player {
     private final Map<Resource, Integer> resourceCardsInHand = new HashMap<>();
     private int winningPoints = 0;
 
-    private final Set<OccupiedResourceField> allOccupiedResourceFields = new HashSet<>();//TODO: wenn ein neues Dorf platziert wird ein Set-Eintrag adden.
-
-
     /**
      * Creates a player object with the related faction.
      *
@@ -207,71 +204,6 @@ public class Player {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Checks if the Player occupies a field with the number thrown.
-     *
-     * @param diceValue the number thrown.
-     * @return true if the player occupies a field with the number thrown.
-     * @author fupat002
-     */
-    public boolean playerOccupiesField(int diceValue) {
-        for (OccupiedResourceField occupiedField : allOccupiedResourceFields) {
-            if (occupiedField.getDiceValue() == diceValue) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Returns the resource of a field with the dice value from a player that he has occupied.
-     *
-     * @param diceValue number between 2 and 12. Dice value of the field.
-     * @return the resource of the field with the dice value.
-     * @author fupat002
-     */
-    //TODO: Wenn zwei Ressourcenfelder den gleichen Würfelwert haben funktioniert es noch nicht so wie gewollt.
-    public Resource getResourceByDiceValue(int diceValue) {
-        for (OccupiedResourceField occupiedField : allOccupiedResourceFields) {
-            if (occupiedField.getDiceValue() == diceValue) {
-                return occupiedField.getResource();
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Counts the winning points of a field with a specific dice value.
-     *
-     * @param diceValue number between 2 and 12. Dice value of the field.
-     * @return the amount of winning points on a resource field.
-     * @author fupat002
-     */
-    public int countResourcePointsOnRolledFields(int diceValue) {
-        int resourceCounter = 0;
-        for (OccupiedResourceField occupiedField : allOccupiedResourceFields) {
-            if (occupiedField.getDiceValue() == diceValue) {
-                if (occupiedField.isOccupiedWithCity()) {
-                    resourceCounter += 2;
-                } else {
-                    resourceCounter++;
-                }
-            }
-        }
-        return resourceCounter;
-    }
-
-    /**
-     * Adds a resource field to the set.
-     *
-     * @param resource  the resource of the field.
-     * @param diceValue the dice value of the field.
-     * @author fupat002
-     */
-    public void addResourceField(Resource resource, int diceValue) {
-        allOccupiedResourceFields.add(new OccupiedResourceField(resource, diceValue));
     }
 
     /**

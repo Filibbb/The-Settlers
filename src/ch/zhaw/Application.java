@@ -1,7 +1,6 @@
 package ch.zhaw;
 
 import ch.zhaw.catan.SettlersGame;
-import ch.zhaw.catan.gamelogic.Dice;
 
 /**
  * Simple main class to start the game.
