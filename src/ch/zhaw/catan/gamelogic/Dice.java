@@ -29,7 +29,7 @@ public class Dice {
             if (inputtedText.equals("ROLLDICE")) {
                 diceThrows[i] = dice();
                 textTerminal.println("You Rolled a " + diceThrows[i]);
-            }else{
+            } else {
                 textTerminal.println("Your input is invalid and so is your roll.");//TODO: Validate command in command handler
             }
         }

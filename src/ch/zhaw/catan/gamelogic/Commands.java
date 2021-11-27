@@ -1,7 +1,7 @@
 package ch.zhaw.catan.gamelogic;
 
 public enum Commands {
-    ROLLDICE("ROLLDICE","Roll the Dice");
+    ROLLDICE("ROLLDICE", "Roll the Dice");
 
     private final String representation;
     private final String commandInfo;
