@@ -1,5 +1,6 @@
 package ch.zhaw.catan.infrastructure;
 
+import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.board.Structure;
 import ch.zhaw.catan.player.Player;
 
@@ -31,15 +32,17 @@ public class Settlement extends AbstractInfrastructure {
      *
      * @param owner       player to whom the building should be assigned to.
      * @param coordinates position where the settlement is being set to.
-     * @return a Settlement Object
+     * @return true if successfully built, false if not.
      * @author weberph5
      */
-    public Settlement build(Player owner, Point coordinates) {
-        if (owner.checkLiquidity(Structure.SETTLEMENT))
-            if (owner.checkStructureStock(Structure.SETTLEMENT)) {
-                return new Settlement(owner, coordinates);
-            }
-        return null;
+    public boolean build(Player owner, Point coordinates, SettlersBoard board) {
+        if (canBuild(owner, coordinates, board)) {
+            board.setCorner(coordinates, new Settlement(owner, coordinates));
+            return true;
+        } else return false;
+    }
+
+    private boolean canBuild(Player owner, Point coordinates, SettlersBoard board) {
+        return (board.hasCorner(coordinates) && (board.getCorner(coordinates) == null) && (board.getNeighboursOfCorner(coordinates).isEmpty() && (!board.getAdjacentEdges(coordinates).isEmpty()) && (owner.checkLiquidity(Structure.SETTLEMENT) && (owner.checkStructureStock(Structure.SETTLEMENT)))));//TODO: check ownership of adjacent road
     }
 }
-

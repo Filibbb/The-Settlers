@@ -75,8 +75,8 @@ import java.util.Map.Entry;
  * </pre>
  *
  * @param <F> Data type for the field data objects
- * @param <C> Data type for the corner data objects
- * @param <E> Data type for the edge data objects
+ * @param <C>> Data type for the corner data objects
+ * @param <E> Data type for the edge  objects
  * @param <A> Data type for the annotation data objects
  *
  * @author tebe
@@ -423,7 +423,7 @@ public class HexBoard<F, C, E, A> {
      * Stores the data for the edge denoted by the two points.
      *
      * @param location the location of the corner
-     * @param data     the data to be stored
+     * @param data     the settlement to be stored
      * @return the old data entry (or null)
      * @throws IllegalArgumentException if there is no corner at this location
      */
@@ -490,7 +490,7 @@ public class HexBoard<F, C, E, A> {
      * @param center the location of the field
      * @return list with non-null corner data elements
      */
-    public List<C> getCornersOfField(Point center) {
+    public List<C> getCornerDataOfField(Point center) {
         List<C> result = new LinkedList<>();
         for (Point c : getCornerCoordinatesOfField(center)) {
             C temp = getCorner(c);

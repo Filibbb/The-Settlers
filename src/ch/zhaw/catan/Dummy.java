@@ -1,3 +1,4 @@
+/*
 package ch.zhaw.catan;
 
 import ch.zhaw.catan.board.Land;
@@ -60,3 +61,4 @@ public class Dummy {
         SHOW, QUIT
     }
 }
+*/
