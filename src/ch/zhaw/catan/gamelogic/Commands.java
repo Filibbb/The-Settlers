@@ -12,7 +12,7 @@ public enum Commands {
      * @param representation the command representation
      * @param commandInfo    the description on what the command does
      */
-    Commands(String representation, String commandInfo) {
+    private Commands(String representation, String commandInfo) {
         this.representation = representation;
         this.commandInfo = commandInfo;
     }
