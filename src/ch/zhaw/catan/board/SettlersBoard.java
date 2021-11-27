@@ -1,5 +1,7 @@
 package ch.zhaw.catan.board;
 
+import ch.zhaw.catan.infrastructure.Road;
+import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.hexboard.HexBoard;
 
 import java.awt.*;
@@ -8,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SettlersBoard extends HexBoard<Land, String, String, String> {
+public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
     // Initial thief position (on the desert field)
     public static final Point INITIAL_THIEF_POSITION = new Point(7, 11);
 
