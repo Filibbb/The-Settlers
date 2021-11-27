@@ -30,6 +30,7 @@ import static ch.zhaw.catan.player.FactionsUtil.getRandomAvailableFaction;
 public class SettlersGame {
     private final TextIO textIO = TextIoFactory.getTextIO();
     private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
+    private final Dice dice = new Dice();
     private final List<Player> playerTurnOrder = new ArrayList<>();
     private int requiredPointsToWin = 0;
     private ArrayList<Player> players;
@@ -50,6 +51,7 @@ public class SettlersGame {
     public void start() {
         printIntroduction();
         setupNewGame();
+        decidePlayerOneWithHighRoll();
 
         while (!hasWinner()) {
             //TODO turn logic
@@ -288,5 +290,10 @@ public class SettlersGame {
     public boolean placeThiefAndStealCard(Point field) {
         //TODO: Implement (or longest road functionality)
         return false;
+    }
+
+    private void decidePlayerOneWithHighRoll(){
+        textTerminal.println("We decide the lucky starter of this round with the highest number rolled. So let's go.");
+        this.currentPlayer = dice.highRoll(players);
     }
 }

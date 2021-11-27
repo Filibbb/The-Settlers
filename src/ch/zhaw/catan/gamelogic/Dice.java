@@ -1,40 +1,46 @@
 package ch.zhaw.catan.gamelogic;
 
 import ch.zhaw.catan.player.Player;
-import ch.zhaw.catan.gamelogic.Commands;
 
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
 import org.beryx.textio.TextTerminal;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
 
 public class Dice {
-    Random random = new Random();
-    TextIO textIO = TextIoFactory.getTextIO();
-    TextTerminal<?> textTerminal = textIO.getTextTerminal();
+    private Random random = new Random();
+    private TextIO textIO = TextIoFactory.getTextIO();
+    private TextTerminal<?> textTerminal = textIO.getTextTerminal();
 
     /**
      * The player with the highest number has to start.
      *
-     * @param participants the set with all players/participants.
+     * @param players the set with all players/participants.
      * @return the player with the highest firs throw.
      * @author fupat002
      */
-    //TODO let the players roll the dice themselves!
-    public Player highRoll(Set<Player> participants) {
-        Object[] players = participants.toArray();
-
-        int[] diceThrows = new int[players.length];
-        for (int i = 0; i < players.length; i++) {
-            diceThrows[i] = dice();
+    public Player highRoll(ArrayList<Player> players) {
+        int[] diceThrows = new int[players.size()];
+        for (int i = 0; i < players.size(); i++) {
+            String inputtedText = textIO.newStringInputReader().read("It is the turn of the player with the faction " + players.get(i).getPlayerFaction() + ". Roll the dice with: \"ROLLDICE\"");
+            if (inputtedText.equals("ROLLDICE")) {
+                diceThrows[i] = dice();
+                textTerminal.println("You Rolled a " + diceThrows[i]);
+            }else{
+                textTerminal.println("Your input is invalid and so is your roll.");
+            }
         }
         int highestDiceValue = getMaxDiceValue(diceThrows);
         if (highestValueIsDuplicated(diceThrows, highestDiceValue)) {
-            return highRoll(participants);
+            textTerminal.println("Several players rolled the same number. Do the whole thing again.");
+            return highRoll(players);
         } else {
-            return (Player) players[indexOfPlayerWithHighestRoll(diceThrows, highestDiceValue)];
+            Player playerWithTheHighestDiceValue = players.get(indexOfPlayerWithHighestRoll(diceThrows, highestDiceValue));
+            textTerminal.println("Faction " + playerWithTheHighestDiceValue.getPlayerFaction() + " rolled a " + diceThrows[indexOfPlayerWithHighestRoll(diceThrows, highestDiceValue)] + ". You are the lucky player who is allowed to start.");
+            return playerWithTheHighestDiceValue;
         }
     }
 
@@ -54,7 +60,7 @@ public class Dice {
                 highestValueCounter++;
             }
         }
-        return highestDiceValue < 1;
+        return highestValueCounter > 1;
     }
 
     private int getMaxDiceValue(int[] diceThrows) {
@@ -65,43 +71,6 @@ public class Dice {
             }
         }
         return maxValue;
-    }
-
-    /**
-     * rolls the dice and distributes the materials to the players.
-     *
-     * @param players the set with all players.
-     * @author fupat002
-     */
-    public void throwDice(Set<Player> players) {
-        int diceValue = dice();
-        if (diceValue == 7) {
-            splitResourcesOfPlayersWithMoreThanSeven(players);
-        } else {
-            for (Player player : players) {
-                handOutResourcesAfterDiceThrow(player, diceValue);
-            }
-        }
-    }
-
-    private void splitResourcesOfPlayersWithMoreThanSeven(Set<Player> players) {
-        for (Player player : players) {
-            if (player.playerHasMoreThanSevenResources()) {
-                player.deletesHalfOfResources();
-            }
-        }
-    }
-
-    private void handOutResourcesAfterDiceThrow(Player player, int diceValue) {
-        if (player.playerOccupiesField(diceValue)) {
-            player.addResourceCardToHand(player.getResourceByDiceValue(diceValue), player.countResourcePointsOnRolledFields(diceValue));
-        }
-    }
-
-    private int playerThrowDice(){
-        textTerminal.println("It's your turn. Roll the dice with: " + Commands.getCommandByRepresentation("ROLLDICE"));
-        //TODO:!!!
-        return 0;
     }
 
     private int dice() {
