@@ -1,8 +1,5 @@
 package ch.zhaw.hexboard;
 
-import ch.zhaw.catan.infrastructure.Road;
-import ch.zhaw.catan.infrastructure.Settlement;
-
 import java.awt.*;
 import java.util.List;
 import java.util.*;
@@ -493,7 +490,7 @@ public class HexBoard<F, C, E, A> {
      * @param center the location of the field
      * @return list with non-null corner data elements
      */
-    public List<C> getSettlementsOfField(Point center) {
+    public List<C> getCornerDataOfField(Point center) {
         List<C> result = new LinkedList<>();
         for (Point c : getCornerCoordinatesOfField(center)) {
             C temp = getCorner(c);
