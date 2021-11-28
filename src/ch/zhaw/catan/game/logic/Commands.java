@@ -1,4 +1,4 @@
-package ch.zhaw.catan.gamelogic;
+package ch.zhaw.catan.game.logic;
 
 /**
  * Commands enum that contain available commands

@@ -49,13 +49,13 @@ public class SettlersGameTestBasic {
         for (int i = 0; i < numberOfPlayers; i++) {
             assertEquals(Faction.values()[i], currentPlayer.getPlayerFaction(),
                     "Player order does not match order of Faction.values()");
-            model.switchToNextPlayer();
+            model.getTurnOrderHandler().switchToNextPlayer();
         }
         assertEquals(Faction.values()[0], currentPlayer.getPlayerFaction(),
                 "Player wrap-around from last player to first player did not work.");
         //Switching backward
         for (int i = numberOfPlayers - 1; i >= 0; i--) {
-            model.switchToPreviousPlayer();
+            model.getTurnOrderHandler().switchToPreviousPlayer();
             assertEquals(Faction.values()[i], currentPlayer.getPlayerFaction(),
                     "Switching players in reverse order does not work as expected.");
         }
@@ -173,7 +173,7 @@ public class SettlersGameTestBasic {
                 assertEquals(expected.get(f).get(r), currentPlayer.getResourceCardCountFor(r),
                         "Resource card stock of player " + i + " [faction " + f + "] for resource type " + r + " does not match.");
             }
-            model.switchToNextPlayer();
+            model.getTurnOrderHandler().switchToNextPlayer();
         }
     }
 
@@ -232,7 +232,7 @@ public class SettlersGameTestBasic {
     @Test
     public void requirementCanTradeFourToOneWithBank() {
         SettlersGame model = ThreePlayerStandard.getAfterSetupPhaseAlmostEmptyBank(DEFAULT_WINPOINTS);
-        model.switchToNextPlayer();
+        model.getTurnOrderHandler().switchToNextPlayer();
 
         final Player currentPlayer = model.getCurrentPlayer();
         Map<Resource, Integer> expectedResourceCards = ThreePlayerStandard.BANK_ALMOST_EMPTY_RESOURCE_CARD_STOCK.get(currentPlayer.getPlayerFaction());
