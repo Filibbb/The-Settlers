@@ -7,7 +7,8 @@ package ch.zhaw.catan.game.logic;
  * @version 1.0.0
  */
 public enum Commands {
-    ROLL_DICE("ROLLDICE", "Roll the Dice");
+    ROLL_DICE("ROLL DICE", "Roll the Dice"),
+    SHOW_COMMANDS("SHOW COMMANDS", "SHOW COMMANDS : Show list of available commands.");
 
     private final String representation;
     private final String commandInfo;
