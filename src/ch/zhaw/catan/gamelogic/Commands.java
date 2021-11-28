@@ -1,5 +1,11 @@
 package ch.zhaw.catan.gamelogic;
 
+/**
+ * Commands enum that contain available commands
+ *
+ * @author fupat002
+ * @version 1.0.0
+ */
 public enum Commands {
     ROLL_DICE("ROLLDICE", "Roll the Dice");
 
