@@ -1,13 +1,11 @@
 package ch.zhaw.catan;
 
 import ch.zhaw.catan.board.Resource;
-import ch.zhaw.catan.gamelogic.Dice;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.board.SettlersBoardTextView;
+import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
-import ch.zhaw.catan.gamelogic.Dice;
-
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
 import org.beryx.textio.TextTerminal;
@@ -30,12 +28,11 @@ import static ch.zhaw.catan.player.FactionsUtil.getRandomAvailableFaction;
 public class SettlersGame {
     private final TextIO textIO = TextIoFactory.getTextIO();
     private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
-    private final Dice dice = new Dice();
-    private final List<Player> playerTurnOrder = new ArrayList<>();
+    private final TurnOrderHandler turnOrderHandler = new TurnOrderHandler();
     private int requiredPointsToWin = 0;
     private ArrayList<Player> players;
     private SettlersBoard settlersBoard;
-    private Player currentPlayer; //TODO set this to the player who has the highest dice throw.
+
 
     /**
      * Constructs a SiedlerGame game state object.
@@ -48,10 +45,13 @@ public class SettlersGame {
         requiredPointsToWin = winPoints;
     }
 
+    /**
+     * Starts the current game instance.
+     */
     public void start() {
         printIntroduction();
         setupNewGame();
-        decidePlayerOneWithHighRoll();
+        turnOrderHandler.determineInitialTurnOrder(players);
 
         while (!hasWinner()) {
             //TODO turn logic
@@ -88,21 +88,6 @@ public class SettlersGame {
     }
 
     /**
-     * Switches to the next player in the defined sequence of players.
-     */
-    public void switchToNextPlayer() {
-        // TODO: Implement
-
-    }
-
-    /**
-     * Switches to the previous player in the defined sequence of players.
-     */
-    public void switchToPreviousPlayer() {
-        // TODO: Implement
-    }
-
-    /**
      * Returns the {@link Faction}s of the active players.
      *
      * <p>The order of the player's factions in the list must
@@ -134,7 +119,7 @@ public class SettlersGame {
      * @return current player
      */
     public Player getCurrentPlayer() {
-        return currentPlayer;
+        return turnOrderHandler.getCurrentPlayer();
     }
 
     /**
@@ -173,7 +158,7 @@ public class SettlersGame {
      * A key action is the payout of the resource cards to the players
      * according to the payout rules of the game. This includes the
      * "negative payout" in case a 7 is thrown and a player has more than
-     *  resource cards.
+     * resource cards.
      * <p>
      * If a player does not get resource cards, the list for this players'
      * {@link Faction} is <b>an empty list (not null)</b>!.
@@ -291,8 +276,9 @@ public class SettlersGame {
         return false;
     }
 
-    private void decidePlayerOneWithHighRoll(){
-        textTerminal.println("We decide the lucky starter of this round with the highest number rolled. So let's go.");
-        this.currentPlayer = dice.highRoll(players);
+
+    //TODO REMOVE once tests are updated!!
+    public TurnOrderHandler getTurnOrderHandler() {
+        return turnOrderHandler;
     }
 }

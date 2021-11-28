@@ -1,7 +1,13 @@
-package ch.zhaw.catan.gamelogic;
+package ch.zhaw.catan.game.logic;
 
+/**
+ * Commands enum that contain available commands
+ *
+ * @author fupat002
+ * @version 1.0.0
+ */
 public enum Commands {
-    ROLLDICE("ROLLDICE", "Roll the Dice");
+    ROLL_DICE("ROLLDICE", "Roll the Dice");
 
     private final String representation;
     private final String commandInfo;
@@ -12,7 +18,7 @@ public enum Commands {
      * @param representation the command representation
      * @param commandInfo    the description on what the command does
      */
-    private Commands(String representation, String commandInfo) {
+    Commands(String representation, String commandInfo) {
         this.representation = representation;
         this.commandInfo = commandInfo;
     }

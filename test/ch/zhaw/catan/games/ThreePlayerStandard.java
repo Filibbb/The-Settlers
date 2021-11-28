@@ -188,10 +188,10 @@ public class ThreePlayerStandard {
             Faction f = model.getCurrentPlayer().getPlayerFaction();
             assertTrue(model.placeInitialSettlement(INITIAL_SETTLEMENT_POSITIONS.get(f).first, false));
             assertTrue(model.placeInitialRoad(INITIAL_SETTLEMENT_POSITIONS.get(f).first, INITIAL_ROAD_ENDPOINTS.get(f).first));
-            model.switchToNextPlayer();
+            model.getTurnOrderHandler().switchToNextPlayer();
         }
         for (int i = 0; i < model.getPlayers().size(); i++) {
-            model.switchToPreviousPlayer();
+            model.getTurnOrderHandler().switchToPreviousPlayer();
             Faction f = model.getCurrentPlayer().getPlayerFaction();
             assertTrue(model.placeInitialSettlement(INITIAL_SETTLEMENT_POSITIONS.get(f).second, true));
             assertTrue(model.placeInitialRoad(INITIAL_SETTLEMENT_POSITIONS.get(f).second, INITIAL_ROAD_ENDPOINTS.get(f).second));
@@ -341,13 +341,13 @@ public class ThreePlayerStandard {
         throwDiceMultipleTimes(model, 5, 6);
         throwDiceMultipleTimes(model, 2, 1);
 
-        model.switchToNextPlayer();
-        model.switchToNextPlayer();
+        model.getTurnOrderHandler().switchToNextPlayer();
+        model.getTurnOrderHandler().switchToNextPlayer();
         model.buildRoad(new Point(2, 12), new Point(3, 13));
         buildRoad(model, List.of(new Point(2, 10), new Point(3, 9), new Point(3, 7)));
         model.buildRoad(new Point(8, 18), new Point(8, 16));
         buildRoad(model, List.of(new Point(7, 19), new Point(6, 18), new Point(6, 16)));
-        model.switchToNextPlayer();
+        model.getTurnOrderHandler().switchToNextPlayer();
         model.buildRoad(new Point(10, 16), new Point(11, 15));
         model.buildRoad(new Point(10, 16), new Point(10, 18));
         buildRoad(model, List.of(new Point(9, 15), new Point(9, 13), new Point(10, 12)));
@@ -358,13 +358,13 @@ public class ThreePlayerStandard {
         throwDiceMultipleTimes(model, 4, 6);
         throwDiceMultipleTimes(model, 5, 6);
 
-        model.switchToNextPlayer();
-        model.switchToNextPlayer();
+        model.getTurnOrderHandler().switchToNextPlayer();
+        model.getTurnOrderHandler().switchToNextPlayer();
         throwDiceMultipleTimes(model, 5, 4);
         model.tradeWithBankFourToOne(Resource.LUMBER, Resource.GRAIN);
         throwDiceMultipleTimes(model, 5, 4);
         model.tradeWithBankFourToOne(Resource.LUMBER, Resource.WOOL);
-        model.switchToNextPlayer();
+        model.getTurnOrderHandler().switchToNextPlayer();
         return model;
     }
 
