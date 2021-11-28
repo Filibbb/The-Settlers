@@ -4,10 +4,9 @@
 Java basiertes Projekt von einer abgespeckten Version von die Siedler von Catan.
 
 # Gruppen Mitglieder und Verantwortungsbereich
-* Adrian Büchi - 
-* Philippe Weber - 
-* Patric Fuchs - 
-* Pascal Küng - 
+* Adrian Büchi 
+* Philippe Weber  
+* Patric Fuchs 
 
 # Teamrules
 
