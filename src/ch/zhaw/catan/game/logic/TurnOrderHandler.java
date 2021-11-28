@@ -44,6 +44,7 @@ public class TurnOrderHandler {
             }
             textTerminal.println("Faction " + playerOrder.get(FIRST).getPlayerFaction() + " rolled a " + highestDiceValue + ". You are the lucky player who is allowed to start.");
             playerTurnOrder = playerOrder;
+            currentPlayer = playerOrder.get(FIRST);
         }
     }
 
