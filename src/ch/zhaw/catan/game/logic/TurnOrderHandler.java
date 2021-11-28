@@ -1,9 +1,6 @@
 package ch.zhaw.catan.game.logic;
 
 import ch.zhaw.catan.player.Player;
-import org.beryx.textio.TextIO;
-import org.beryx.textio.TextIoFactory;
-import org.beryx.textio.TextTerminal;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,33 +15,30 @@ import java.util.List;
  */
 public class TurnOrderHandler {
     private static final int FIRST = 0;
-    private final Dice dice = new Dice();
-    private final TextIO textIO = TextIoFactory.getTextIO();
-    private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
     private List<Player> playerTurnOrder = new ArrayList<>();
     private Player currentPlayer;
 
     /**
      * The player with the highest number has to start.
      *
-     * @param players the set with all players/participants.
+     * @param diceResults the set with all players/participants and their roll results.
+     * @return boolean value expressing the success of determining the initial turnorder
      * @author fupat002, abuechi
      */
-    public void determineInitialTurnOrder(List<Player> players) {
-        final List<DiceResult> diceResults = dice.rollForPlayers(players);
+    public boolean determineInitialTurnOrder(List<DiceResult> diceResults) {
         int highestDiceValue = getMaxDiceValue(diceResults);
         if (highestValueIsDuplicated(diceResults, highestDiceValue)) {
-            textTerminal.println("Several players rolled the same number. Do the whole thing again.");
-            determineInitialTurnOrder(players);
+            return false;
         } else {
             final List<Player> playerOrder = new ArrayList<>();
             diceResults.sort(Comparator.comparing(DiceResult::getDiceResult));
+            Collections.reverse(diceResults);
             for (DiceResult diceResult : diceResults) {
                 playerOrder.add(diceResult.getPlayer());
             }
-            textTerminal.println("Faction " + playerOrder.get(FIRST).getPlayerFaction() + " rolled a " + highestDiceValue + ". You are the lucky player who is allowed to start.");
             playerTurnOrder = playerOrder;
             currentPlayer = playerOrder.get(FIRST);
+            return true;
         }
     }
 
@@ -100,5 +94,9 @@ public class TurnOrderHandler {
 
     public Player getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public List<Player> getPlayerTurnOrder() {
+        return playerTurnOrder;
     }
 }
