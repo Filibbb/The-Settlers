@@ -45,6 +45,9 @@ public class SettlersGame {
         requiredPointsToWin = winPoints;
     }
 
+    /**
+     * Starts the current game instance.
+     */
     public void start() {
         printIntroduction();
         setupNewGame();
