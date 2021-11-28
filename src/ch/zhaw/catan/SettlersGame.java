@@ -3,6 +3,8 @@ package ch.zhaw.catan;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.board.SettlersBoardTextView;
+import ch.zhaw.catan.game.logic.Dice;
+import ch.zhaw.catan.game.logic.DiceResult;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
@@ -28,11 +30,12 @@ import static ch.zhaw.catan.player.FactionsUtil.getRandomAvailableFaction;
 public class SettlersGame {
     private final TextIO textIO = TextIoFactory.getTextIO();
     private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
+    private final Dice dice = new Dice();
     private final TurnOrderHandler turnOrderHandler = new TurnOrderHandler();
+    private final SettlersBoard settlersBoard = new SettlersBoard();
+    private final SettlersBoardTextView settlersBoardTextView = new SettlersBoardTextView(settlersBoard);
     private int requiredPointsToWin = 0;
     private ArrayList<Player> players;
-    private SettlersBoard settlersBoard;
-
 
     /**
      * Constructs a SiedlerGame game state object.
@@ -51,10 +54,21 @@ public class SettlersGame {
     public void start() {
         printIntroduction();
         setupNewGame();
-        turnOrderHandler.determineInitialTurnOrder(players);
+        determineTurnOrder();
 
         while (!hasWinner()) {
             //TODO turn logic
+        }
+    }
+
+    private void determineTurnOrder() {
+        final List<DiceResult> diceResults = dice.rollForPlayers(players);
+        final boolean successFul = turnOrderHandler.determineInitialTurnOrder(diceResults);
+        if (successFul) {
+            textTerminal.println("Faction " + turnOrderHandler.getCurrentPlayer().getPlayerFaction() + " is the lucky player who is allowed to start.");
+        } else {
+            textTerminal.println("Several players rolled the same number. Do the whole thing again.");
+            determineTurnOrder();
         }
     }
 
@@ -74,12 +88,14 @@ public class SettlersGame {
     private void setupNewGame() {
         int numberOfPlayers = textIO.newIntInputReader().withMinVal(2).withMaxVal(4).read("Please enter the number of players. 2, 3 or 4 players are supported.");
         addPlayersToGame(numberOfPlayers);
-        settlersBoard = new SettlersBoard();
-        SettlersBoardTextView view = new SettlersBoardTextView(settlersBoard);
-        textTerminal.println(view.toString());
+        textTerminal.println(settlersBoardTextView.toString());
     }
 
-
+    /**
+     * Adds players to the game.
+     *
+     * @param numberOfPlayers the selected numbers of players
+     */
     public void addPlayersToGame(int numberOfPlayers) {
         players = new ArrayList<>(numberOfPlayers);
         for (int playerNumber = 1; playerNumber <= numberOfPlayers; playerNumber++) {

@@ -3,9 +3,12 @@ package ch.zhaw.catan.games;
 import ch.zhaw.catan.SettlersGame;
 import ch.zhaw.catan.Tuple;
 import ch.zhaw.catan.board.Resource;
+import ch.zhaw.catan.game.logic.DiceResult;
 import ch.zhaw.catan.player.Faction;
+import ch.zhaw.catan.player.Player;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -81,17 +84,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class ThreePlayerStandard {
     public final static int NUMBER_OF_PLAYERS = 3;
-
     public static final Map<Faction, Tuple<Point, Point>> INITIAL_SETTLEMENT_POSITIONS =
             Map.of(Faction.values()[0], new Tuple<>(new Point(5, 7), new Point(10, 16)),
                     Faction.values()[1], new Tuple<>(new Point(11, 13), new Point(8, 4)),
                     Faction.values()[2], new Tuple<>(new Point(2, 12), new Point(7, 19)));
-
     public static final Map<Faction, Tuple<Point, Point>> INITIAL_ROAD_ENDPOINTS = Map.of(Faction.values()[0],
             new Tuple<>(new Point(6, 6), new Point(9, 15)), Faction.values()[1],
             new Tuple<>(new Point(12, 12), new Point(8, 6)), Faction.values()[2],
             new Tuple<>(new Point(2, 10), new Point(8, 18)));
-
     public static final Map<Faction, Map<Resource, Integer>> INITIAL_PLAYER_CARD_STOCK = Map.of(
             Faction.values()[0], Map.of(Resource.GRAIN, 0, Resource.WOOL, 1,
                     Resource.BRICK, 1, Resource.ORE, 0, Resource.LUMBER, 0),
@@ -101,7 +101,6 @@ public class ThreePlayerStandard {
             Faction.values()[2],
             Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
                     Resource.ORE, 0, Resource.LUMBER, 0));
-
     public static final Map<Faction, Map<Resource, Integer>> BANK_ALMOST_EMPTY_RESOURCE_CARD_STOCK = Map.of(
             Faction.values()[0], Map.of(Resource.GRAIN, 8, Resource.WOOL, 9,
                     Resource.BRICK, 9, Resource.ORE, 7, Resource.LUMBER, 9),
@@ -111,7 +110,6 @@ public class ThreePlayerStandard {
             Faction.values()[2],
             Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 8,
                     Resource.ORE, 0, Resource.LUMBER, 9));
-
     public static final Map<Faction, Map<Resource, Integer>> PLAYER_ONE_READY_TO_BUILD_FIFTH_SETTLEMENT_RESOURCE_CARD_STOCK = Map.of(
             Faction.values()[0], Map.of(Resource.GRAIN, 2, Resource.WOOL, 2,
                     Resource.BRICK, 3, Resource.ORE, 0, Resource.LUMBER, 3),
@@ -121,7 +119,6 @@ public class ThreePlayerStandard {
             Faction.values()[2],
             Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
                     Resource.ORE, 0, Resource.LUMBER, 0));
-
     public static final Map<Integer, Map<Faction, List<Resource>>> INITIAL_DICE_THROW_PAYOUT = Map.of(
             2, Map.of(
                     Faction.values()[0], List.of(Resource.GRAIN),
@@ -163,15 +160,14 @@ public class ThreePlayerStandard {
                     Faction.values()[0], List.of(Resource.WOOL),
                     Faction.values()[1], List.of(Resource.WOOL),
                     Faction.values()[2], List.of()));
-
     public static final Map<Resource, Integer> RESOURCE_CARDS_IN_BANK_AFTER_STARTUP_PHASE = Map.of(Resource.LUMBER, 19,
             Resource.BRICK, 17, Resource.WOOL, 16, Resource.GRAIN, 19, Resource.ORE, 19);
-
     public static final Point PLAYER_ONE_READY_TO_BUILD_FIFTH_SETTLEMENT_FIFTH_SETTLEMENT_POSITION = new Point(9, 13);
     public static final List<Point> playerOneReadyToBuildFifthSettlementAllSettlementPositions =
             List.of(INITIAL_SETTLEMENT_POSITIONS.get(Faction.values()[0]).first,
                     INITIAL_SETTLEMENT_POSITIONS.get(Faction.values()[0]).second,
                     new Point(7, 7), new Point(6, 4), PLAYER_ONE_READY_TO_BUILD_FIFTH_SETTLEMENT_FIFTH_SETTLEMENT_POSITION);
+    private static final List<DiceResult> DICE_RESULTS = new ArrayList<>();
 
     /**
      * Returns a siedler game after the setup phase in the setup
@@ -184,6 +180,12 @@ public class ThreePlayerStandard {
     public static SettlersGame getAfterSetupPhase(int winpoints) {
         SettlersGame model = new SettlersGame(winpoints);
         model.addPlayersToGame(NUMBER_OF_PLAYERS);
+
+        DICE_RESULTS.add(new DiceResult(12, new Player(Faction.RED)));
+        DICE_RESULTS.add(new DiceResult(5, new Player(Faction.BLUE)));
+        DICE_RESULTS.add(new DiceResult(3, new Player(Faction.GREEN)));
+        model.getTurnOrderHandler().determineInitialTurnOrder(DICE_RESULTS);
+
         for (int i = 0; i < model.getPlayers().size(); i++) {
             Faction f = model.getCurrentPlayer().getPlayerFaction();
             assertTrue(model.placeInitialSettlement(INITIAL_SETTLEMENT_POSITIONS.get(f).first, false));
