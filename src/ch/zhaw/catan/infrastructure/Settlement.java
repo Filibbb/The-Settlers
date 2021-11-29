@@ -6,6 +6,7 @@ import ch.zhaw.catan.board.Structure;
 import ch.zhaw.catan.player.Player;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Class that contains the logic regarding a settlement.

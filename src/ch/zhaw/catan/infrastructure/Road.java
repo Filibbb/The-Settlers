@@ -1,5 +1,6 @@
 package ch.zhaw.catan.infrastructure;
 
+import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.board.Structure;
 import ch.zhaw.catan.player.Player;
@@ -41,6 +42,7 @@ public class Road extends AbstractInfrastructure {
     public boolean build(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
         if (canBuild(owner, startPoint, endPoint, board)) {
             board.setEdge(startPoint, endPoint, new Road(owner, startPoint, endPoint));
+            payRoad(owner);
             return true;
 
         } else return false;
@@ -48,5 +50,10 @@ public class Road extends AbstractInfrastructure {
 
     private boolean canBuild(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
         return ((owner.checkLiquidity(Structure.ROAD)) && (owner.checkStructureStock(Structure.ROAD) && (board.hasEdge(startPoint, endPoint)) && (board.getEdge(startPoint, endPoint) == null) && (!board.getAdjacentEdges(startPoint).isEmpty()))); //TODO check ownership of adjacent road
+    }
+
+    private void payRoad(Player owner){
+        owner.removeResourceCardFromHand(Resource.LUMBER);
+        owner.removeResourceCardFromHand(Resource.BRICK);
     }
 }
