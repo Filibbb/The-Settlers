@@ -30,13 +30,13 @@ public class Dice {
     public List<DiceResult> rollForPlayers(List<Player> players) {
         List<DiceResult> diceThrows = new ArrayList<>(players.size());
         for (Player player : players) {
-            String inputtedText = textIO.newStringInputReader().read("It is the turn of the player with the faction " + player.getPlayerFaction() + ". Roll the dice with: \"ROLLDICE\"");
-            if (inputtedText.equals("ROLLDICE")) {
+            String inputtedText = textIO.newStringInputReader().read("It is the turn of the player with the faction " + player.getPlayerFaction() + ". Roll the dice with: \"ROLL DICE\"");
+            if (inputtedText.equals("ROLL DICE")) {
                 final int dicedResult = dice();
                 diceThrows.add(new DiceResult(dicedResult, player));
                 textTerminal.println("Player " + player.getPlayerFaction() + "  rolled a " + dicedResult);
             } else {
-                textTerminal.println("Your input is invalid and so is your roll. Restarting the dicing...");//TODO: Validate command in command handler
+                textTerminal.println("Your input is invalid and so is your roll. Restarting the dicing...");
                 return rollForPlayers(players);
             }
         }
