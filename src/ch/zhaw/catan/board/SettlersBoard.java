@@ -5,22 +5,21 @@ import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.hexboard.HexBoard;
 
 import java.awt.*;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
     // Initial thief position (on the desert field)
     public static final Point INITIAL_THIEF_POSITION = new Point(7, 11);
 
     private final Map<Point, Integer> diceNumberPlacements;
+    private final Map<Point, Land> defaultLandPlacement;
 
     /**
      * Creates a default settlers board with default initialization of board and dicenumber placements
      */
     public SettlersBoard() {
-        Map<Point, Land> defaultLandPlacement = getDefaultLandPlacement();
+        defaultLandPlacement = getDefaultLandPlacement();
         addFieldsForLandPlacements(defaultLandPlacement);
         diceNumberPlacements = getDefaultDiceNumberPlacement();
     }
@@ -107,15 +106,38 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         return diceNumberPlacements;
     }
 
+    public Resource getResourcesOfField(Point field){
+        for (Map.Entry<Point, Land> fields : defaultLandPlacement.entrySet()){
+            if(fields.getKey() == field){
+                return fields.getValue().getResource();
+            }
+        }
+        return null;
+    }
+
+
+    public Map<Object, Integer>  getPlayersSettledOnField(){
+            //TODO: Create a Map with the players on the field and the Point Values from each player on this field.
+            //TODO: vlt auch nicht in dieser Klasse.
+            //TODO: Return -> Object just a place holder, return Map of Player and Integer
+        return null;
+    }
+
     /**
      * Returns the fields associated with the specified dice value.
      *
-     * @param dice the dice value
+     * @param diceValue the dice value
      * @return the fields associated with the dice value
+     * @author fupat002
      */
-    public List<Point> getFieldsForDiceValue(int dice) {
-        //TODO: Implement.
-        return Collections.emptyList();
+    public List<Point> getFieldsByDiceValue(int diceValue) {
+        List<Point> pointsOfFieldWithDiceValue = new ArrayList<>();
+        for (Map.Entry<Point, Integer> field : diceNumberPlacements.entrySet()){
+            if(field.getValue() == diceValue){
+                pointsOfFieldWithDiceValue.add(field.getKey());
+            }
+        }
+        return pointsOfFieldWithDiceValue;
     }
 
     /**

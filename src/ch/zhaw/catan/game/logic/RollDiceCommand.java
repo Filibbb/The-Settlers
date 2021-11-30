@@ -1,17 +1,26 @@
 package ch.zhaw.catan.game.logic;
 
+import ch.zhaw.catan.board.Resource;
+import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.player.Player;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class RollDiceCommand {
 
-    public void execute(Dice dice, ArrayList<Player> players) {
+    public void execute(Dice dice, ArrayList<Player> players, SettlersBoard settlersBoard) {
         int diceValue = dice.dice();
         if (diceValue == 7) {
             sevenRolled(players);
         } else {
-            //getField by dice value -> check the settlements on this field then hand out de resource with the dice value to the owner of the settlement.
+            List<Point> allFieldsWithDiceValue = settlersBoard.getFieldsByDiceValue(diceValue);
+            for (Point field : allFieldsWithDiceValue) {
+                Resource resourceOfRolledField = settlersBoard.getResourcesOfField(field);
+                //TODO: get players and there "winning points" of this field
+                // and then handout resources to the Players of this field
+            }
         }
     }
 
