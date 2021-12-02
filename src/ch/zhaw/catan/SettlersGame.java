@@ -3,6 +3,7 @@ package ch.zhaw.catan;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.board.SettlersBoardTextView;
+import ch.zhaw.catan.board.Structure;
 import ch.zhaw.catan.game.logic.Dice;
 import ch.zhaw.catan.game.logic.DiceResult;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
@@ -14,6 +15,7 @@ import org.beryx.textio.TextTerminal;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -54,27 +56,47 @@ public class SettlersGame {
     public void start() {
         printIntroduction();
         setupNewGame();
-        determineTurnOrder();
+        startFoundationPhase();
 
         while (!hasWinner()) {
             //TODO turn logic
         }
     }
 
-    private void determineTurnOrder() {
-        final List<DiceResult> diceResults = dice.rollForPlayers(players);
-        final boolean successFul = turnOrderHandler.determineInitialTurnOrder(diceResults);
-        if (successFul) {
-            textTerminal.println("Faction " + turnOrderHandler.getCurrentPlayer().getPlayerFaction() + " is the lucky player who is allowed to start.");
-        } else {
-            textTerminal.println("Several players rolled the same number. Do the whole thing again.");
-            determineTurnOrder();
+    private void startFoundationPhase() {
+        textTerminal.println("Now that everything is settled. Lets found your settlements!.");
+        final List<Player> playerTurnOrder = turnOrderHandler.getPlayerTurnOrder();
+
+        foundationPhase(playerTurnOrder, false);
+
+        textTerminal.println("First placement done. Now reverse order to place the last settlement of the foundation phase.");
+
+        foundationPhase(playerTurnOrder, true);
+
+        textTerminal.println("Foundation phase complete! Swapping to normal game now! Good luck!");
+        textTerminal.println(settlersBoardTextView.toString());
+    }
+
+    private void foundationPhase(final List<Player> playerTurnOrder, boolean reverse) {
+        if (reverse) {
+            Collections.reverse(playerTurnOrder);
+        }
+        for (Player player : playerTurnOrder) {
+            textTerminal.println("It's " + player.getPlayerFaction() + " turn.");
+            //TODO build for free a settlement based on commands at the desired position @weberph5
+
+            if (!reverse) {
+                player.increaseBuiltStructures(Structure.ROAD);
+            }
+
+            player.increaseBuiltStructures(Structure.SETTLEMENT);
+            player.incrementWinningPoints();
         }
     }
 
     private boolean hasWinner() {
         for (Player player : players) {
-            if (player.getWinningPoints() == requiredPointsToWin) {
+            if (player.getWinningPointCounter() == requiredPointsToWin) {
                 return true;
             }
         }
@@ -89,6 +111,18 @@ public class SettlersGame {
         int numberOfPlayers = textIO.newIntInputReader().withMinVal(2).withMaxVal(4).read("Please enter the number of players. 2, 3 or 4 players are supported.");
         addPlayersToGame(numberOfPlayers);
         textTerminal.println(settlersBoardTextView.toString());
+        determineTurnOrder();
+    }
+
+    private void determineTurnOrder() {
+        final List<DiceResult> diceResults = dice.rollForPlayers(players);
+        final boolean successFul = turnOrderHandler.determineInitialTurnOrder(diceResults);
+        if (successFul) {
+            textTerminal.println("Faction " + turnOrderHandler.getCurrentPlayer().getPlayerFaction() + " is the lucky player who is allowed to start.");
+        } else {
+            textTerminal.println("Several players rolled the same number. Do the whole thing again.");
+            determineTurnOrder();
+        }
     }
 
     /**

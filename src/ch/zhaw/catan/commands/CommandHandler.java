@@ -1,4 +1,4 @@
-package ch.zhaw.catan.game.logic;
+package ch.zhaw.catan.commands;
 
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
@@ -12,8 +12,8 @@ public class CommandHandler {
     private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
     private Commands command;
 
-    public void executeCommand(){
-        switch(command){
+    public void executeCommand() {
+        switch (command) {
             case ROLL_DICE:
                 //TODO: implement throwDice with distribute resources.
                 break;
@@ -27,11 +27,11 @@ public class CommandHandler {
         }
     }
 
-    public void setCommand(String userInput){
-        this.command = Commands.getCommandByRepresentation(userInput);
+    public Commands getCommand() {
+        return command;
     }
 
-    public Commands getCommand(){
-        return command;
+    public void setCommand(String userInput) {
+        this.command = Commands.getCommandByRepresentation(userInput);
     }
 }
