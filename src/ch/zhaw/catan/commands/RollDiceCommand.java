@@ -1,7 +1,8 @@
-package ch.zhaw.catan.game.logic;
+package ch.zhaw.catan.commands;
 
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoard;
+import ch.zhaw.catan.game.logic.Dice;
 import ch.zhaw.catan.player.Player;
 
 import java.awt.*;
