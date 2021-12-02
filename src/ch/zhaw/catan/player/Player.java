@@ -3,7 +3,8 @@ package ch.zhaw.catan.player;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.Structure;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class manages the player data and faction.
@@ -40,7 +41,7 @@ public class Player {
      * @throws RuntimeException if unknown structure type is entered.
      * @author weberph5
      */
-    public boolean checkStructureStock(Structure structure) {
+    public boolean hasEnoughInStructureStock(Structure structure) {
         switch (structure) {
             case ROAD -> {
                 return (builtStructuresCounter.get(Structure.ROAD) < Structure.ROAD.getStockPerPlayer());
@@ -88,19 +89,16 @@ public class Player {
      */
     public void increaseBuiltStructures(Structure structure) {
         switch (structure) {
-            case ROAD -> {
-                Integer builtRoads = builtStructuresCounter.get(Structure.ROAD);
-                builtStructuresCounter.put(Structure.ROAD, builtRoads++);
-            }
-            case SETTLEMENT -> {
-                Integer builtSettlements = builtStructuresCounter.get(Structure.SETTLEMENT);
-                builtStructuresCounter.put(Structure.SETTLEMENT, builtSettlements++);
-            }
-            case CITY -> {
-                Integer builtCities = builtStructuresCounter.get(Structure.CITY);
-                builtStructuresCounter.put(Structure.CITY, builtCities++);
-            }
+            case ROAD -> incrementCounterFor(Structure.ROAD);
+            case SETTLEMENT -> incrementCounterFor(Structure.SETTLEMENT);
+            case CITY -> incrementCounterFor(Structure.CITY);
+            default -> throw new RuntimeException("FATAL! Unexpected structure type " + structure + " . Please contact developers to update.");
         }
+    }
+
+    private void incrementCounterFor(Structure structureType) {
+        final Integer currentCounter = builtStructuresCounter.get(structureType);
+        builtStructuresCounter.put(structureType, currentCounter + 1);
     }
 
     /**
@@ -166,11 +164,15 @@ public class Player {
     }
 
     private void addResource(Resource resource, int count) {
-        if (resourceCardsInHand.containsKey(resource)) {
-            final Integer cardCount = resourceCardsInHand.get(resource);
-            resourceCardsInHand.put(resource, cardCount + count);
+        if (count > 0) {
+            if (resourceCardsInHand.containsKey(resource)) {
+                final Integer cardCount = resourceCardsInHand.get(resource);
+                resourceCardsInHand.put(resource, cardCount + count);
+            } else {
+                resourceCardsInHand.put(resource, count);
+            }
         } else {
-            resourceCardsInHand.put(resource, count);
+            throw new RuntimeException("Unexpected result: Adding Resource cards with negative counter. Please use `removeResourceCardFromHand` instead.");
         }
     }
 
@@ -200,7 +202,7 @@ public class Player {
     private boolean removeResource(Resource resource, int count) {
         if (resourceCardsInHand.containsKey(resource)) {
             final Integer cardCount = resourceCardsInHand.get(resource);
-            resourceCardsInHand.put(resource, cardCount - count);
+            resourceCardsInHand.put(resource, Math.max(cardCount - count, 0));
             return true;
         }
         return false;

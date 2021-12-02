@@ -6,7 +6,6 @@ import ch.zhaw.catan.board.Structure;
 import ch.zhaw.catan.player.Player;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 /**
  * Class that contains the logic regarding a settlement.
@@ -47,9 +46,10 @@ public class Settlement extends AbstractInfrastructure {
     }
 
     private boolean canBuild(Player owner, Point coordinates, SettlersBoard board) {
-        return (board.hasCorner(coordinates) && (board.getCorner(coordinates) == null) && (board.getNeighboursOfCorner(coordinates).isEmpty() && (!board.getAdjacentEdges(coordinates).isEmpty()) && (owner.checkLiquidity(Structure.SETTLEMENT) && (owner.checkStructureStock(Structure.SETTLEMENT)))));//TODO: check ownership of adjacent road
+        return (board.hasCorner(coordinates) && (board.getCorner(coordinates) == null) && (board.getNeighboursOfCorner(coordinates).isEmpty() && (!board.getAdjacentEdges(coordinates).isEmpty()) && (owner.checkLiquidity(Structure.SETTLEMENT) && (owner.hasEnoughInStructureStock(Structure.SETTLEMENT)))));//TODO: check ownership of adjacent road
     }
-    private void paySettlement(Player owner){
+
+    private void paySettlement(Player owner) {
         owner.removeResourceCardFromHand(Resource.BRICK);
         owner.removeResourceCardFromHand(Resource.GRAIN);
         owner.removeResourceCardFromHand(Resource.WOOL);
