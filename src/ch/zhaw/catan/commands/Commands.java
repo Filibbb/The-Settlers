@@ -1,4 +1,4 @@
-package ch.zhaw.catan.game.logic;
+package ch.zhaw.catan.commands;
 
 /**
  * Commands enum that contain available commands
@@ -7,7 +7,8 @@ package ch.zhaw.catan.game.logic;
  * @version 1.0.0
  */
 public enum Commands {
-    ROLL_DICE("ROLL DICE", "Roll the Dice"),
+    ROLL_DICE("ROLL DICE", "ROLL DICE: Roll the Dice"),
+    END_TURN("END TURN", "END TURN: End the current turn"),
     SHOW_COMMANDS("SHOW COMMANDS", "SHOW COMMANDS : Show list of available commands.");
 
     private final String representation;

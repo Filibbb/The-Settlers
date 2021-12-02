@@ -49,10 +49,10 @@ public class Road extends AbstractInfrastructure {
     }
 
     private boolean canBuild(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
-        return ((owner.checkLiquidity(Structure.ROAD)) && (owner.checkStructureStock(Structure.ROAD) && (board.hasEdge(startPoint, endPoint)) && (board.getEdge(startPoint, endPoint) == null) && (!board.getAdjacentEdges(startPoint).isEmpty()))); //TODO check ownership of adjacent road
+        return ((owner.checkLiquidity(Structure.ROAD)) && (owner.hasEnoughInStructureStock(Structure.ROAD) && (board.hasEdge(startPoint, endPoint)) && (board.getEdge(startPoint, endPoint) == null) && (!board.getAdjacentEdges(startPoint).isEmpty()))); //TODO check ownership of adjacent road
     }
 
-    private void payRoad(Player owner){
+    private void payRoad(Player owner) {
         owner.removeResourceCardFromHand(Resource.LUMBER);
         owner.removeResourceCardFromHand(Resource.BRICK);
     }

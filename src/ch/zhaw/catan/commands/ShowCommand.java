@@ -1,4 +1,4 @@
-package ch.zhaw.catan.game.logic;
+package ch.zhaw.catan.commands;
 
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
@@ -10,7 +10,7 @@ import org.beryx.textio.TextTerminal;
  * @author abuechi
  * @version 1.0.0
  */
-public class ShowCommand {
+public class ShowCommand implements Command {
     private final TextIO textIO = TextIoFactory.getTextIO();
     private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
 
@@ -19,6 +19,7 @@ public class ShowCommand {
      *
      * @author weberph5
      */
+    @Override
     public void execute() {
         textTerminal.println("Available Commands (Case sensitive!):");
         textTerminal.println("");
