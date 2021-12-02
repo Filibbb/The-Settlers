@@ -139,7 +139,7 @@ public class Player {
      * Deletes half of the resources.
      */
     public void deletesHalfOfResources() {
-        int cardsToGiveUp = getTotalResourceCardCount() / 2;
+        int cardsToGiveUp = Math.floorDiv(getTotalResourceCardCount(), 2);
         while (cardsToGiveUp != 0) {
             for (Resource card : resourceCardsInHand.keySet()) {
                 if (cardsToGiveUp != 0 && resourceCardsInHand.get(card) > 0) {
