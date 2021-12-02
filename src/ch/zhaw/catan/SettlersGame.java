@@ -4,6 +4,8 @@ import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.board.SettlersBoardTextView;
 import ch.zhaw.catan.board.Structure;
+import ch.zhaw.catan.commands.CommandHandler;
+import ch.zhaw.catan.commands.Commands;
 import ch.zhaw.catan.game.logic.Dice;
 import ch.zhaw.catan.game.logic.DiceResult;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
@@ -19,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static ch.zhaw.catan.commands.Commands.*;
 import static ch.zhaw.catan.player.FactionsUtil.getRandomAvailableFaction;
 
 
@@ -36,6 +39,7 @@ public class SettlersGame {
     private final TurnOrderHandler turnOrderHandler = new TurnOrderHandler();
     private final SettlersBoard settlersBoard = new SettlersBoard();
     private final SettlersBoardTextView settlersBoardTextView = new SettlersBoardTextView(settlersBoard);
+    private final CommandHandler commandHandler = new CommandHandler(turnOrderHandler);
     private int requiredPointsToWin = 0;
     private ArrayList<Player> players;
 
@@ -57,9 +61,26 @@ public class SettlersGame {
         printIntroduction();
         setupNewGame();
         startFoundationPhase();
+        startMainPhase();
+    }
 
+    private void startMainPhase() {
+        boolean samePlayerAsBefore = false;
         while (!hasWinner()) {
-            //TODO turn logic
+            if (!samePlayerAsBefore) {
+                final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
+                textTerminal.println("It's " + currentPlayer.getPlayerFaction() + " turn. Choose your actions down below:");
+                textTerminal.println("If you are done with your turn, enter END TURN command.");
+                commandHandler.executeCommand(SHOW_COMMANDS);
+            }
+            final String userInput = textIO.newStringInputReader().read("Please enter your next action:");
+            final Commands commandByRepresentation = getCommandByRepresentation(userInput);
+            samePlayerAsBefore = commandByRepresentation != null && commandByRepresentation != END_TURN;
+            if (commandByRepresentation != null) {
+                commandHandler.executeCommand(commandByRepresentation);
+            } else {
+                textTerminal.println("This command is not available. Use 'SHOW COMMANDS' for available commands.");
+            }
         }
     }
 
