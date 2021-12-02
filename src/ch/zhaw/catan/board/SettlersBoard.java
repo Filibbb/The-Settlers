@@ -125,8 +125,7 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
      * @return the list with the adjacent {@link Land}s
      */
     public List<Land> getLandsForCorner(Point corner) {
-        //TODO: Implement.
-        return Collections.emptyList();
+        return getFields(corner);
     }
 
     private void addFieldsForLandPlacements(Map<Point, Land> landPlacement) {
