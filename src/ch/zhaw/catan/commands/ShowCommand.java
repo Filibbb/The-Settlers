@@ -1,4 +1,4 @@
-package ch.zhaw.catan.game.logic;
+package ch.zhaw.catan.commands;
 
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
