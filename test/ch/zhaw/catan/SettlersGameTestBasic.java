@@ -1,6 +1,5 @@
 package ch.zhaw.catan;
 
-import ch.zhaw.catan.board.Land;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoardTextView;
 import ch.zhaw.catan.games.ThreePlayerStandard;
@@ -15,12 +14,11 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-import static ch.zhaw.catan.board.SettlersBoard.getDefaultLandPlacement;
-import static ch.zhaw.catan.games.ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS;
 import static ch.zhaw.catan.games.ThreePlayerStandard.getAfterSetupPhase;
 import static ch.zhaw.catan.infrastructure.Road.build;
 import static ch.zhaw.catan.infrastructure.Settlement.build;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * This class contains some basic tests for the {@link SettlersGame} class
@@ -32,40 +30,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class SettlersGameTestBasic {
     private final static int DEFAULT_WINPOINTS = 5;
-    private final static int DEFAULT_NUMBER_OF_PLAYERS = 3;
-
-    /**
-     * Tests whether the game board meets the required layout/land placement.
-     */
-    @Test
-    public void requirementLandPlacementTest() {
-        SettlersGame model = new SettlersGame(DEFAULT_WINPOINTS);
-
-        model.addPlayersToGame(DEFAULT_NUMBER_OF_PLAYERS);
-        assertEquals(getDefaultLandPlacement().size(), model.getBoard().getFields().size(), "Check if explicit init must be done (violates spec): "
-                + "modify initializeSiedlerGame accordingly.");
-        for (Map.Entry<Point, Land> e : getDefaultLandPlacement().entrySet()) {
-            assertEquals(e.getValue(), model.getBoard().getField(e.getKey()),
-                    "Land placement does not match default placement.");
-        }
-    }
-
-    /**
-     * Tests whether the {@link ThreePlayerStandard#getAfterSetupPhase(int)}} game board is not empty (returns
-     * an object) at positions where settlements and roads have been placed.
-     */
-    @Test
-    public void requirementSettlementAndRoadPositionsOccupiedThreePlayerStandard() {
-        SettlersGame model = getAfterSetupPhase(DEFAULT_WINPOINTS);
-        assertEquals(DEFAULT_NUMBER_OF_PLAYERS, model.getTurnOrderHandler().getPlayerTurnOrder().size());
-        for (Player player : model.getTurnOrderHandler().getPlayerTurnOrder()) {
-            final Faction playerFaction = player.getPlayerFaction();
-            assertNotNull(model.getBoard().getCorner(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).first));
-            assertNotNull(model.getBoard().getCorner(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).second));
-            assertNotNull(model.getBoard().getEdge(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).first, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(playerFaction).first));
-            assertNotNull(model.getBoard().getEdge(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).second, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(playerFaction).second));
-        }
-    }
 
     /**
      * Checks that the resource card payout for different dice values matches
