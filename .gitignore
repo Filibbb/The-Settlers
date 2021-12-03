@@ -30,3 +30,5 @@ out/
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/git_toolbox_prj.xml
