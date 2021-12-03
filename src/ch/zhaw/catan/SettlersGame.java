@@ -111,10 +111,10 @@ public class SettlersGame {
     }
 
     private void initialBuild(Player player) {
-        int coordinateX = textIO.newIntInputReader().read("Enter x coordinate of corner");
-        int coordinateY = textIO.newIntInputReader().read("Enter y coordinate of corner");
-        int endPointX = textIO.newIntInputReader().read("Enter x coordinate of the endpoint of the adjacent road");
-        int endPointY = textIO.newIntInputReader().read("Enter x coordinate of the endpoint of the adjacent road");
+        int coordinateX = textIO.newIntInputReader().withMinVal(2).withMaxVal(12).read("Enter x coordinate of corner");
+        int coordinateY = textIO.newIntInputReader().withMinVal(3).withMaxVal(12).read("Enter y coordinate of corner");
+        int endPointX = textIO.newIntInputReader().withMinVal(2).withMaxVal(12).read("Enter x coordinate of the endpoint of the adjacent road");
+        int endPointY = textIO.newIntInputReader().withMinVal(3).withMaxVal(19).read("Enter x coordinate of the endpoint of the adjacent road");
         Point coordinates = new Point(coordinateX, coordinateY);
         Point endPoint = new Point(endPointX, endPointY);
         if (settlersBoard.hasCorner(coordinates) && (settlersBoard.getCorner(coordinates) == null) && (settlersBoard.getNeighboursOfCorner(coordinates).isEmpty()) && settlersBoard.getEdge(coordinates, endPoint) == null) {
