@@ -161,7 +161,7 @@ public class BuildingInfrastructureTests {
 
     /**
      * Tests whether player one can build a city starting in game state
-     * {@link ThreePlayerStandard#getAfterSetupPhaseAlmostEmptyBank(int)}.
+     * {@link ThreePlayerStandard#getAfterSetupPhaseAlmostEmptyBank()}.
      */
     @Test
     public void requirementBuildCity() {

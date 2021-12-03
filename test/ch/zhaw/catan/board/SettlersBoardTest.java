@@ -1,6 +1,7 @@
 package ch.zhaw.catan.board;
 
-import ch.zhaw.catan.SettlersGame;
+import ch.zhaw.catan.game.logic.TurnOrderHandler;
+import ch.zhaw.catan.games.GameDataContainer;
 import ch.zhaw.catan.games.ThreePlayerStandard;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
@@ -22,9 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author abuechi, tebe
  */
 class SettlersBoardTest {
-    private final static int DEFAULT_WINPOINTS = 5;
     private final static int DEFAULT_NUMBER_OF_PLAYERS = 3;
-
     private SettlersBoard settlersBoard;
 
     @BeforeEach
@@ -46,19 +45,22 @@ class SettlersBoardTest {
     }
 
     /**
-     * Tests whether the {@link ThreePlayerStandard#getAfterSetupPhase(int)}} game board is not empty (returns
+     * Tests whether the {@link ThreePlayerStandard#getAfterSetupPhase()}} game board is not empty (returns
      * an object) at positions where settlements and roads have been placed.
      */
     @Test
     public void requirementSettlementAndRoadPositionsOccupiedThreePlayerStandard() {
-        SettlersGame model = getAfterSetupPhase(DEFAULT_WINPOINTS);
-        assertEquals(DEFAULT_NUMBER_OF_PLAYERS, model.getTurnOrderHandler().getPlayerTurnOrder().size());
-        for (Player player : model.getTurnOrderHandler().getPlayerTurnOrder()) {
+        GameDataContainer model = getAfterSetupPhase();
+        final TurnOrderHandler turnOrderHandler = model.getTurnOrderHandler();
+        assertEquals(DEFAULT_NUMBER_OF_PLAYERS, turnOrderHandler.getPlayerTurnOrder().size());
+        final SettlersBoard settlersBoard = model.getSettlersBoard();
+
+        for (Player player : turnOrderHandler.getPlayerTurnOrder()) {
             final Faction playerFaction = player.getPlayerFaction();
-            assertNotNull(model.getBoard().getCorner(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).first));
-            assertNotNull(model.getBoard().getCorner(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).second));
-            assertNotNull(model.getBoard().getEdge(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).first, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(playerFaction).first));
-            assertNotNull(model.getBoard().getEdge(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).second, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(playerFaction).second));
+            assertNotNull(settlersBoard.getCorner(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).first));
+            assertNotNull(settlersBoard.getCorner(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).second));
+            assertNotNull(settlersBoard.getEdge(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).first, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(playerFaction).first));
+            assertNotNull(settlersBoard.getEdge(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).second, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(playerFaction).second));
         }
     }
 }
