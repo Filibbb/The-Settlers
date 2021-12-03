@@ -40,7 +40,7 @@ public class SettlersGame {
     private final SettlersBoard settlersBoard = new SettlersBoard();
     private final SettlersBoardTextView settlersBoardTextView = new SettlersBoardTextView(settlersBoard);
     private final CommandHandler commandHandler = new CommandHandler(turnOrderHandler);
-    private int requiredPointsToWin = 0;
+    private int requiredPointsToWin;
     private ArrayList<Player> players;
 
     /**
@@ -159,68 +159,12 @@ public class SettlersGame {
     }
 
     /**
-     * Returns the {@link Faction}s of the active players.
-     *
-     * <p>The order of the player's factions in the list must
-     * correspond to the order in which they play.
-     * Hence, the player that sets the first settlement must be
-     * at position 0 in the list etc.
-     *
-     * <strong>Important note:</strong> The list must contain the
-     * factions of active players only.</p>
-     *
-     * @return the list with player's factions
-     */
-    public List<Player> getPlayers() {
-        return players;
-    }
-
-    /**
      * Returns the game board.
      *
      * @return the game board
      */
     public SettlersBoard getBoard() {
         return settlersBoard;
-    }
-
-    /**
-     * This method mainly exists to make sure the pre-existing tests can be executed.
-     *
-     * @return current player
-     */
-    public Player getCurrentPlayer() {
-        return turnOrderHandler.getCurrentPlayer();
-    }
-
-    /**
-     * Places a settlement in the founder's phase (phase II) of the game.
-     *
-     * <p>The placement does not cost any resource cards. If payout is
-     * set to true, for each adjacent resource-producing field, a resource card of the
-     * type of the resource produced by the field is taken from the bank (if available) and added to
-     * the players' stock of resource cards.</p>
-     *
-     * @param position the position of the settlement
-     * @param payout   if true, the player gets one resource card per adjacent resource-producing field
-     * @return true, if the placement was successful
-     */
-    public boolean placeInitialSettlement(Point position, boolean payout) {
-        // TODO: Implement
-        return false;
-    }
-
-    /**
-     * Places a road in the founder's phase (phase II) of the game.
-     * The placement does not cost any resource cards.
-     *
-     * @param roadStart position of the start of the road
-     * @param roadEnd   position of the end of the road
-     * @return true, if the placement was successful
-     */
-    public boolean placeInitialRoad(Point roadStart, Point roadEnd) {
-        // TODO: Implement
-        return false;
     }
 
     /**
@@ -248,62 +192,6 @@ public class SettlersGame {
         // TODO: Implement
         return null;
     }
-
-    /**
-     * Builds a settlement at the specified position on the board.
-     *
-     * <p>The settlement can be built if:
-     * <ul>
-     * <li> the player possesses the required resource cards</li>
-     * <li> a settlement to place on the board</li>
-     * <li> the specified position meets the build rules for settlements</li>
-     * </ul>
-     *
-     * @param position the position of the settlement
-     * @return true, if the placement was successful
-     */
-    public boolean buildSettlement(Point position) {
-        // TODO: Implement
-        return false;
-    }
-
-    /**
-     * Builds a city at the specified position on the board.
-     *
-     * <p>The city can be built if:
-     * <ul>
-     * <li> the player possesses the required resource cards</li>
-     * <li> a city to place on the board</li>
-     * <li> the specified position meets the build rules for cities</li>
-     * </ul>
-     *
-     * @param position the position of the city
-     * @return true, if the placement was successful
-     */
-    public boolean buildCity(Point position) {
-        // TODO: OPTIONAL task - Implement
-        return false;
-    }
-
-    /**
-     * Builds a road at the specified position on the board.
-     *
-     * <p>The road can be built if:
-     * <ul>
-     * <li> the player possesses the required resource cards</li>
-     * <li> a road to place on the board</li>
-     * <li> the specified position meets the build rules for roads</li>
-     * </ul>
-     *
-     * @param roadStart the position of the start of the road
-     * @param roadEnd   the position of the end of the road
-     * @return true, if the placement was successful
-     */
-    public boolean buildRoad(Point roadStart, Point roadEnd) {
-        // TODO: Implement
-        return false;
-    }
-
 
     /**
      * Trades in  resource cards of the
