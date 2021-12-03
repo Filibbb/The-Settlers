@@ -4,6 +4,7 @@ import ch.zhaw.catan.SettlersGame;
 import ch.zhaw.catan.Tuple;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.game.logic.DiceResult;
+import ch.zhaw.catan.infrastructure.Road;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
 
@@ -12,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static ch.zhaw.catan.infrastructure.Road.initialBuild;
+import static ch.zhaw.catan.infrastructure.Settlement.build;
+import static ch.zhaw.catan.infrastructure.Settlement.initialBuild;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -186,17 +190,20 @@ public class ThreePlayerStandard {
         DICE_RESULTS.add(new DiceResult(3, new Player(Faction.GREEN)));
         model.getTurnOrderHandler().determineInitialTurnOrder(DICE_RESULTS);
 
-        for (int i = 0; i < model.getPlayers().size(); i++) {
-            Faction f = model.getCurrentPlayer().getPlayerFaction();
-            assertTrue(model.placeInitialSettlement(INITIAL_SETTLEMENT_POSITIONS.get(f).first, false));
-            assertTrue(model.placeInitialRoad(INITIAL_SETTLEMENT_POSITIONS.get(f).first, INITIAL_ROAD_ENDPOINTS.get(f).first));
+        for (int i = 0; i < model.getTurnOrderHandler().getPlayerTurnOrder().size(); i++) {
+            final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
+            Faction faction = currentPlayer.getPlayerFaction();
+            assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, model.getBoard()));
+            assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, INITIAL_ROAD_ENDPOINTS.get(faction).first, model.getBoard()));
             model.getTurnOrderHandler().switchToNextPlayer();
         }
-        for (int i = 0; i < model.getPlayers().size(); i++) {
+        for (int i = 0; i < model.getTurnOrderHandler().getPlayerTurnOrder().size(); i++) {
             model.getTurnOrderHandler().switchToPreviousPlayer();
-            Faction f = model.getCurrentPlayer().getPlayerFaction();
-            assertTrue(model.placeInitialSettlement(INITIAL_SETTLEMENT_POSITIONS.get(f).second, true));
-            assertTrue(model.placeInitialRoad(INITIAL_SETTLEMENT_POSITIONS.get(f).second, INITIAL_ROAD_ENDPOINTS.get(f).second));
+            final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
+            Faction faction = currentPlayer.getPlayerFaction();
+            assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, model.getBoard()));
+            //add payout here
+            assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, INITIAL_ROAD_ENDPOINTS.get(faction).second, model.getBoard()));
         }
         return model;
     }
@@ -344,14 +351,17 @@ public class ThreePlayerStandard {
         throwDiceMultipleTimes(model, 2, 1);
 
         model.getTurnOrderHandler().switchToNextPlayer();
-        model.getTurnOrderHandler().switchToNextPlayer();
-        model.buildRoad(new Point(2, 12), new Point(3, 13));
+        Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
+
+        Road.build(currentPlayer, new Point(2, 12), new Point(3, 13), model.getBoard());
         buildRoad(model, List.of(new Point(2, 10), new Point(3, 9), new Point(3, 7)));
-        model.buildRoad(new Point(8, 18), new Point(8, 16));
+        Road.build(currentPlayer, new Point(8, 18), new Point(8, 16), model.getBoard());
         buildRoad(model, List.of(new Point(7, 19), new Point(6, 18), new Point(6, 16)));
         model.getTurnOrderHandler().switchToNextPlayer();
-        model.buildRoad(new Point(10, 16), new Point(11, 15));
-        model.buildRoad(new Point(10, 16), new Point(10, 18));
+        currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
+        Road.build(currentPlayer, new Point(10, 16), new Point(11, 15), model.getBoard());
+        Road.build(currentPlayer, new Point(10, 16), new Point(10, 18), model.getBoard());
+
         buildRoad(model, List.of(new Point(9, 15), new Point(9, 13), new Point(10, 12)));
         buildRoad(model, List.of(new Point(5, 7), new Point(5, 9), new Point(4, 10), new Point(3, 9)));
 
@@ -458,27 +468,28 @@ public class ThreePlayerStandard {
      */
     public static SettlersGame getPlayerOneReadyToBuildFifthSettlement(int winpoints) {
         SettlersGame model = getAfterSetupPhase(winpoints);
+        final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
         //generate resources to build four roads and four settlements.
         throwDiceMultipleTimes(model, 6, 8);
         throwDiceMultipleTimes(model, 11, 7);
         throwDiceMultipleTimes(model, 2, 4);
         throwDiceMultipleTimes(model, 12, 3);
-        model.buildRoad(new Point(6, 6), new Point(7, 7));
-        model.buildRoad(new Point(6, 6), new Point(6, 4));
-        model.buildRoad(new Point(9, 15), new Point(9, 13));
-        model.buildSettlement(playerOneReadyToBuildFifthSettlementAllSettlementPositions.get(2));
-        model.buildSettlement(playerOneReadyToBuildFifthSettlementAllSettlementPositions.get(3));
+        Road.build(currentPlayer, new Point(6, 6), new Point(7, 7), model.getBoard());
+        Road.build(currentPlayer, new Point(6, 6), new Point(6, 4), model.getBoard());
+        Road.build(currentPlayer, new Point(9, 15), new Point(9, 13), model.getBoard());
+        build(currentPlayer, playerOneReadyToBuildFifthSettlementAllSettlementPositions.get(2), model.getBoard());
+        build(currentPlayer, playerOneReadyToBuildFifthSettlementAllSettlementPositions.get(3), model.getBoard());
         return model;
     }
 
     private static void buildSettlement(SettlersGame model, Point position, List<Point> roads) {
         buildRoad(model, roads);
-        assertTrue(model.buildSettlement(position));
+        assertTrue(build(model.getTurnOrderHandler().getCurrentPlayer(), position, model.getBoard()));
     }
 
     private static void buildRoad(SettlersGame model, List<Point> roads) {
         for (int i = 0; i < roads.size() - 1; i++) {
-            assertTrue(model.buildRoad(roads.get(i), roads.get(i + 1)));
+            assertTrue(Road.build(model.getTurnOrderHandler().getCurrentPlayer(), roads.get(i), roads.get(i + 1), model.getBoard()));
         }
     }
 }

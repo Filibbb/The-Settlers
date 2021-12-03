@@ -20,7 +20,10 @@ import java.util.List;
 import java.util.Map;
 
 import static ch.zhaw.catan.board.SettlersBoard.getDefaultLandPlacement;
+import static ch.zhaw.catan.games.ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS;
 import static ch.zhaw.catan.games.ThreePlayerStandard.getAfterSetupPhase;
+import static ch.zhaw.catan.infrastructure.Road.build;
+import static ch.zhaw.catan.infrastructure.Settlement.build;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -103,12 +106,13 @@ public class SettlersGameTestBasic {
     @Test
     public void requirementSettlementAndRoadPositionsOccupiedThreePlayerStandard() {
         SettlersGame model = getAfterSetupPhase(DEFAULT_WINPOINTS);
-        assertEquals(DEFAULT_NUMBER_OF_PLAYERS, model.getPlayers().size());
-        for (Player f : model.getPlayers()) {
-            assertNotNull(model.getBoard().getCorner(ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS.get(f.getPlayerFaction()).first));
-            assertNotNull(model.getBoard().getCorner(ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS.get(f.getPlayerFaction()).second));
-            assertNotNull(model.getBoard().getEdge(ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS.get(f.getPlayerFaction()).first, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(f).first));
-            assertNotNull(model.getBoard().getEdge(ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS.get(f.getPlayerFaction()).second, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(f).second));
+        assertEquals(DEFAULT_NUMBER_OF_PLAYERS, model.getTurnOrderHandler().getPlayerTurnOrder().size());
+        for (Player player : model.getTurnOrderHandler().getPlayerTurnOrder()) {
+            final Faction playerFaction = player.getPlayerFaction();
+            assertNotNull(model.getBoard().getCorner(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).first));
+            assertNotNull(model.getBoard().getCorner(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).second));
+            assertNotNull(model.getBoard().getEdge(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).first, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(playerFaction).first));
+            assertNotNull(model.getBoard().getEdge(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).second, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(playerFaction).second));
         }
     }
 
@@ -186,7 +190,7 @@ public class SettlersGameTestBasic {
 
     private void assertPlayerResourceCardStockEquals(SettlersGame model, Map<Faction, Map<Resource, Integer>> expected) {
         for (int i = 0; i < expected.keySet().size(); i++) {
-            final Player currentPlayer = model.getCurrentPlayer();
+            final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
             Faction f = currentPlayer.getPlayerFaction();
             for (Resource r : Resource.values()) {
                 assertEquals(expected.get(f).get(r), currentPlayer.getResourceCardCountFor(r),
@@ -194,28 +198,6 @@ public class SettlersGameTestBasic {
             }
             model.getTurnOrderHandler().switchToNextPlayer();
         }
-    }
-
-    /**
-     * Tests whether player one can build two roads starting in game state
-     * {@link ThreePlayerStandard#getAfterSetupPhaseAlmostEmptyBank(int)}.
-     */
-    @Test
-    public void requirementBuildRoad() {
-        SettlersGame model = ThreePlayerStandard.getAfterSetupPhaseAlmostEmptyBank(DEFAULT_WINPOINTS);
-        assertTrue(model.buildRoad(new Point(6, 6), new Point(6, 4)));
-        assertTrue(model.buildRoad(new Point(6, 4), new Point(7, 3)));
-    }
-
-    /**
-     * Tests whether player one can build a road and a settlement starting in game state
-     * {@link ThreePlayerStandard#getAfterSetupPhaseAlmostEmptyBank(int)}.
-     */
-    @Test
-    public void requirementBuildSettlement() {
-        SettlersGame model = ThreePlayerStandard.getAfterSetupPhaseAlmostEmptyBank(DEFAULT_WINPOINTS);
-        assertTrue(model.buildRoad(new Point(9, 15), new Point(9, 13)));
-        assertTrue(model.buildSettlement(new Point(9, 13)));
     }
 
     /**
@@ -228,19 +210,10 @@ public class SettlersGameTestBasic {
         for (int diceValue : List.of(2, 6, 6, 11)) {
             model.throwDice(diceValue);
         }
-        assertTrue(model.buildRoad(new Point(6, 6), new Point(7, 7)));
-        assertTrue(model.buildSettlement(new Point(7, 7)));
-        assertEquals(List.of(Resource.ORE, Resource.ORE), model.throwDice(4).get(model.getCurrentPlayer().getPlayerFaction()));
-    }
-
-    /**
-     * Tests whether player one can build a city starting in game state
-     * {@link ThreePlayerStandard#getAfterSetupPhaseAlmostEmptyBank(int)}.
-     */
-    @Test
-    public void requirementBuildCity() {
-        SettlersGame model = ThreePlayerStandard.getAfterSetupPhaseAlmostEmptyBank(DEFAULT_WINPOINTS);
-        assertTrue(model.buildCity(new Point(10, 16)));
+        final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
+        assertTrue(build(currentPlayer, new Point(6, 6), new Point(7, 7), model.getBoard()));
+        assertTrue(build(currentPlayer, new Point(7, 7), model.getBoard()));
+        assertEquals(List.of(Resource.ORE, Resource.ORE), model.throwDice(4).get(currentPlayer.getPlayerFaction()));
     }
 
     /**
@@ -253,7 +226,7 @@ public class SettlersGameTestBasic {
         SettlersGame model = ThreePlayerStandard.getAfterSetupPhaseAlmostEmptyBank(DEFAULT_WINPOINTS);
         model.getTurnOrderHandler().switchToNextPlayer();
 
-        final Player currentPlayer = model.getCurrentPlayer();
+        final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
         Map<Resource, Integer> expectedResourceCards = ThreePlayerStandard.BANK_ALMOST_EMPTY_RESOURCE_CARD_STOCK.get(currentPlayer.getPlayerFaction());
         assertEquals(expectedResourceCards.get(Resource.WOOL), currentPlayer.getResourceCardCountFor(Resource.WOOL));
         assertEquals(expectedResourceCards.get(Resource.LUMBER), currentPlayer.getResourceCardCountFor((Resource.LUMBER)));
