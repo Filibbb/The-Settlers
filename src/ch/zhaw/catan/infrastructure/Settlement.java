@@ -45,7 +45,7 @@ public class Settlement extends AbstractInfrastructure {
         } else return false;
     }
 
-    public boolean initialBuild(Player owner, Point coordinates, SettlersBoard board) {
+    public static boolean initialBuild(Player owner, Point coordinates, SettlersBoard board) {
         if ((board.hasCorner(coordinates)) && (board.getCorner(coordinates) == null) && (board.getNeighboursOfCorner(coordinates).isEmpty())) {
             board.setCorner(coordinates, new Settlement(owner, coordinates));
             return true;

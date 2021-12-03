@@ -48,7 +48,7 @@ public class Road extends AbstractInfrastructure {
         } else return false;
     }
 
-    public boolean initialBuild(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
+    public static boolean initialBuild(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
         if ((board.hasEdge(startPoint, endPoint)) && (board.getEdge(startPoint, endPoint) == null) && (board.getCorner(startPoint) != null)) {
             board.setEdge(startPoint, endPoint, new Road(owner, startPoint, endPoint));
             return true;
