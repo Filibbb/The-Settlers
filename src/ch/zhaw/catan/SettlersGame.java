@@ -40,8 +40,7 @@ public class SettlersGame {
     private final SettlersBoard settlersBoard = new SettlersBoard();
     private final SettlersBoardTextView settlersBoardTextView = new SettlersBoardTextView(settlersBoard);
     private final CommandHandler commandHandler = new CommandHandler(turnOrderHandler);
-    private int requiredPointsToWin;
-    private ArrayList<Player> players;
+    private final int requiredPointsToWin;
 
     /**
      * Constructs a SiedlerGame game state object.
@@ -116,7 +115,7 @@ public class SettlersGame {
     }
 
     private boolean hasWinner() {
-        for (Player player : players) {
+        for (Player player : turnOrderHandler.getPlayerTurnOrder()) {
             if (player.getWinningPointCounter() == requiredPointsToWin) {
                 return true;
             }
@@ -130,19 +129,19 @@ public class SettlersGame {
 
     private void setupNewGame() {
         int numberOfPlayers = textIO.newIntInputReader().withMinVal(2).withMaxVal(4).read("Please enter the number of players. 2, 3 or 4 players are supported.");
-        addPlayersToGame(numberOfPlayers);
+        final List<Player> players = createPlayers(numberOfPlayers);
         textTerminal.println(settlersBoardTextView.toString());
-        determineTurnOrder();
+        determineTurnOrder(players);
     }
 
-    private void determineTurnOrder() {
+    private void determineTurnOrder(List<Player> players) {
         final List<DiceResult> diceResults = dice.rollForPlayers(players);
         final boolean successFul = turnOrderHandler.determineInitialTurnOrder(diceResults);
         if (successFul) {
             textTerminal.println("Faction " + turnOrderHandler.getCurrentPlayer().getPlayerFaction() + " is the lucky player who is allowed to start.");
         } else {
             textTerminal.println("Several players rolled the same number. Do the whole thing again.");
-            determineTurnOrder();
+            determineTurnOrder(players);
         }
     }
 
@@ -150,12 +149,14 @@ public class SettlersGame {
      * Adds players to the game.
      *
      * @param numberOfPlayers the selected numbers of players
+     * @return a unordered list of players with the specified number as size
      */
-    public void addPlayersToGame(int numberOfPlayers) {
-        players = new ArrayList<>(numberOfPlayers);
+    public List<Player> createPlayers(int numberOfPlayers) {
+        List<Player> players = new ArrayList<>(numberOfPlayers);
         for (int playerNumber = 1; playerNumber <= numberOfPlayers; playerNumber++) {
             players.add(new Player(getRandomAvailableFaction()));
         }
+        return players;
     }
 
     /**
