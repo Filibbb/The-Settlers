@@ -159,15 +159,6 @@ public class SettlersGame {
     }
 
     /**
-     * Returns the game board.
-     *
-     * @return the game board
-     */
-    public SettlersBoard getBoard() {
-        return settlersBoard;
-    }
-
-    /**
      * This method takes care of actions depending on the dice throw result.
      * <p>
      * A key action is the payout of the resource cards to the players
@@ -233,11 +224,5 @@ public class SettlersGame {
     public boolean placeThiefAndStealCard(Point field) {
         //TODO: Implement (or longest road functionality)
         return false;
-    }
-
-
-    //TODO REMOVE once tests are updated!!
-    public TurnOrderHandler getTurnOrderHandler() {
-        return turnOrderHandler;
     }
 }
