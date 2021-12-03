@@ -105,23 +105,33 @@ public class SettlersGame {
         }
         for (Player player : playerTurnOrder) {
             textTerminal.println("It's " + player.getPlayerFaction() + " turn to build a Settlement and a Road adjacent to it.");
-            buildInitialSettlementWithRoad(player);
+            buildInitialSettlement(player);
         }
 
     }
 
-    private void buildInitialSettlementWithRoad(Player player) {
+    private void buildInitialSettlement(Player player) {
         int coordinateX = textIO.newIntInputReader().withMinVal(2).withMaxVal(12).read("Enter x coordinate of corner");
-        int coordinateY = textIO.newIntInputReader().withMinVal(3).withMaxVal(12).read("Enter y coordinate of corner");
-        int endPointX = textIO.newIntInputReader().withMinVal(2).withMaxVal(12).read("Enter x coordinate of the endpoint of the adjacent road");
-        int endPointY = textIO.newIntInputReader().withMinVal(3).withMaxVal(19).read("Enter x coordinate of the endpoint of the adjacent road");
+        int coordinateY = textIO.newIntInputReader().withMinVal(3).withMaxVal(19).read("Enter y coordinate of corner");
         Point coordinates = new Point(coordinateX, coordinateY);
-        Point endPoint = new Point(endPointX, endPointY);
-        if (Settlement.initialBuild(player, coordinates, settlersBoard) && Road.initialBuild(player, coordinates, endPoint, settlersBoard)) {
-            textTerminal.println("Success! Settlement and Road is built.");
+        if (Settlement.initialBuild(player, coordinates, settlersBoard)) {
+            textTerminal.println("Success! Settlement is built.");
+            buildInitialRoad(player, coordinates);
         } else {
             textTerminal.println("You can not build on the entered coordinates. Please try again");
-            buildInitialSettlementWithRoad(player);
+            buildInitialSettlement(player);
+        }
+    }
+
+    private void buildInitialRoad(Player player, Point startPoint) {
+        int endPointX = textIO.newIntInputReader().withMinVal(2).withMaxVal(12).read("Enter x coordinate of the endpoint of the adjacent road");
+        int endPointY = textIO.newIntInputReader().withMinVal(3).withMaxVal(19).read("Enter y coordinate of the endpoint of the adjacent road");
+        Point endPoint = new Point(endPointX, endPointY);
+        if (Road.initialBuild(player, startPoint, endPoint, settlersBoard)) {
+            textTerminal.println("Success!");
+        } else {
+            textTerminal.println("Building the road was not successful! Please try again!");
+            buildInitialRoad(player, startPoint);
         }
     }
 
