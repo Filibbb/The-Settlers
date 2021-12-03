@@ -514,7 +514,7 @@ public class HexBoard<F, C, E, A> {
     public ArrayList<Point> getCornerCoordinatesOfOccupiedField(Point field) {
         ArrayList<Point> occupiedCornersOfField = new ArrayList<>();
         for (Point corner : getCornerCoordinatesOfField(field)) {
-            if (corner != null) {
+            if (getBuildingOnCorner(corner) != null) {
                 occupiedCornersOfField.add(corner);
             }
         }
