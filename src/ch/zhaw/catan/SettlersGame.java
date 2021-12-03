@@ -105,22 +105,24 @@ public class SettlersGame {
         }
         for (Player player : playerTurnOrder) {
             textTerminal.println("It's " + player.getPlayerFaction() + " turn to build a Settlement and a Road adjacent to it.");
-            buildInitialSettlement(player);
+            Point startPoint = buildInitialSettlement(player);
+            buildInitialRoad(player, startPoint);
         }
 
     }
 
-    private void buildInitialSettlement(Player player) {
+    private Point buildInitialSettlement(Player player) {
         int coordinateX = textIO.newIntInputReader().withMinVal(2).withMaxVal(12).read("Enter x coordinate of corner");
         int coordinateY = textIO.newIntInputReader().withMinVal(3).withMaxVal(19).read("Enter y coordinate of corner");
         Point coordinates = new Point(coordinateX, coordinateY);
         if (Settlement.initialBuild(player, coordinates, settlersBoard)) {
             textTerminal.println("Success! Settlement is built.");
-            buildInitialRoad(player, coordinates);
+            return coordinates;
         } else {
             textTerminal.println("You can not build on the entered coordinates. Please try again");
             buildInitialSettlement(player);
         }
+        return null;
     }
 
     private void buildInitialRoad(Player player, Point startPoint) {
