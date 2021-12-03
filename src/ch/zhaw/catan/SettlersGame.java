@@ -105,8 +105,8 @@ public class SettlersGame {
         }
         for (Player player : playerTurnOrder) {
             textTerminal.println("It's " + player.getPlayerFaction() + " turn to build a Settlement and a Road adjacent to it.");
-            Point startPoint = buildInitialSettlement(player);
-            buildInitialRoad(player, startPoint);
+            Point coordinates = buildInitialSettlement(player);
+            buildInitialRoad(player, coordinates);
         }
 
     }
