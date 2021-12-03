@@ -3,19 +3,15 @@ package ch.zhaw.catan;
 import ch.zhaw.catan.board.Land;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoardTextView;
-import ch.zhaw.catan.game.logic.DiceResult;
-import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.games.ThreePlayerStandard;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,51 +33,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SettlersGameTestBasic {
     private final static int DEFAULT_WINPOINTS = 5;
     private final static int DEFAULT_NUMBER_OF_PLAYERS = 3;
-    private List<DiceResult> diceResults = new ArrayList<>();
-
-    @BeforeEach
-    void setUp() {
-        initDiceResults();
-    }
-
-    private void initDiceResults() {
-        diceResults.add(new DiceResult(12, new Player(Faction.RED)));
-        diceResults.add(new DiceResult(5, new Player(Faction.BLUE)));
-        diceResults.add(new DiceResult(3, new Player(Faction.GREEN)));
-        diceResults.add(new DiceResult(1, new Player(Faction.YELLOW)));
-    }
-
-    /**
-     * Tests whether the functionality for switching to the next/previous player
-     * works as expected for different numbers of players.
-     *
-     * @param numberOfPlayers the number of players
-     */
-    @ParameterizedTest
-    @ValueSource(ints = {2, 3, 4})
-    public void requirementPlayerSwitching(int numberOfPlayers) {
-        diceResults = diceResults.subList(0, numberOfPlayers);
-        TurnOrderHandler turnOrderHandler = new TurnOrderHandler();
-        turnOrderHandler.determineInitialTurnOrder(diceResults);
-
-        assertEquals(numberOfPlayers, turnOrderHandler.getPlayerTurnOrder().size(), "Wrong number of players returned by getPlayers()");
-
-        //Switching forward
-
-        for (int i = 0; i < numberOfPlayers; i++) {
-            assertEquals(Faction.values()[i], turnOrderHandler.getCurrentPlayer().getPlayerFaction(),
-                    "Player order does not match order of Faction.values()");
-            turnOrderHandler.switchToNextPlayer();
-        }
-        assertEquals(Faction.values()[0], turnOrderHandler.getCurrentPlayer().getPlayerFaction(),
-                "Player wrap-around from last player to first player did not work.");
-        //Switching backward
-        for (int i = numberOfPlayers - 1; i >= 0; i--) {
-            turnOrderHandler.switchToPreviousPlayer();
-            assertEquals(Faction.values()[i], turnOrderHandler.getCurrentPlayer().getPlayerFaction(),
-                    "Switching players in reverse order does not work as expected.");
-        }
-    }
 
     /**
      * Tests whether the game board meets the required layout/land placement.
