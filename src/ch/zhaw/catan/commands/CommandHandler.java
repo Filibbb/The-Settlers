@@ -1,9 +1,13 @@
 package ch.zhaw.catan.commands;
 
+import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
+import ch.zhaw.catan.player.Player;
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
 import org.beryx.textio.TextTerminal;
+
+import java.util.ArrayList;
 
 /**
  * Handles all Commands.
@@ -17,10 +21,11 @@ public class CommandHandler {
         this.turnOrderHandler = turnOrderHandler;
     }
 
-    public void executeCommand(Commands command) {
+    public void executeCommand(Commands command, ArrayList<Player> players, SettlersBoard settlersBoard) {
         switch (command) {
             case ROLL_DICE:
-                //TODO: implement throwDice with distribute resources.
+                RollDiceCommand rollDiceCommand = new RollDiceCommand();
+                rollDiceCommand.execute(players, settlersBoard);
                 break;
             case END_TURN:
                 final EndTurnCommand endTurnCommand = new EndTurnCommand(turnOrderHandler);

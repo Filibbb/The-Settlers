@@ -71,13 +71,13 @@ public class SettlersGame {
                 final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
                 textTerminal.println("It's " + currentPlayer.getPlayerFaction() + " turn. Choose your actions down below:");
                 textTerminal.println("If you are done with your turn, enter END TURN command.");
-                commandHandler.executeCommand(SHOW_COMMANDS);
+                commandHandler.executeCommand(SHOW_COMMANDS, players, settlersBoard);
             }
             final String userInput = textIO.newStringInputReader().read("Please enter your next action:");
             final Commands commandByRepresentation = getCommandByRepresentation(userInput);
             samePlayerAsBefore = commandByRepresentation != null && commandByRepresentation != END_TURN;
             if (commandByRepresentation != null) {
-                commandHandler.executeCommand(commandByRepresentation);
+                commandHandler.executeCommand(commandByRepresentation, players, settlersBoard);
             } else {
                 textTerminal.println("This command is not available. Use 'SHOW COMMANDS' for available commands.");
             }

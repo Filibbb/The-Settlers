@@ -106,20 +106,12 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         return diceNumberPlacements;
     }
 
-    public Resource getResourcesOfField(Point field){
-        for (Map.Entry<Point, Land> fields : defaultLandPlacement.entrySet()){
-            if(fields.getKey() == field){
+    public Resource getResourceOfField(Point field) {
+        for (Map.Entry<Point, Land> fields : defaultLandPlacement.entrySet()) {
+            if (fields.getKey() == field) {
                 return fields.getValue().getResource();
             }
         }
-        return null;
-    }
-
-
-    public Map<Object, Integer>  getPlayersSettledOnField(){
-            //TODO: Create a Map with the players on the field and the Point Values from each player on this field.
-            //TODO: vlt auch nicht in dieser Klasse.
-            //TODO: Return -> Object just a place holder, return Map of Player and Integer
         return null;
     }
 
@@ -132,8 +124,8 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
      */
     public List<Point> getFieldsByDiceValue(int diceValue) {
         List<Point> pointsOfFieldWithDiceValue = new ArrayList<>();
-        for (Map.Entry<Point, Integer> field : diceNumberPlacements.entrySet()){
-            if(field.getValue() == diceValue){
+        for (Map.Entry<Point, Integer> field : diceNumberPlacements.entrySet()) {
+            if (field.getValue() == diceValue) {
                 pointsOfFieldWithDiceValue.add(field.getKey());
             }
         }
