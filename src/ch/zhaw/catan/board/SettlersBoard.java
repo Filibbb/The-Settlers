@@ -31,29 +31,29 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
      * @author tebe
      */
     public static Map<Point, Integer> getDefaultDiceNumberPlacement() {
-        Map<Point, Integer> diceNumberAssignements = new HashMap<>();
-        diceNumberAssignements.put(new Point(4, 8), 2);
-        diceNumberAssignements.put(new Point(7, 5), 3);
-        diceNumberAssignements.put(new Point(8, 14), 3);
-        diceNumberAssignements.put(new Point(6, 8), 4);
-        diceNumberAssignements.put(new Point(7, 17), 4);
+        Map<Point, Integer> diceNumberAssignments = new HashMap<>();
+        diceNumberAssignments.put(new Point(4, 8), 2);
+        diceNumberAssignments.put(new Point(7, 5), 3);
+        diceNumberAssignments.put(new Point(8, 14), 3);
+        diceNumberAssignments.put(new Point(6, 8), 4);
+        diceNumberAssignments.put(new Point(7, 17), 4);
 
-        diceNumberAssignements.put(new Point(3, 11), 5);
-        diceNumberAssignements.put(new Point(8, 8), 5);
-        diceNumberAssignements.put(new Point(5, 5), 6);
-        diceNumberAssignements.put(new Point(9, 11), 6);
+        diceNumberAssignments.put(new Point(3, 11), 5);
+        diceNumberAssignments.put(new Point(8, 8), 5);
+        diceNumberAssignments.put(new Point(5, 5), 6);
+        diceNumberAssignments.put(new Point(9, 11), 6);
 
-        diceNumberAssignements.put(new Point(7, 11), 7);
-        diceNumberAssignements.put(new Point(9, 5), 8);
-        diceNumberAssignements.put(new Point(5, 17), 8);
-        diceNumberAssignements.put(new Point(5, 11), 9);
-        diceNumberAssignements.put(new Point(11, 11), 9);
-        diceNumberAssignements.put(new Point(4, 14), 10);
-        diceNumberAssignements.put(new Point(10, 8), 10);
-        diceNumberAssignements.put(new Point(6, 14), 11);
-        diceNumberAssignements.put(new Point(9, 17), 11);
-        diceNumberAssignements.put(new Point(10, 14), 12);
-        return Collections.unmodifiableMap(diceNumberAssignements);
+        diceNumberAssignments.put(new Point(7, 11), 7);
+        diceNumberAssignments.put(new Point(9, 5), 8);
+        diceNumberAssignments.put(new Point(5, 17), 8);
+        diceNumberAssignments.put(new Point(5, 11), 9);
+        diceNumberAssignments.put(new Point(11, 11), 9);
+        diceNumberAssignments.put(new Point(4, 14), 10);
+        diceNumberAssignments.put(new Point(10, 8), 10);
+        diceNumberAssignments.put(new Point(6, 14), 11);
+        diceNumberAssignments.put(new Point(9, 17), 11);
+        diceNumberAssignments.put(new Point(10, 14), 12);
+        return Collections.unmodifiableMap(diceNumberAssignments);
     }
 
     /**

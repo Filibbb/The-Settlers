@@ -76,15 +76,20 @@ public class Player {
      */
     public boolean checkLiquidity(Structure structure) {
         Map<Resource, Integer> resourceCards = getResourceCardsInHand();
+        final Integer lumberResourceCount = resourceCards.get(Resource.LUMBER);
+        final Integer brickResourceCount = resourceCards.get(Resource.BRICK);
+        final Integer grainResourceCount = resourceCards.get(Resource.GRAIN);
         switch (structure) {
             case CITY -> {
-                return ((resourceCards.get(Resource.ORE) >= 3) && (resourceCards.get(Resource.GRAIN) >= 2));
+                final Integer oreResourceCount = resourceCards.get(Resource.ORE);
+                return oreResourceCount != null && oreResourceCount >= 3 && grainResourceCount != null && grainResourceCount >= 2;
             }
             case ROAD -> {
-                return ((resourceCards.get(Resource.LUMBER) >= 1) && (resourceCards.get(Resource.BRICK) >= 1));
+                return lumberResourceCount != null && lumberResourceCount >= 1 && brickResourceCount != null && brickResourceCount >= 1;
             }
             case SETTLEMENT -> {
-                return ((resourceCards.get(Resource.LUMBER) >= 1) && (resourceCards.get(Resource.GRAIN) >= 1) && (resourceCards.get(Resource.BRICK) >= 1) && (resourceCards.get(Resource.WOOL) >= 1));
+                final Integer woolResourceCount = resourceCards.get(Resource.WOOL);
+                return lumberResourceCount != null && lumberResourceCount >= 1 && grainResourceCount != null && grainResourceCount >= 1 && brickResourceCount != null && brickResourceCount >= 1 && woolResourceCount != null && woolResourceCount >= 1;
             }
         }
         return false;

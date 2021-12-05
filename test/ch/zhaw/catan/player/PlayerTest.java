@@ -32,7 +32,6 @@ class PlayerTest {
         player.addResourceCardToHand(Resource.ORE, ORE_COUNT);
     }
 
-
     /**
      * Tests if total card count is correctly calculated
      */
