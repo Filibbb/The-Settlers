@@ -108,7 +108,7 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
 
     public Resource getResourceOfField(Point field) {
         for (Map.Entry<Point, Land> fields : defaultLandPlacement.entrySet()) {
-            if (fields.getKey() == field) {
+            if (fields.getKey().equals(field)) {
                 return fields.getValue().getResource();
             }
         }

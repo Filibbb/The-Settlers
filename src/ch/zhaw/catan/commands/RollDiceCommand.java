@@ -36,7 +36,7 @@ public class RollDiceCommand {
         }
     }
 
-    private void handoutResourcesOfTheRolledField(int diceValue) {
+    void handoutResourcesOfTheRolledField(int diceValue) {
         List<Point> allFieldsWithDiceValue = settlersBoard.getFieldsByDiceValue(diceValue);
         for (Point field : allFieldsWithDiceValue) {
             Resource resourceOfRolledField = settlersBoard.getResourceOfField(field);
