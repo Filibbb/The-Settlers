@@ -2,13 +2,9 @@ package ch.zhaw.catan.commands;
 
 
 import ch.zhaw.catan.SettlersGameTestBasic;
-import ch.zhaw.catan.board.Land;
 import ch.zhaw.catan.board.Resource;
-import ch.zhaw.catan.board.SettlersBoard;
-import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.games.GameDataContainer;
 import ch.zhaw.catan.games.ThreePlayerStandard;
-import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
 
@@ -16,13 +12,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static ch.zhaw.catan.games.ThreePlayerStandard.getAfterSetupPhase;
-import static ch.zhaw.catan.infrastructure.Road.build;
+import static ch.zhaw.catan.infrastructure.Settlement.initialBuild;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -62,7 +56,6 @@ public class RollDiceCommandTest {
                 Faction.values()[2],
                 Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
                         Resource.ORE, 0, Resource.LUMBER, 1));
-
         settlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
     }
 
@@ -74,12 +67,20 @@ public class RollDiceCommandTest {
     public void requirementTwoSettlementsSamePlayerSameFieldResourceCardPayout() {
         GameDataContainer model = getAfterSetupPhase();
         RollDiceCommand rollDiceCommand = new RollDiceCommand(model.getSettlersBoard(), model.getTurnOrderHandler());
-        for (int diceValue : List.of(2, 6, 6, 11)) {
+        final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
+        assertTrue(initialBuild(currentPlayer, new Point(7, 7), model.getSettlersBoard()));
+        for (int diceValue : List.of(4, 4, 4)) {
             rollDiceCommand.handoutResourcesOfTheRolledField(diceValue);
         }
-        final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
-        assertTrue(build(currentPlayer, new Point(6, 6), new Point(7, 7), model.getSettlersBoard()));
-        assertTrue(Settlement.build(currentPlayer, new Point(7, 7), model.getSettlersBoard()));
-        //assertEquals(List.of(Resource.ORE, Resource.ORE), model.throwDice(4).get(currentPlayer.getPlayerFaction())); FIXME once done
+        Map<Faction, Map<Resource, Integer>> expected = Map.of(
+                Faction.values()[0], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0,
+                        Resource.BRICK, 0, Resource.ORE, 6, Resource.LUMBER, 0),
+                Faction.values()[1],
+                Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0,
+                        Resource.ORE, 0, Resource.LUMBER, 0),
+                Faction.values()[2],
+                Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 3,
+                        Resource.ORE, 0, Resource.LUMBER, 0));
+        settlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
     }
 }
