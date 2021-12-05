@@ -61,7 +61,6 @@ public class RollDiceCommandTest {
 
     /**
      * Tests whether payout with multiple settlements of the same player at one field works
-     * {@link ThreePlayerStandard#getAfterSetupPhaseAlmostEmptyBank()}.
      */
     @Test
     public void requirementTwoSettlementsSamePlayerSameFieldResourceCardPayout() {
