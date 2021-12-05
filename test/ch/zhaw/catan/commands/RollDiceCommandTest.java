@@ -26,14 +26,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @version 1.0.0
  */
 public class RollDiceCommandTest {
-    private SettlersGameTestBasic settlersGameTestBasic;
+    private GameDataContainer model;
+    private RollDiceCommand rollDiceCommand;
 
     /**
      * Creates initial dice roll test.
      */
     @BeforeEach
     public void setUp() {
-        settlersGameTestBasic = new SettlersGameTestBasic();
+        model = getAfterSetupPhase();
+        rollDiceCommand = new RollDiceCommand(model.getSettlersBoard(), model.getTurnOrderHandler());
     }
 
     /**
@@ -42,8 +44,6 @@ public class RollDiceCommandTest {
      */
     @Test
     public void requirementDiceThrowPlayerResourceCardStockUpdateTest() {
-        GameDataContainer model = getAfterSetupPhase();
-        RollDiceCommand rollDiceCommand = new RollDiceCommand(model.getSettlersBoard(), model.getTurnOrderHandler());
         for (int i : List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
             rollDiceCommand.handoutResourcesOfTheRolledField(i);
         }
@@ -56,7 +56,7 @@ public class RollDiceCommandTest {
                 Faction.values()[2],
                 Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
                         Resource.ORE, 0, Resource.LUMBER, 1));
-        settlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
+        SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
     }
 
     /**
@@ -65,8 +65,6 @@ public class RollDiceCommandTest {
      */
     @Test
     public void requirementTwoSettlementsSamePlayerSameFieldResourceCardPayout() {
-        GameDataContainer model = getAfterSetupPhase();
-        RollDiceCommand rollDiceCommand = new RollDiceCommand(model.getSettlersBoard(), model.getTurnOrderHandler());
         final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
         assertTrue(initialBuild(currentPlayer, new Point(7, 7), model.getSettlersBoard()));
         for (int diceValue : List.of(4, 4, 4)) {
@@ -81,6 +79,6 @@ public class RollDiceCommandTest {
                 Faction.values()[2],
                 Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 3,
                         Resource.ORE, 0, Resource.LUMBER, 0));
-        settlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
+        SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
     }
 }

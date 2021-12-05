@@ -75,7 +75,7 @@ public class SettlersGameTestBasic {
         assertPlayerResourceCardStockEquals(model, ThreePlayerStandard.PLAYER_ONE_READY_TO_BUILD_FIFTH_SETTLEMENT_RESOURCE_CARD_STOCK);
     }
 
-    public void assertPlayerResourceCardStockEquals(GameDataContainer model, Map<Faction, Map<Resource, Integer>> expected) {
+    public static void assertPlayerResourceCardStockEquals(GameDataContainer model, Map<Faction, Map<Resource, Integer>> expected) {
         for (int i = 0; i < expected.keySet().size(); i++) {
             final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
             Faction f = currentPlayer.getPlayerFaction();

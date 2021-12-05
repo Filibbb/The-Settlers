@@ -13,14 +13,14 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
     public static final Point INITIAL_THIEF_POSITION = new Point(7, 11);
 
     private final Map<Point, Integer> diceNumberPlacements;
-    private final Map<Point, Land> defaultLandPlacement;
+    private final Map<Point, Land> landTilePlacement;
 
     /**
      * Creates a default settlers board with default initialization of board and dicenumber placements
      */
     public SettlersBoard() {
-        defaultLandPlacement = getDefaultLandPlacement();
-        addFieldsForLandPlacements(defaultLandPlacement);
+        landTilePlacement = getDefaultLandTilePlacement();
+        addFieldsForLandPlacements(landTilePlacement);
         diceNumberPlacements = getDefaultDiceNumberPlacement();
     }
 
@@ -64,7 +64,7 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
      * @return the field to {@link Land} mapping for the standard setup
      * @author tebe
      */
-    public static Map<Point, Land> getDefaultLandPlacement() {
+    public static Map<Point, Land> getDefaultLandTilePlacement() {
         Map<Point, Land> landPlacements = new HashMap<>();
         Point[] water = {new Point(4, 2), new Point(6, 2), new Point(8, 2), new Point(10, 2),
                 new Point(3, 5), new Point(11, 5), new Point(2, 8), new Point(12, 8), new Point(1, 11),
@@ -107,7 +107,7 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
     }
 
     public Resource getResourceOfField(Point field) {
-        for (Map.Entry<Point, Land> fields : defaultLandPlacement.entrySet()) {
+        for (Map.Entry<Point, Land> fields : landTilePlacement.entrySet()) {
             if (fields.getKey().equals(field)) {
                 return fields.getValue().getResource();
             }
