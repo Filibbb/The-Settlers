@@ -488,23 +488,6 @@ public class HexBoard<F, C, E, A> {
     }
 
     /**
-     * Returns the (non-null) data elements of the corners of the specified field.
-     *
-     * @param center the location of the field
-     * @return list with non-null corner data elements
-     */
-    public List<C> getCornerDataOfField(Point center) {
-        List<C> result = new LinkedList<>();
-        for (Point c : getCornerCoordinatesOfField(center)) {
-            C temp = getCorner(c);
-            if (temp != null) {
-                result.add(temp);
-            }
-        }
-        return result;
-    }
-
-    /**
      * Returns all occupied corners of a specific field based on the center coordinates.
      *
      * @param field the point of the center / field
@@ -514,15 +497,11 @@ public class HexBoard<F, C, E, A> {
     public ArrayList<Point> getCornerCoordinatesOfOccupiedField(Point field) {
         ArrayList<Point> occupiedCornersOfField = new ArrayList<>();
         for (Point corner : getCornerCoordinatesOfField(field)) {
-            if (getBuildingOnCorner(corner) != null) {
+            if (getCorner(corner) != null) {
                 occupiedCornersOfField.add(corner);
             }
         }
         return occupiedCornersOfField;
-    }
-
-    public Object getBuildingOnCorner(Point cornerCoordinates) {
-        return corner.get(cornerCoordinates);
     }
 
     int getMaxCoordinateX() {

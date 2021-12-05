@@ -142,6 +142,10 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         return getFields(corner);
     }
 
+    public Settlement getBuildingOnCorner(Point cornerCoordinates) {
+        return getCorner(cornerCoordinates);
+    }
+
     private void addFieldsForLandPlacements(Map<Point, Land> landPlacement) {
         for (Map.Entry<Point, Land> landEntry : landPlacement.entrySet()) {
             addField(landEntry.getKey(), landEntry.getValue());
