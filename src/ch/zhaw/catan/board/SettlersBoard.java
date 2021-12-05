@@ -5,23 +5,22 @@ import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.hexboard.HexBoard;
 
 import java.awt.*;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
     // Initial thief position (on the desert field)
     public static final Point INITIAL_THIEF_POSITION = new Point(7, 11);
 
     private final Map<Point, Integer> diceNumberPlacements;
+    private final Map<Point, Land> landTilePlacement;
 
     /**
      * Creates a default settlers board with default initialization of board and dicenumber placements
      */
     public SettlersBoard() {
-        Map<Point, Land> defaultLandPlacement = getDefaultLandPlacement();
-        addFieldsForLandPlacements(defaultLandPlacement);
+        landTilePlacement = getDefaultLandTilePlacement();
+        addFieldsForLandPlacements(landTilePlacement);
         diceNumberPlacements = getDefaultDiceNumberPlacement();
     }
 
@@ -65,7 +64,7 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
      * @return the field to {@link Land} mapping for the standard setup
      * @author tebe
      */
-    public static Map<Point, Land> getDefaultLandPlacement() {
+    public static Map<Point, Land> getDefaultLandTilePlacement() {
         Map<Point, Land> landPlacements = new HashMap<>();
         Point[] water = {new Point(4, 2), new Point(6, 2), new Point(8, 2), new Point(10, 2),
                 new Point(3, 5), new Point(11, 5), new Point(2, 8), new Point(12, 8), new Point(1, 11),
@@ -107,15 +106,30 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         return diceNumberPlacements;
     }
 
+    public Resource getResourceOfField(Point field) {
+        for (Map.Entry<Point, Land> fields : landTilePlacement.entrySet()) {
+            if (fields.getKey().equals(field)) {
+                return fields.getValue().getResource();
+            }
+        }
+        return null;
+    }
+
     /**
      * Returns the fields associated with the specified dice value.
      *
-     * @param dice the dice value
+     * @param diceValue the dice value
      * @return the fields associated with the dice value
+     * @author fupat002
      */
-    public List<Point> getFieldsForDiceValue(int dice) {
-        //TODO: Implement.
-        return Collections.emptyList();
+    public List<Point> getFieldsByDiceValue(int diceValue) {
+        List<Point> pointsOfFieldWithDiceValue = new ArrayList<>();
+        for (Map.Entry<Point, Integer> field : diceNumberPlacements.entrySet()) {
+            if (field.getValue() == diceValue) {
+                pointsOfFieldWithDiceValue.add(field.getKey());
+            }
+        }
+        return pointsOfFieldWithDiceValue;
     }
 
     /**
@@ -126,6 +140,10 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
      */
     public List<Land> getLandsForCorner(Point corner) {
         return getFields(corner);
+    }
+
+    public Settlement getBuildingOnCorner(Point cornerCoordinates) {
+        return getCorner(cornerCoordinates);
     }
 
     private void addFieldsForLandPlacements(Map<Point, Land> landPlacement) {

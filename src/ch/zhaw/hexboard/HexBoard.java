@@ -1,5 +1,8 @@
 package ch.zhaw.hexboard;
 
+import ch.zhaw.catan.infrastructure.Settlement;
+import ch.zhaw.catan.player.Player;
+
 import java.awt.*;
 import java.util.List;
 import java.util.*;
@@ -485,20 +488,20 @@ public class HexBoard<F, C, E, A> {
     }
 
     /**
-     * Returns the (non-null) data elements of the corners of the specified field.
+     * Returns all occupied corners of a specific field based on the center coordinates.
      *
-     * @param center the location of the field
-     * @return list with non-null corner data elements
+     * @param field the point of the center / field
+     * @return List with the occupied corners.
+     * @author fupat002
      */
-    public List<C> getCornerDataOfField(Point center) {
-        List<C> result = new LinkedList<>();
-        for (Point c : getCornerCoordinatesOfField(center)) {
-            C temp = getCorner(c);
-            if (temp != null) {
-                result.add(temp);
+    public ArrayList<Point> getCornerCoordinatesOfOccupiedField(Point field) {
+        ArrayList<Point> occupiedCornersOfField = new ArrayList<>();
+        for (Point corner : getCornerCoordinatesOfField(field)) {
+            if (getCorner(corner) != null) {
+                occupiedCornersOfField.add(corner);
             }
         }
-        return result;
+        return occupiedCornersOfField;
     }
 
     int getMaxCoordinateX() {

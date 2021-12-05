@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.awt.*;
 import java.util.Map;
 
-import static ch.zhaw.catan.board.SettlersBoard.getDefaultLandPlacement;
+import static ch.zhaw.catan.board.SettlersBoard.getDefaultLandTilePlacement;
 import static ch.zhaw.catan.games.ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS;
 import static ch.zhaw.catan.games.ThreePlayerStandard.getAfterSetupPhase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,9 +36,9 @@ class SettlersBoardTest {
      */
     @Test
     public void requirementLandPlacementTest() {
-        assertEquals(getDefaultLandPlacement().size(), settlersBoard.getFields().size(), "Check if explicit init must be done (violates spec): "
+        assertEquals(getDefaultLandTilePlacement().size(), settlersBoard.getFields().size(), "Check if explicit init must be done (violates spec): "
                 + "modify initializeSiedlerGame accordingly.");
-        for (Map.Entry<Point, Land> e : getDefaultLandPlacement().entrySet()) {
+        for (Map.Entry<Point, Land> e : getDefaultLandTilePlacement().entrySet()) {
             assertEquals(e.getValue(), settlersBoard.getField(e.getKey()),
                     "Land placement does not match default placement.");
         }
