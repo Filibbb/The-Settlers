@@ -8,8 +8,6 @@ import ch.zhaw.catan.commands.Commands;
 import ch.zhaw.catan.game.logic.Dice;
 import ch.zhaw.catan.game.logic.DiceResult;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
-import ch.zhaw.catan.infrastructure.Road;
-import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
 import org.beryx.textio.TextIO;
@@ -23,8 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 import static ch.zhaw.catan.commands.Commands.*;
+import static ch.zhaw.catan.infrastructure.Road.initialRoadBuild;
+import static ch.zhaw.catan.infrastructure.Settlement.initialSettlementBuild;
 import static ch.zhaw.catan.player.FactionsUtil.getRandomAvailableFaction;
-
 
 /**
  * This class performs all actions related to modifying the game state.
@@ -114,22 +113,21 @@ public class SettlersGame {
     private Point buildInitialSettlement(Player player) {
         int coordinateX = textIO.newIntInputReader().withMinVal(2).withMaxVal(12).read("Enter x coordinate of corner");
         int coordinateY = textIO.newIntInputReader().withMinVal(3).withMaxVal(19).read("Enter y coordinate of corner");
-        Point coordinates = new Point(coordinateX, coordinateY);
-        if (!Settlement.initialBuild(player, coordinates, settlersBoard)) {
+        Point settlementCoordinates = new Point(coordinateX, coordinateY);
+        if (initialSettlementBuild(player, settlementCoordinates, settlersBoard)) {
             textTerminal.println("You can not build on the entered coordinates. Please try again");
             buildInitialSettlement(player);
-
+            return null;
         } else {
-            return coordinates;
+            return settlementCoordinates;
         }
-        return null;
     }
 
     private void buildInitialRoad(Player player, Point startPoint) {
         int endPointX = textIO.newIntInputReader().withMinVal(2).withMaxVal(12).read("Enter x coordinate of the endpoint of the adjacent road");
         int endPointY = textIO.newIntInputReader().withMinVal(3).withMaxVal(19).read("Enter y coordinate of the endpoint of the adjacent road");
         Point endPoint = new Point(endPointX, endPointY);
-        if (!Road.initialBuild(player, startPoint, endPoint, settlersBoard)) {
+        if (initialRoadBuild(player, startPoint, endPoint, settlersBoard)) {
             textTerminal.println("Building the road was not successful! Please try again!");
             buildInitialRoad(player, startPoint);
         }
