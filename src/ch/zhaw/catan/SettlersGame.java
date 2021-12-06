@@ -114,7 +114,7 @@ public class SettlersGame {
         int coordinateX = textIO.newIntInputReader().withMinVal(2).withMaxVal(12).read("Enter x coordinate of corner");
         int coordinateY = textIO.newIntInputReader().withMinVal(3).withMaxVal(19).read("Enter y coordinate of corner");
         Point settlementCoordinates = new Point(coordinateX, coordinateY);
-        if (initialSettlementBuild(player, settlementCoordinates, settlersBoard)) {
+        if (!initialSettlementBuild(player, settlementCoordinates, settlersBoard)) {
             textTerminal.println("You can not build on the entered coordinates. Please try again");
             buildInitialSettlement(player);
             return null;
@@ -127,7 +127,7 @@ public class SettlersGame {
         int endPointX = textIO.newIntInputReader().withMinVal(2).withMaxVal(12).read("Enter x coordinate of the endpoint of the adjacent road");
         int endPointY = textIO.newIntInputReader().withMinVal(3).withMaxVal(19).read("Enter y coordinate of the endpoint of the adjacent road");
         Point endPoint = new Point(endPointX, endPointY);
-        if (initialRoadBuild(player, startPoint, endPoint, settlersBoard)) {
+        if (!initialRoadBuild(player, startPoint, endPoint, settlersBoard)) {
             textTerminal.println("Building the road was not successful! Please try again!");
             buildInitialRoad(player, startPoint);
         }
