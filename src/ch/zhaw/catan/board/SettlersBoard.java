@@ -3,17 +3,22 @@ package ch.zhaw.catan.board;
 import ch.zhaw.catan.infrastructure.Road;
 import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.hexboard.HexBoard;
+import org.beryx.textio.TextIO;
+import org.beryx.textio.TextIoFactory;
+import org.beryx.textio.TextTerminal;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
 public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
-    // Initial thief position (on the desert field)
     public static final Point INITIAL_THIEF_POSITION = new Point(7, 11);
 
+    private Point thiefPosition;
     private final Map<Point, Integer> diceNumberPlacements;
     private final Map<Point, Land> landTilePlacement;
+    private final TextIO textIO = TextIoFactory.getTextIO();
+    private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
 
     /**
      * Creates a default settlers board with default initialization of board and dicenumber placements
@@ -144,6 +149,19 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
 
     public Settlement getBuildingOnCorner(Point cornerCoordinates) {
         return getCorner(cornerCoordinates);
+    }
+
+    public void placeThiefOnField(){
+        int xCoordinate = textIO.newIntInputReader().read("You rolled a seven. Where do you want to place the thief? Enter the X coordinate of the center");
+        int yCoordinate = textIO.newIntInputReader().read(" Enter the Y coordinate of the center");
+        thiefPosition = new Point(xCoordinate, yCoordinate);
+        //Todo Ausgabe von Folgen der Besetzung dieses feldes.
+        // bsp. if field not occupied -> niemand ist betroffen, wenn besetzet, dann dieser spieler kriegt diese Ressource nicht bei diesem Würfelwert.
+        // textTerminal.println("With your placement on " + thiefPosition);
+    }
+
+    public boolean isThiefOnField(Point field) {
+        return thiefPosition.equals(field);
     }
 
     private void addFieldsForLandPlacements(Map<Point, Land> landPlacement) {

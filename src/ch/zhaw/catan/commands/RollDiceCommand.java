@@ -17,7 +17,7 @@ public class RollDiceCommand {
     private final SettlersBoard settlersBoard;
     private final List<Player> players;
 
-    public RollDiceCommand(SettlersBoard settlersBoard, TurnOrderHandler turnOrderHandler){
+    public RollDiceCommand(SettlersBoard settlersBoard, TurnOrderHandler turnOrderHandler) {
         this.settlersBoard = settlersBoard;
         this.players = turnOrderHandler.getPlayerTurnOrder();
     }
@@ -39,12 +39,14 @@ public class RollDiceCommand {
     void handoutResourcesOfTheRolledField(int diceValue) {
         List<Point> allFieldsWithDiceValue = settlersBoard.getFieldsByDiceValue(diceValue);
         for (Point field : allFieldsWithDiceValue) {
-            Resource resourceOfRolledField = settlersBoard.getResourceOfField(field);
-            ArrayList<Point> occupiedCornersOfField = settlersBoard.getCornerCoordinatesOfOccupiedField(field);
-            for (Point occupiedCorner : occupiedCornersOfField) {
-                Settlement buildingOnCorner = settlersBoard.getBuildingOnCorner(occupiedCorner);
-                Player owner = buildingOnCorner.getOwner();
-                owner.addResourceCardToHand(resourceOfRolledField);
+            if (!settlersBoard.isThiefOnField(field)) {
+                Resource resourceOfRolledField = settlersBoard.getResourceOfField(field);
+                ArrayList<Point> occupiedCornersOfField = settlersBoard.getCornerCoordinatesOfOccupiedField(field);
+                for (Point occupiedCorner : occupiedCornersOfField) {
+                    Settlement buildingOnCorner = settlersBoard.getBuildingOnCorner(occupiedCorner);
+                    Player owner = buildingOnCorner.getOwner();
+                    owner.addResourceCardToHand(resourceOfRolledField);
+                }
             }
         }
     }
@@ -55,5 +57,7 @@ public class RollDiceCommand {
                 player.deletesHalfOfResources();
             }
         }
+        settlersBoard.placeThiefOnField();
+        //steal from player
     }
 }
