@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import static ch.zhaw.catan.games.ThreePlayerStandard.getAfterSetupPhase;
-import static ch.zhaw.catan.infrastructure.Settlement.initialBuild;
+import static ch.zhaw.catan.infrastructure.Settlement.initialSettlementBuild;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -65,7 +65,7 @@ public class RollDiceCommandTest {
     @Test
     public void requirementTwoSettlementsSamePlayerSameFieldResourceCardPayout() {
         final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
-        assertTrue(initialBuild(currentPlayer, new Point(7, 7), model.getSettlersBoard()));
+        assertTrue(initialSettlementBuild(currentPlayer, new Point(7, 7), model.getSettlersBoard()));
         for (int diceValue : List.of(4, 4, 4)) {
             rollDiceCommand.handoutResourcesOfTheRolledField(diceValue);
         }
