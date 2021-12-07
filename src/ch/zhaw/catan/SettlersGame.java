@@ -3,7 +3,6 @@ package ch.zhaw.catan;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.board.SettlersBoardTextView;
-import ch.zhaw.catan.board.Structure;
 import ch.zhaw.catan.commands.CommandHandler;
 import ch.zhaw.catan.commands.Commands;
 import ch.zhaw.catan.game.logic.Dice;
@@ -22,8 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 import static ch.zhaw.catan.commands.Commands.*;
+import static ch.zhaw.catan.infrastructure.Road.initialRoadBuild;
+import static ch.zhaw.catan.infrastructure.Settlement.initialSettlementBuild;
 import static ch.zhaw.catan.player.FactionsUtil.getRandomAvailableFaction;
-
 
 /**
  * This class performs all actions related to modifying the game state.
@@ -84,7 +84,7 @@ public class SettlersGame {
     }
 
     private void startFoundationPhase() {
-        textTerminal.println("Now that everything is settled. Lets found your settlements!.");
+        textTerminal.println("Now that everything is settled. Lets found your settlements!");
         final List<Player> playerTurnOrder = turnOrderHandler.getPlayerTurnOrder();
 
         foundationPhase(playerTurnOrder, false);
@@ -102,15 +102,32 @@ public class SettlersGame {
             Collections.reverse(playerTurnOrder);
         }
         for (Player player : playerTurnOrder) {
-            textTerminal.println("It's " + player.getPlayerFaction() + " turn.");
-            //TODO build for free a settlement based on commands at the desired position @weberph5
+            textTerminal.println("It's " + player.getPlayerFaction() + " turn to build a Settlement and a Road adjacent to it.");
+            Point settlementCoordinates = buildInitialSettlement(player);
+            buildInitialRoad(player, settlementCoordinates);
+        }
 
-            if (!reverse) {
-                player.increaseBuiltStructures(Structure.ROAD);
-            }
+    }
 
-            player.increaseBuiltStructures(Structure.SETTLEMENT);
-            player.incrementWinningPoints();
+    private Point buildInitialSettlement(Player player) {
+        int coordinateX = textIO.newIntInputReader().withMinVal(2).withMaxVal(12).read("Enter x coordinate of corner");
+        int coordinateY = textIO.newIntInputReader().withMinVal(3).withMaxVal(19).read("Enter y coordinate of corner");
+        Point settlementCoordinates = new Point(coordinateX, coordinateY);
+        if (!initialSettlementBuild(player, settlementCoordinates, settlersBoard)) {
+            textTerminal.println("You can not build on the entered coordinates. Please try again");
+            return buildInitialSettlement(player);
+        } else {
+            return settlementCoordinates;
+        }
+    }
+
+    private void buildInitialRoad(Player player, Point startPoint) {
+        int endPointX = textIO.newIntInputReader().withMinVal(2).withMaxVal(12).read("Enter x coordinate of the endpoint of the adjacent road");
+        int endPointY = textIO.newIntInputReader().withMinVal(3).withMaxVal(19).read("Enter y coordinate of the endpoint of the adjacent road");
+        Point endPoint = new Point(endPointX, endPointY);
+        if (!initialRoadBuild(player, startPoint, endPoint, settlersBoard)) {
+            textTerminal.println("Building the road was not successful! Please try again!");
+            buildInitialRoad(player, startPoint);
         }
     }
 

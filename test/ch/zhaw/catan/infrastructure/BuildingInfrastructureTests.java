@@ -19,9 +19,9 @@ import static ch.zhaw.catan.board.Structure.SETTLEMENT;
 import static ch.zhaw.catan.games.ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS;
 import static ch.zhaw.catan.games.ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS;
 import static ch.zhaw.catan.infrastructure.Road.build;
-import static ch.zhaw.catan.infrastructure.Road.initialBuild;
+import static ch.zhaw.catan.infrastructure.Road.initialRoadBuild;
 import static ch.zhaw.catan.infrastructure.Settlement.build;
-import static ch.zhaw.catan.infrastructure.Settlement.initialBuild;
+import static ch.zhaw.catan.infrastructure.Settlement.initialSettlementBuild;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -64,14 +64,14 @@ public class BuildingInfrastructureTests {
     private void setupInitialPhase() {
         Player currentPlayer = turnOrderHandler.getCurrentPlayer();
         final Faction faction = currentPlayer.getPlayerFaction();
-        assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, settlersBoard));
-        assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, INITIAL_ROAD_ENDPOINTS.get(faction).first, settlersBoard));
+        assertTrue(initialSettlementBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, settlersBoard));
+        assertTrue(initialRoadBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, INITIAL_ROAD_ENDPOINTS.get(faction).first, settlersBoard));
 
         turnOrderHandler.switchToNextPlayer();
 
         currentPlayer = turnOrderHandler.getCurrentPlayer();
-        assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, settlersBoard));
-        assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, INITIAL_ROAD_ENDPOINTS.get(faction).second, settlersBoard));
+        assertTrue(initialSettlementBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, settlersBoard));
+        assertTrue(initialRoadBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, INITIAL_ROAD_ENDPOINTS.get(faction).second, settlersBoard));
     }
 
     /**
@@ -81,8 +81,8 @@ public class BuildingInfrastructureTests {
     public void requirementBuildRoadInSetupPhase() {
         final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
         final Faction faction = currentPlayer.getPlayerFaction();
-        assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, settlersBoard));
-        assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, INITIAL_ROAD_ENDPOINTS.get(faction).first, settlersBoard));
+        assertTrue(initialSettlementBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, settlersBoard));
+        assertTrue(initialRoadBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, INITIAL_ROAD_ENDPOINTS.get(faction).first, settlersBoard));
         assertEquals(currentPlayer.getTotalResourceCardCount(), DEFAULT_TOTAL_HAND_CARDS);
     }
 
@@ -93,10 +93,10 @@ public class BuildingInfrastructureTests {
     public void requirementRoadMustBeBuiltAdjacentToSettlement() {
         final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
         final Faction faction = currentPlayer.getPlayerFaction();
-        assertFalse(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, INITIAL_ROAD_ENDPOINTS.get(faction).second, settlersBoard));
+        assertFalse(initialRoadBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, INITIAL_ROAD_ENDPOINTS.get(faction).second, settlersBoard));
 
-        assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, settlersBoard));
-        assertFalse(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, INITIAL_ROAD_ENDPOINTS.get(faction).first, settlersBoard));
+        assertTrue(initialSettlementBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, settlersBoard));
+        assertFalse(initialRoadBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, INITIAL_ROAD_ENDPOINTS.get(faction).first, settlersBoard));
         assertEquals(currentPlayer.getTotalResourceCardCount(), DEFAULT_TOTAL_HAND_CARDS);
     }
 
@@ -122,7 +122,7 @@ public class BuildingInfrastructureTests {
     public void requirementBuildSettlementInSetupPhase() {
         final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
         final Faction faction = currentPlayer.getPlayerFaction();
-        assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, settlersBoard));
+        assertTrue(initialSettlementBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, settlersBoard));
         assertEquals(currentPlayer.getTotalResourceCardCount(), DEFAULT_TOTAL_HAND_CARDS);
     }
 

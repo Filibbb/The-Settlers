@@ -28,6 +28,13 @@ public class Settlement extends AbstractInfrastructure {
         owner.incrementWinningPoints();
     }
 
+    public static boolean initialSettlementBuild(Player owner, Point coordinates, SettlersBoard board) {
+        if (board.hasCorner(coordinates) && board.getCorner(coordinates) == null && board.getNeighboursOfCorner(coordinates).isEmpty()) {
+            board.setCorner(coordinates, new Settlement(owner, coordinates));
+            return true;
+        } else return false;
+    }
+
     /**
      * Build method for building a new Settlement.
      *
@@ -45,15 +52,8 @@ public class Settlement extends AbstractInfrastructure {
         } else return false;
     }
 
-    public static boolean initialBuild(Player owner, Point coordinates, SettlersBoard board) {
-        if ((board.hasCorner(coordinates)) && (board.getCorner(coordinates) == null) && (board.getNeighboursOfCorner(coordinates).isEmpty())) {
-            board.setCorner(coordinates, new Settlement(owner, coordinates));
-            return true;
-        } else return false;
-    }
-
     private static boolean canBuild(Player owner, Point coordinates, SettlersBoard board) {
-        return (board.hasCorner(coordinates) && (board.getCorner(coordinates) == null) && (board.getNeighboursOfCorner(coordinates).isEmpty() && (!board.getAdjacentEdges(coordinates).isEmpty()) && (owner.checkLiquidity(Structure.SETTLEMENT) && (owner.hasEnoughInStructureStock(Structure.SETTLEMENT)))));//TODO: check ownership of adjacent road
+        return (board.hasCorner(coordinates) && board.getCorner(coordinates) == null && board.getNeighboursOfCorner(coordinates).isEmpty() && !board.getAdjacentEdges(coordinates).isEmpty() && owner.checkLiquidity(Structure.SETTLEMENT) && (owner.hasEnoughInStructureStock(Structure.SETTLEMENT)));//TODO: check ownership of adjacent road
     }
 
     private static void paySettlement(Player owner) {

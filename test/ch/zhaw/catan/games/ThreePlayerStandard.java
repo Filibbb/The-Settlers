@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Map;
 
 import static ch.zhaw.catan.infrastructure.Road.build;
-import static ch.zhaw.catan.infrastructure.Road.initialBuild;
+import static ch.zhaw.catan.infrastructure.Road.initialRoadBuild;
 import static ch.zhaw.catan.infrastructure.Settlement.build;
-import static ch.zhaw.catan.infrastructure.Settlement.initialBuild;
+import static ch.zhaw.catan.infrastructure.Settlement.initialSettlementBuild;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -193,17 +193,17 @@ public class ThreePlayerStandard {
         for (int i = 0; i < turnOrderHandler.getPlayerTurnOrder().size(); i++) {
             final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
             Faction faction = currentPlayer.getPlayerFaction();
-            assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, settlersBoard));
-            assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, INITIAL_ROAD_ENDPOINTS.get(faction).first, settlersBoard));
+            assertTrue(initialSettlementBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, settlersBoard));
+            assertTrue(initialRoadBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, INITIAL_ROAD_ENDPOINTS.get(faction).first, settlersBoard));
             turnOrderHandler.switchToNextPlayer();
         }
         for (int i = 0; i < turnOrderHandler.getPlayerTurnOrder().size(); i++) {
             turnOrderHandler.switchToPreviousPlayer();
             final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
             Faction faction = currentPlayer.getPlayerFaction();
-            assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, settlersBoard));
+            assertTrue(initialSettlementBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, settlersBoard));
             //add payout here
-            assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, INITIAL_ROAD_ENDPOINTS.get(faction).second, settlersBoard));
+            assertTrue(initialRoadBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, INITIAL_ROAD_ENDPOINTS.get(faction).second, settlersBoard));
         }
 
         return new GameDataContainer(settlersBoard, turnOrderHandler);
