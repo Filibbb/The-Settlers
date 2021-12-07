@@ -180,7 +180,7 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         return thiefPosition.equals(field);
     }
 
-    private void stealCardFromNeighbor(TurnOrderHandler turnOrderHandler){
+    public void stealCardFromNeighbor(TurnOrderHandler turnOrderHandler){
         Player currentPlayer = turnOrderHandler.getCurrentPlayer();
         if(hasNeighborWithRessource(thiefPosition, currentPlayer)){
             stealRandomCard(turnOrderHandler.getCurrentPlayer(), getNeighbor(thiefPosition, currentPlayer));
@@ -188,8 +188,9 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
     }
 
     private void stealRandomCard(Player stealer, Player robbedPerson) {
-        //getRndomResourceInHand made in player class.
-        //robbedPerson.removeResourceCardFromHand()
+        Resource resource = robbedPerson.getRandomResourceInHand();
+        robbedPerson.removeResourceCardFromHand(resource);
+        stealer.addResourceCardToHand(resource);
     }
 
     public boolean hasNeighborWithRessource(Point field, Player currentPlayer){

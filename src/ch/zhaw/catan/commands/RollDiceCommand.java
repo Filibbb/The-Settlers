@@ -49,7 +49,7 @@ public class RollDiceCommand {
                     Player owner = buildingOnCorner.getOwner();
                     owner.addResourceCardToHand(resourceOfRolledField);
                 }
-            }//todo Massage: "Faction ... doesn't get resources"
+            }//todo Massage: "Factions ... doesn't get resources"
         }
     }
 
@@ -60,6 +60,6 @@ public class RollDiceCommand {
             }
         }
         settlersBoard.placeThiefOnField();
-        //steal from player
+        settlersBoard.stealCardFromNeighbor(turnOrderHandler);
     }
 }
