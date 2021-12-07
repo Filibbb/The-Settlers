@@ -14,8 +14,6 @@ import java.util.*;
 import java.util.List;
 
 public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
-    public static final Point INITIAL_THIEF_POSITION = new Point(7, 11);
-
     private Point thiefPosition;
     private final Map<Point, Integer> diceNumberPlacements;
     private final Map<Point, Land> landTilePlacement;
@@ -153,13 +151,13 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         return getCorner(cornerCoordinates);
     }
 
-    public void placeThiefOnField(){
+    public void placeThiefOnField() {
         int xCoordinate = textIO.newIntInputReader().read("You rolled a seven. Where do you want to place the thief? Enter the X coordinate of the center");
         int yCoordinate = textIO.newIntInputReader().read(" Enter the Y coordinate of the center");
         Point thiefPosition = new Point(xCoordinate, yCoordinate);
-        if(isValidThiefPlacement(thiefPosition)){
-            this.thiefPosition = thiefPosition;
-        }else{
+        if (isValidThiefPlacement(thiefPosition)) {
+            setThiefPosition(thiefPosition);
+        } else {
             textTerminal.println("Place the thief in the Center of a Field!");
             placeThiefOnField();
         }
@@ -168,23 +166,31 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         // textTerminal.println("With your placement on " + thiefPosition);
     }
 
-    private boolean isValidThiefPlacement(Point thiefPosition){
+    public boolean isThiefOnField(Point field) {
+        if(thiefPosition != null){
+            return thiefPosition.equals(field);
+        }else{
+            return false;
+        }
+    }
+
+    public void stealCardFromNeighbor(TurnOrderHandler turnOrderHandler) {
+        Player currentPlayer = turnOrderHandler.getCurrentPlayer();
+        if (hasNeighborWithRessource(thiefPosition, currentPlayer)) {
+            stealRandomCard(turnOrderHandler.getCurrentPlayer(), getNeighbor(thiefPosition, currentPlayer));
+        }
+    }
+
+    public void setThiefPosition(Point thiefPosition) {
+        this.thiefPosition = thiefPosition;
+    }
+
+    private boolean isValidThiefPlacement(Point thiefPosition) {
         return getFields().contains(thiefPosition) && !isWater(thiefPosition);
     }
 
-    private boolean isWater(Point field){
+    private boolean isWater(Point field) {
         return landTilePlacement.get(field).equals(Land.WATER);
-    }
-
-    public boolean isThiefOnField(Point field) {
-        return thiefPosition.equals(field);
-    }
-
-    public void stealCardFromNeighbor(TurnOrderHandler turnOrderHandler){
-        Player currentPlayer = turnOrderHandler.getCurrentPlayer();
-        if(hasNeighborWithRessource(thiefPosition, currentPlayer)){
-            stealRandomCard(turnOrderHandler.getCurrentPlayer(), getNeighbor(thiefPosition, currentPlayer));
-        }
     }
 
     private void stealRandomCard(Player stealer, Player robbedPerson) {
@@ -193,17 +199,17 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         stealer.addResourceCardToHand(resource);
     }
 
-    public boolean hasNeighborWithRessource(Point field, Player currentPlayer){
+    private boolean hasNeighborWithRessource(Point field, Player currentPlayer) {
         List<Settlement> neighbors = getNeighbors(field, currentPlayer);
-        for(Settlement neighbor : neighbors){
-            if(neighbor.getOwner().getTotalResourceCardCount() > 0){
+        for (Settlement neighbor : neighbors) {
+            if (neighbor.getOwner().getTotalResourceCardCount() > 0) {
                 return true;
             }
         }
         return false;
     }
 
-    private Player getNeighbor(Point field, Player currentPlayer){
+    private Player getNeighbor(Point field, Player currentPlayer) {
         List<Settlement> neighbors = getNeighbors(field, currentPlayer);
         return neighbors.get(0).getOwner();
     }
@@ -211,8 +217,8 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
     private List<Settlement> getNeighbors(Point field, Player currentPlayer) {
         List<Point> occupiedCorners = getCornerCoordinatesOfOccupiedField(field);
         List<Settlement> neighbors = new ArrayList<>();
-        for (Point occupiedCorner : occupiedCorners){
-            if(currentPlayer.equals(getBuildingOnCorner(occupiedCorner).getOwner())){
+        for (Point occupiedCorner : occupiedCorners) {
+            if (currentPlayer.equals(getBuildingOnCorner(occupiedCorner).getOwner())) {
                 neighbors.add(getBuildingOnCorner(occupiedCorner));
             }
         }

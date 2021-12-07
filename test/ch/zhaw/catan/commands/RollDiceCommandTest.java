@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class RollDiceCommandTest {
     private GameDataContainer model;
     private RollDiceCommand rollDiceCommand;
+    private final Point thiefPosition = new Point(6, 8);
 
     /**
      * Creates initial dice roll test.
@@ -78,6 +79,44 @@ public class RollDiceCommandTest {
                 Faction.values()[2],
                 Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 3,
                         Resource.ORE, 0, Resource.LUMBER, 0));
+        SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
+    }
+
+    @Test
+    public void blockedFieldByThief(){
+        model.getSettlersBoard().setThiefPosition(thiefPosition);
+        for (int i : List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
+            rollDiceCommand.handoutResourcesOfTheRolledField(i);
+        }
+        Map<Faction, Map<Resource, Integer>> expected = Map.of(
+                Faction.values()[0], Map.of(Resource.GRAIN, 1, Resource.WOOL, 1,
+                        Resource.BRICK, 1, Resource.ORE, 0, Resource.LUMBER, 1),
+                Faction.values()[1],
+                Map.of(Resource.GRAIN, 1, Resource.WOOL, 3, Resource.BRICK, 0,
+                        Resource.ORE, 0, Resource.LUMBER, 0),
+                Faction.values()[2],
+                Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
+                        Resource.ORE, 0, Resource.LUMBER, 1));
+        SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
+    }
+
+    @Test
+    public void multipleSettlementsBlockedByThief() {
+        final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
+        assertTrue(initialSettlementBuild(currentPlayer, new Point(7, 7), model.getSettlersBoard()));
+        model.getSettlersBoard().setThiefPosition(thiefPosition);
+        for (int diceValue : List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
+            rollDiceCommand.handoutResourcesOfTheRolledField(diceValue);
+        }
+        Map<Faction, Map<Resource, Integer>> expected = Map.of(
+                Faction.values()[0], Map.of(Resource.GRAIN, 2, Resource.WOOL, 2,
+                        Resource.BRICK, 1, Resource.ORE, 0, Resource.LUMBER, 1),
+                Faction.values()[1],
+                Map.of(Resource.GRAIN, 1, Resource.WOOL, 3, Resource.BRICK, 0,
+                        Resource.ORE, 0, Resource.LUMBER, 0),
+                Faction.values()[2],
+                Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
+                        Resource.ORE, 0, Resource.LUMBER, 1));
         SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
     }
 }
