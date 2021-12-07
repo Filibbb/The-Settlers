@@ -201,20 +201,4 @@ public class SettlersGame {
         // TODO: Implement
         return null;
     }
-
-
-    /**
-     * Places the thief on the specified field and steals a random resource card (if
-     * the player has such cards) from a random player with a settlement at that
-     * field (if there is a settlement) and adds it to the resource cards of the
-     * current player.
-     *
-     * @param field the field on which to place the thief
-     * @return false, if the specified field is not a field or the thief cannot be
-     * placed there (e.g., on water)
-     */
-    public boolean placeThiefAndStealCard(Point field) {
-        //TODO: Implement (or longest road functionality)
-        return false;
-    }
 }

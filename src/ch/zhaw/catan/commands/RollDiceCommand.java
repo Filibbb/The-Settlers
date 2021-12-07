@@ -15,10 +15,12 @@ import java.util.List;
 public class RollDiceCommand {
     private final Dice dice = new Dice();
     private final SettlersBoard settlersBoard;
+    private final TurnOrderHandler turnOrderHandler;
     private final List<Player> players;
 
     public RollDiceCommand(SettlersBoard settlersBoard, TurnOrderHandler turnOrderHandler) {
         this.settlersBoard = settlersBoard;
+        this.turnOrderHandler = turnOrderHandler;
         this.players = turnOrderHandler.getPlayerTurnOrder();
     }
 

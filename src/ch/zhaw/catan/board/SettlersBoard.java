@@ -1,7 +1,9 @@
 package ch.zhaw.catan.board;
 
+import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.infrastructure.Road;
 import ch.zhaw.catan.infrastructure.Settlement;
+import ch.zhaw.catan.player.Player;
 import ch.zhaw.hexboard.HexBoard;
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
@@ -167,11 +169,53 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
     }
 
     private boolean isValidThiefPlacement(Point thiefPosition){
-        return getFields().contains(thiefPosition);
+        return getFields().contains(thiefPosition) && !isWater(thiefPosition);
+    }
+
+    private boolean isWater(Point field){
+        return landTilePlacement.get(field).equals(Land.WATER);
     }
 
     public boolean isThiefOnField(Point field) {
         return thiefPosition.equals(field);
+    }
+
+    private void stealCardFromNeighbor(TurnOrderHandler turnOrderHandler){
+        Player currentPlayer = turnOrderHandler.getCurrentPlayer();
+        if(hasNeighborWithRessource(thiefPosition, currentPlayer)){
+            stealRandomCard(turnOrderHandler.getCurrentPlayer(), getNeighbor(thiefPosition, currentPlayer));
+        }
+    }
+
+    private void stealRandomCard(Player stealer, Player robbedPerson) {
+        //getRndomResourceInHand made in player class.
+        //robbedPerson.removeResourceCardFromHand()
+    }
+
+    public boolean hasNeighborWithRessource(Point field, Player currentPlayer){
+        List<Settlement> neighbors = getNeighbors(field, currentPlayer);
+        for(Settlement neighbor : neighbors){
+            if(neighbor.getOwner().getTotalResourceCardCount() > 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Player getNeighbor(Point field, Player currentPlayer){
+        List<Settlement> neighbors = getNeighbors(field, currentPlayer);
+        return neighbors.get(0).getOwner();
+    }
+
+    private List<Settlement> getNeighbors(Point field, Player currentPlayer) {
+        List<Point> occupiedCorners = getCornerCoordinatesOfOccupiedField(field);
+        List<Settlement> neighbors = new ArrayList<>();
+        for (Point occupiedCorner : occupiedCorners){
+            if(currentPlayer.equals(getBuildingOnCorner(occupiedCorner).getOwner())){
+                neighbors.add(getBuildingOnCorner(occupiedCorner));
+            }
+        }
+        return neighbors;
     }
 
     private void addFieldsForLandPlacements(Map<Point, Land> landPlacement) {
