@@ -154,10 +154,20 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
     public void placeThiefOnField(){
         int xCoordinate = textIO.newIntInputReader().read("You rolled a seven. Where do you want to place the thief? Enter the X coordinate of the center");
         int yCoordinate = textIO.newIntInputReader().read(" Enter the Y coordinate of the center");
-        thiefPosition = new Point(xCoordinate, yCoordinate);
+        Point thiefPosition = new Point(xCoordinate, yCoordinate);
+        if(isValidThiefPlacement(thiefPosition)){
+            this.thiefPosition = thiefPosition;
+        }else{
+            textTerminal.println("Place the thief in the Center of a Field!");
+            placeThiefOnField();
+        }
         //Todo Ausgabe von Folgen der Besetzung dieses feldes.
         // bsp. if field not occupied -> niemand ist betroffen, wenn besetzet, dann dieser spieler kriegt diese Ressource nicht bei diesem Würfelwert.
         // textTerminal.println("With your placement on " + thiefPosition);
+    }
+
+    private boolean isValidThiefPlacement(Point thiefPosition){
+        return getFields().contains(thiefPosition);
     }
 
     public boolean isThiefOnField(Point field) {

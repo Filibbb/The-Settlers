@@ -47,7 +47,7 @@ public class RollDiceCommand {
                     Player owner = buildingOnCorner.getOwner();
                     owner.addResourceCardToHand(resourceOfRolledField);
                 }
-            }
+            }//todo Massage: "Faction ... doesn't get resources"
         }
     }
 
