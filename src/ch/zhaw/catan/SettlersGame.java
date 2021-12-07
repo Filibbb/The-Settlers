@@ -116,8 +116,7 @@ public class SettlersGame {
         Point settlementCoordinates = new Point(coordinateX, coordinateY);
         if (!initialSettlementBuild(player, settlementCoordinates, settlersBoard)) {
             textTerminal.println("You can not build on the entered coordinates. Please try again");
-            buildInitialSettlement(player);
-            return null;
+            return buildInitialSettlement(player);
         } else {
             return settlementCoordinates;
         }
