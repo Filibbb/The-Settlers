@@ -3,7 +3,9 @@ package ch.zhaw.catan.games;
 import ch.zhaw.catan.SettlersGame;
 import ch.zhaw.catan.Tuple;
 import ch.zhaw.catan.board.Resource;
+import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.game.logic.DiceResult;
+import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
 
@@ -12,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static ch.zhaw.catan.infrastructure.Road.build;
+import static ch.zhaw.catan.infrastructure.Road.initialBuild;
+import static ch.zhaw.catan.infrastructure.Settlement.build;
+import static ch.zhaw.catan.infrastructure.Settlement.initialBuild;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -174,31 +180,33 @@ public class ThreePlayerStandard {
      * and with the initial resource card setup as described
      * in {@link ThreePlayerStandard}.
      *
-     * @param winpoints the number of points required to win the game
      * @return the siedler game
      */
-    public static SettlersGame getAfterSetupPhase(int winpoints) {
-        SettlersGame model = new SettlersGame(winpoints);
-        model.addPlayersToGame(NUMBER_OF_PLAYERS);
-
+    public static GameDataContainer getAfterSetupPhase() {
         DICE_RESULTS.add(new DiceResult(12, new Player(Faction.RED)));
         DICE_RESULTS.add(new DiceResult(5, new Player(Faction.BLUE)));
         DICE_RESULTS.add(new DiceResult(3, new Player(Faction.GREEN)));
-        model.getTurnOrderHandler().determineInitialTurnOrder(DICE_RESULTS);
+        TurnOrderHandler turnOrderHandler = new TurnOrderHandler();
+        turnOrderHandler.determineInitialTurnOrder(DICE_RESULTS);
+        SettlersBoard settlersBoard = new SettlersBoard();
 
-        for (int i = 0; i < model.getPlayers().size(); i++) {
-            Faction f = model.getCurrentPlayer().getPlayerFaction();
-            assertTrue(model.placeInitialSettlement(INITIAL_SETTLEMENT_POSITIONS.get(f).first, false));
-            assertTrue(model.placeInitialRoad(INITIAL_SETTLEMENT_POSITIONS.get(f).first, INITIAL_ROAD_ENDPOINTS.get(f).first));
-            model.getTurnOrderHandler().switchToNextPlayer();
+        for (int i = 0; i < turnOrderHandler.getPlayerTurnOrder().size(); i++) {
+            final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
+            Faction faction = currentPlayer.getPlayerFaction();
+            assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, settlersBoard));
+            assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).first, INITIAL_ROAD_ENDPOINTS.get(faction).first, settlersBoard));
+            turnOrderHandler.switchToNextPlayer();
         }
-        for (int i = 0; i < model.getPlayers().size(); i++) {
-            model.getTurnOrderHandler().switchToPreviousPlayer();
-            Faction f = model.getCurrentPlayer().getPlayerFaction();
-            assertTrue(model.placeInitialSettlement(INITIAL_SETTLEMENT_POSITIONS.get(f).second, true));
-            assertTrue(model.placeInitialRoad(INITIAL_SETTLEMENT_POSITIONS.get(f).second, INITIAL_ROAD_ENDPOINTS.get(f).second));
+        for (int i = 0; i < turnOrderHandler.getPlayerTurnOrder().size(); i++) {
+            turnOrderHandler.switchToPreviousPlayer();
+            final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
+            Faction faction = currentPlayer.getPlayerFaction();
+            assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, settlersBoard));
+            //add payout here
+            assertTrue(initialBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, INITIAL_ROAD_ENDPOINTS.get(faction).second, settlersBoard));
         }
-        return model;
+
+        return new GameDataContainer(settlersBoard, turnOrderHandler);
     }
 
     /**
@@ -241,11 +249,10 @@ public class ThreePlayerStandard {
      * <li>WOOL: 0</li>
      * </ul>
      *
-     * @param winpoints the number of points required to win the game
      * @return the siedler game
      */
-    public static SettlersGame getAfterSetupPhaseAlmostEmptyBank(int winpoints) {
-        SettlersGame model = getAfterSetupPhase(winpoints);
+    public static GameDataContainer getAfterSetupPhaseAlmostEmptyBank() {
+        GameDataContainer model = getAfterSetupPhase();
         throwDiceMultipleTimes(model, 6, 9);
         throwDiceMultipleTimes(model, 11, 8);
         throwDiceMultipleTimes(model, 2, 8);
@@ -332,11 +339,10 @@ public class ThreePlayerStandard {
      * <li>WOOL: 1</li>
      * </ul>
      *
-     * @param winpoints the number of points required to win the game
      * @return the siedler game
      */
-    public static SettlersGame getAfterSetupPhaseSomeRoads(int winpoints) {
-        SettlersGame model = getAfterSetupPhase(winpoints);
+    public static GameDataContainer getAfterSetupPhaseSomeRoads() {
+        GameDataContainer model = getAfterSetupPhase();
         throwDiceMultipleTimes(model, 6, 7);
         throwDiceMultipleTimes(model, 11, 6);
         throwDiceMultipleTimes(model, 4, 5);
@@ -344,14 +350,17 @@ public class ThreePlayerStandard {
         throwDiceMultipleTimes(model, 2, 1);
 
         model.getTurnOrderHandler().switchToNextPlayer();
-        model.getTurnOrderHandler().switchToNextPlayer();
-        model.buildRoad(new Point(2, 12), new Point(3, 13));
+        Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
+
+        build(currentPlayer, new Point(2, 12), new Point(3, 13), model.getSettlersBoard());
         buildRoad(model, List.of(new Point(2, 10), new Point(3, 9), new Point(3, 7)));
-        model.buildRoad(new Point(8, 18), new Point(8, 16));
+        build(currentPlayer, new Point(8, 18), new Point(8, 16), model.getSettlersBoard());
         buildRoad(model, List.of(new Point(7, 19), new Point(6, 18), new Point(6, 16)));
         model.getTurnOrderHandler().switchToNextPlayer();
-        model.buildRoad(new Point(10, 16), new Point(11, 15));
-        model.buildRoad(new Point(10, 16), new Point(10, 18));
+        currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
+        build(currentPlayer, new Point(10, 16), new Point(11, 15), model.getSettlersBoard());
+        build(currentPlayer, new Point(10, 16), new Point(10, 18), model.getSettlersBoard());
+
         buildRoad(model, List.of(new Point(9, 15), new Point(9, 13), new Point(10, 12)));
         buildRoad(model, List.of(new Point(5, 7), new Point(5, 9), new Point(4, 10), new Point(3, 9)));
 
@@ -363,17 +372,17 @@ public class ThreePlayerStandard {
         model.getTurnOrderHandler().switchToNextPlayer();
         model.getTurnOrderHandler().switchToNextPlayer();
         throwDiceMultipleTimes(model, 5, 4);
-        model.tradeWithBankFourToOne(Resource.LUMBER, Resource.GRAIN);
+        //model.tradeWithBankFourToOne(Resource.LUMBER, Resource.GRAIN); FIXME Trading with bank
         throwDiceMultipleTimes(model, 5, 4);
-        model.tradeWithBankFourToOne(Resource.LUMBER, Resource.WOOL);
+        // model.tradeWithBankFourToOne(Resource.LUMBER, Resource.WOOL); FIXME trading with bank
         model.getTurnOrderHandler().switchToNextPlayer();
         return model;
     }
 
 
-    private static SettlersGame throwDiceMultipleTimes(SettlersGame model, int diceValue, int numberOfTimes) {
+    private static GameDataContainer throwDiceMultipleTimes(GameDataContainer model, int diceValue, int numberOfTimes) {
         for (int i = 0; i < numberOfTimes; i++) {
-            model.throwDice(diceValue);
+            //model.throwDice(diceValue);
         }
         return model;
     }
@@ -453,32 +462,32 @@ public class ThreePlayerStandard {
      * <li>WOOL: 0</li>
      * </ul>
      *
-     * @param winpoints the number of points required to win the game
-     * @return the siedler game
+     * @return the siedler game related data
      */
-    public static SettlersGame getPlayerOneReadyToBuildFifthSettlement(int winpoints) {
-        SettlersGame model = getAfterSetupPhase(winpoints);
+    public static GameDataContainer getPlayerOneReadyToBuildFifthSettlement() {
+        GameDataContainer model = getAfterSetupPhase();
+        final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
         //generate resources to build four roads and four settlements.
         throwDiceMultipleTimes(model, 6, 8);
         throwDiceMultipleTimes(model, 11, 7);
         throwDiceMultipleTimes(model, 2, 4);
         throwDiceMultipleTimes(model, 12, 3);
-        model.buildRoad(new Point(6, 6), new Point(7, 7));
-        model.buildRoad(new Point(6, 6), new Point(6, 4));
-        model.buildRoad(new Point(9, 15), new Point(9, 13));
-        model.buildSettlement(playerOneReadyToBuildFifthSettlementAllSettlementPositions.get(2));
-        model.buildSettlement(playerOneReadyToBuildFifthSettlementAllSettlementPositions.get(3));
+        build(currentPlayer, new Point(6, 6), new Point(7, 7), model.getSettlersBoard());
+        build(currentPlayer, new Point(6, 6), new Point(6, 4), model.getSettlersBoard());
+        build(currentPlayer, new Point(9, 15), new Point(9, 13), model.getSettlersBoard());
+        build(currentPlayer, playerOneReadyToBuildFifthSettlementAllSettlementPositions.get(2), model.getSettlersBoard());
+        build(currentPlayer, playerOneReadyToBuildFifthSettlementAllSettlementPositions.get(3), model.getSettlersBoard());
         return model;
     }
 
-    private static void buildSettlement(SettlersGame model, Point position, List<Point> roads) {
+    private static void buildSettlement(GameDataContainer model, Point position, List<Point> roads) {
         buildRoad(model, roads);
-        assertTrue(model.buildSettlement(position));
+        assertTrue(build(model.getTurnOrderHandler().getCurrentPlayer(), position, model.getSettlersBoard()));
     }
 
-    private static void buildRoad(SettlersGame model, List<Point> roads) {
+    private static void buildRoad(GameDataContainer model, List<Point> roads) {
         for (int i = 0; i < roads.size() - 1; i++) {
-            assertTrue(model.buildRoad(roads.get(i), roads.get(i + 1)));
+            assertTrue(build(model.getTurnOrderHandler().getCurrentPlayer(), roads.get(i), roads.get(i + 1), model.getSettlersBoard()));
         }
     }
 }

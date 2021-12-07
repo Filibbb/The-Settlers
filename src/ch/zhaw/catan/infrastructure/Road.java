@@ -39,7 +39,7 @@ public class Road extends AbstractInfrastructure {
      * @return true if successfully built, false if not.
      * @author weberph5
      */
-    public boolean build(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
+    public static boolean build(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
         if (canBuild(owner, startPoint, endPoint, board)) {
             board.setEdge(startPoint, endPoint, new Road(owner, startPoint, endPoint));
             payRoad(owner);

@@ -32,7 +32,6 @@ class PlayerTest {
         player.addResourceCardToHand(Resource.ORE, ORE_COUNT);
     }
 
-
     /**
      * Tests if total card count is correctly calculated
      */
@@ -173,7 +172,7 @@ class PlayerTest {
     @Test
     public void deletesHalfOfResources() {
         player.deletesHalfOfResources();
-        assertEquals(player.getTotalResourceCardCount(), 2); //TODO @fupat002 => this method seems to do something odd, please recheck (also does it need to delete half of all resources?)
+        assertEquals(player.getTotalResourceCardCount(), 3);
     }
 
 }
