@@ -172,10 +172,6 @@ public class HexBoard<F, C, E, A> {
                 && HexBoard.getCornerCoordinatesOfField(field).contains(corner);
     }
 
-    protected Map<Point, F> getField() {
-        return field;
-    }
-
     /**
      * Adds a field to the board and creates the surrounding (empty) corners and
      * edges if they do not yet exist Note: Corners and edges of a field might
