@@ -1,6 +1,5 @@
 package ch.zhaw.catan.board;
 
-import ch.zhaw.catan.SettlersGameTestBasic;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.games.GameDataContainer;
 import ch.zhaw.catan.games.ThreePlayerStandard;
@@ -15,7 +14,6 @@ import java.util.Map;
 import static ch.zhaw.catan.board.SettlersBoard.getDefaultLandTilePlacement;
 import static ch.zhaw.catan.games.ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS;
 import static ch.zhaw.catan.games.ThreePlayerStandard.getAfterSetupPhase;
-import static ch.zhaw.catan.infrastructure.Settlement.initialSettlementBuild;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -24,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author abuechi, tebe
  */
 class SettlersBoardTest {
-    private final static Point THIEF_POSITION = new Point(6, 8);
     private final static int DEFAULT_NUMBER_OF_PLAYERS = 3;
     private SettlersBoard settlersBoard;
 
@@ -64,28 +61,5 @@ class SettlersBoardTest {
             assertNotNull(settlersBoard.getEdge(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).first, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(playerFaction).first));
             assertNotNull(settlersBoard.getEdge(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).second, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(playerFaction).second));
         }
-    }
-
-    /**
-     * Tests whether the thief works.
-     */
-    @Test
-    public void stealCardFromNeighborAfterThiefPlacementTest(){
-        GameDataContainer model = getAfterSetupPhase();
-        final TurnOrderHandler turnOrderHandler = model.getTurnOrderHandler();
-        final SettlersBoard settlersBoard = model.getSettlersBoard();
-
-        for(Player player : turnOrderHandler.getPlayerTurnOrder()){
-            player.addResourceCardToHand(Resource.ORE);
-        }
-        assertTrue(initialSettlementBuild(model.getTurnOrderHandler().getPlayerTurnOrder().get(1), new Point(7, 7), model.getSettlersBoard()));
-        settlersBoard.setThiefPosition(THIEF_POSITION);
-        settlersBoard.stealCardFromNeighborAfterThiefPlacement(model.getTurnOrderHandler());
-
-        Map<Faction, Map<Resource, Integer>> expected = Map.of(
-                Faction.values()[0], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 2, Resource.LUMBER, 0),
-                Faction.values()[1], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 0, Resource.LUMBER, 0),
-                Faction.values()[2], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 1, Resource.LUMBER, 0));
-        SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
     }
 }

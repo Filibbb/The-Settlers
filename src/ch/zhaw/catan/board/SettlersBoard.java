@@ -1,13 +1,9 @@
 package ch.zhaw.catan.board;
 
-import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.infrastructure.Road;
 import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.catan.player.Player;
 import ch.zhaw.hexboard.HexBoard;
-import org.beryx.textio.TextIO;
-import org.beryx.textio.TextIoFactory;
-import org.beryx.textio.TextTerminal;
 
 import java.awt.*;
 import java.util.*;
@@ -17,9 +13,6 @@ import java.util.List;
  * This is the Settlers game board that is built on a hex board.
  */
 public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
-    private final TextIO textIO = TextIoFactory.getTextIO();
-    private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
-    private Point thiefPosition;
     private final Map<Point, Integer> diceNumberPlacements;
     private final Map<Point, Land> landTilePlacement;
 
@@ -117,9 +110,9 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
     /**
      * Returns the resource of a specific field.
      *
-     * @param field     center coordinate sof a field
-     * @return          the resource of the field
-     * @author          fupat002
+     * @param field center coordinate sof a field
+     * @return the resource of the field
+     * @author fupat002
      */
     public Resource getResourceOfField(Point field) {
         for (Map.Entry<Point, Land> fields : landTilePlacement.entrySet()) {
@@ -133,9 +126,9 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
     /**
      * Returns the fields associated with the specified dice value.
      *
-     * @param diceValue     the dice value
-     * @return              the fields associated with the dice value
-     * @author              fupat002
+     * @param diceValue the dice value
+     * @return the fields associated with the dice value
+     * @author fupat002
      */
     public List<Point> getFieldsByDiceValue(int diceValue) {
         List<Point> pointsOfFieldWithDiceValue = new ArrayList<>();
@@ -161,89 +154,12 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         return getCorner(cornerCoordinates);
     }
 
-    /**
-     * Asks the user for coordinates for the thief placement and handles the thief placements.
-     *
-     * @param turnOrderHandler  the current turn order handler
-     * @author                  fupat002
-     */
-    public void placeThiefOnField(TurnOrderHandler turnOrderHandler) {
-        int xCoordinate = textIO.newIntInputReader().read("You rolled a seven. Where do you want to place the thief? Enter the X coordinate of the center");
-        int yCoordinate = textIO.newIntInputReader().read(" Enter the Y coordinate of the center");
-        Point thiefPosition = new Point(xCoordinate, yCoordinate);
-        if (isValidThiefPlacement(thiefPosition)) {
-            setThiefPosition(thiefPosition);
-            stealCardFromNeighborAfterThiefPlacement(turnOrderHandler);
-        } else {
-            textTerminal.println("Place the thief in the Center of a Field!");
-            placeThiefOnField(turnOrderHandler);
-        }
-        printConsequencesOfThiefPlacement();
-    }
-
-    /**
-     * Prints the information of the field occupied by the thief.
-     *
-     * @author fupat002
-     */
-    public void printInfoOfFieldOccupiedByThief(){
-        textTerminal.println("The thief is on this field ("+ thiefPosition +").");
-        textTerminal.println("This Factions don't get any " + getResourceOfField(thiefPosition) + ":");
-        for(Point occupiedCorner : getOccupiedCornerCoordinatesOfField(thiefPosition)){
-            textTerminal.println(getBuildingOnCorner(occupiedCorner).getOwner().getPlayerFaction().toString());
-        }
-    }
-
-    /**
-     * Returns true if the thief is on the field.
-     *
-     * @param field     the coordinates of the field
-     * @return          the presence of the thief in the field
-     * @author          fupat002
-     */
-    public boolean isThiefOnField(Point field) {
-        if (thiefPosition != null) {
-            return thiefPosition.equals(field);
-        } else {
-            return false;
-        }
-    }
-
-    public void setThiefPosition(Point thiefPosition) {
-        this.thiefPosition = thiefPosition;
-    }
-
-    void stealCardFromNeighborAfterThiefPlacement(TurnOrderHandler turnOrderHandler) {
-        Player currentPlayer = turnOrderHandler.getCurrentPlayer();
-        if (hasNeighborWithRessource(thiefPosition, currentPlayer)) {
-            stealRandomCard(turnOrderHandler.getCurrentPlayer(), getNeighbor(thiefPosition, currentPlayer));
-        }
-    }
-
-    private void printConsequencesOfThiefPlacement(){
-        if(!getOccupiedCornerCoordinatesOfField(thiefPosition).isEmpty()){
-            printInfoOfFieldOccupiedByThief();
-        }else{
-            textTerminal.println("So far nobody has been affected with this placement.");
-        }
-    }
-
-    private boolean isValidThiefPlacement(Point thiefPosition) {
-        return getFields().contains(thiefPosition) && !isWater(thiefPosition);
-    }
-
-    private boolean isWater(Point field) {
+    public boolean isWater(Point field) {
         return landTilePlacement.get(field).equals(Land.WATER);
     }
 
-    private void stealRandomCard(Player stealer, Player robbedPerson) {
-        Resource resource = robbedPerson.getRandomResourceInHand();
-        robbedPerson.removeResourceCardFromHand(resource);
-        stealer.addResourceCardToHand(resource);
-    }
-
-    private boolean hasNeighborWithRessource(Point field, Player currentPlayer) {
-        List<Settlement> neighbors = getNeighbors(field, currentPlayer);
+    public boolean hasNeighborWithRessource(Point field, Player currentPlayer) {
+        List<Settlement> neighbors = getNeighborsWithResources(field, currentPlayer);
         for (Settlement neighbor : neighbors) {
             if (neighbor.getOwner().getTotalResourceCardCount() > 0) {
                 return true;
@@ -252,16 +168,22 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         return false;
     }
 
-    private Player getNeighbor(Point field, Player currentPlayer) {
-        List<Settlement> neighbors = getNeighbors(field, currentPlayer);
-        return neighbors.get(0).getOwner();
+    public Player getNeighbor(Point field, Player currentPlayer) {
+        Random random = new Random();
+        List<Settlement> neighbors = getNeighborsWithResources(field, currentPlayer);
+        if (neighbors.size() > 1) {
+            return neighbors.get(random.nextInt(neighbors.size())).getOwner();
+        } else {
+            return neighbors.get(0).getOwner();
+        }
     }
 
-    private List<Settlement> getNeighbors(Point field, Player currentPlayer) {
+    private List<Settlement> getNeighborsWithResources(Point field, Player currentPlayer) {
         List<Point> occupiedCorners = getOccupiedCornerCoordinatesOfField(field);
         List<Settlement> neighbors = new ArrayList<>();
         for (Point occupiedCorner : occupiedCorners) {
-            if (!currentPlayer.equals(getBuildingOnCorner(occupiedCorner).getOwner())) {
+            Player neighbor = getBuildingOnCorner(occupiedCorner).getOwner();
+            if (!currentPlayer.equals(neighbor) && neighbor.getTotalResourceCardCount() > 0) {
                 neighbors.add(getBuildingOnCorner(occupiedCorner));
             }
         }

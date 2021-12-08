@@ -3,6 +3,7 @@ package ch.zhaw.catan.commands;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.game.logic.Dice;
+import ch.zhaw.catan.game.logic.Thief;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.catan.player.Player;
@@ -22,6 +23,7 @@ public class RollDiceCommand implements Command{
     private final SettlersBoard settlersBoard;
     private final TurnOrderHandler turnOrderHandler;
     private final List<Player> players;
+    private final Thief thief;
 
     /**
      * Creates the RollDiceCommand
@@ -29,10 +31,11 @@ public class RollDiceCommand implements Command{
      * @param settlersBoard     The current settlers board
      * @param turnOrderHandler  The current turn order handler with all players
      */
-    public RollDiceCommand(SettlersBoard settlersBoard, TurnOrderHandler turnOrderHandler) {
+    public RollDiceCommand(SettlersBoard settlersBoard, TurnOrderHandler turnOrderHandler, Thief thief) {
         this.settlersBoard = settlersBoard;
         this.turnOrderHandler = turnOrderHandler;
         this.players = turnOrderHandler.getPlayerTurnOrder();
+        this.thief = thief;
     }
 
     /**
@@ -48,10 +51,10 @@ public class RollDiceCommand implements Command{
         }
     }
 
-    void handoutResourcesOfTheRolledField(int diceValue) {
+    public void handoutResourcesOfTheRolledField(int diceValue) {
         List<Point> allFieldsWithDiceValue = settlersBoard.getFieldsByDiceValue(diceValue);
         for (Point field : allFieldsWithDiceValue) {
-            if (!settlersBoard.isThiefOnField(field)) {
+            if (!thief.isThiefOnField(field)) {
                 Resource resourceOfRolledField = settlersBoard.getResourceOfField(field);
                 ArrayList<Point> occupiedCornersOfField = settlersBoard.getOccupiedCornerCoordinatesOfField(field);
                 for (Point occupiedCorner : occupiedCornersOfField) {
@@ -60,7 +63,7 @@ public class RollDiceCommand implements Command{
                     owner.addResourceCardToHand(resourceOfRolledField);
                 }
             } else {
-                settlersBoard.printInfoOfFieldOccupiedByThief();
+                thief.printInfoOfFieldOccupiedByThief();
             }
         }
     }
@@ -71,6 +74,7 @@ public class RollDiceCommand implements Command{
                 player.deletesHalfOfResources();
             }
         }
-        settlersBoard.placeThiefOnField(turnOrderHandler);
+        thief.placeThiefOnField();
+        thief.stealCardFromNeighbor(turnOrderHandler);
     }
 }

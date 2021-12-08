@@ -5,6 +5,7 @@ import ch.zhaw.catan.Tuple;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.game.logic.DiceResult;
+import ch.zhaw.catan.game.logic.Thief;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
@@ -189,6 +190,7 @@ public class ThreePlayerStandard {
         TurnOrderHandler turnOrderHandler = new TurnOrderHandler();
         turnOrderHandler.determineInitialTurnOrder(DICE_RESULTS);
         SettlersBoard settlersBoard = new SettlersBoard();
+        Thief thief = new Thief(settlersBoard);
 
         for (int i = 0; i < turnOrderHandler.getPlayerTurnOrder().size(); i++) {
             final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
@@ -206,7 +208,7 @@ public class ThreePlayerStandard {
             assertTrue(initialRoadBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, INITIAL_ROAD_ENDPOINTS.get(faction).second, settlersBoard));
         }
 
-        return new GameDataContainer(settlersBoard, turnOrderHandler);
+        return new GameDataContainer(settlersBoard, turnOrderHandler, thief);
     }
 
     /**

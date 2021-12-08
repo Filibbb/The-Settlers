@@ -7,6 +7,7 @@ import ch.zhaw.catan.commands.CommandHandler;
 import ch.zhaw.catan.commands.Commands;
 import ch.zhaw.catan.game.logic.Dice;
 import ch.zhaw.catan.game.logic.DiceResult;
+import ch.zhaw.catan.game.logic.Thief;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
@@ -38,7 +39,8 @@ public class SettlersGame {
     private final TurnOrderHandler turnOrderHandler = new TurnOrderHandler();
     private final SettlersBoard settlersBoard = new SettlersBoard();
     private final SettlersBoardTextView settlersBoardTextView = new SettlersBoardTextView(settlersBoard);
-    private final CommandHandler commandHandler = new CommandHandler(turnOrderHandler, settlersBoard);
+    private final Thief thief = new Thief(settlersBoard);
+    private final CommandHandler commandHandler = new CommandHandler(turnOrderHandler, settlersBoard, thief);
     private final int requiredPointsToWin;
 
     /**

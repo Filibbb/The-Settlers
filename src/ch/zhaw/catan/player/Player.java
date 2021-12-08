@@ -12,7 +12,6 @@ import java.util.*;
  */
 public class Player {
     private final Faction playerFaction;
-    private Random random = new Random();
     private final Map<Structure, Integer> builtStructuresCounter = new HashMap<>(Map.of(Structure.ROAD, 0, Structure.SETTLEMENT, 0, Structure.CITY, 0));
     private final Map<Resource, Integer> resourceCardsInHand = new HashMap<>();
     private int winningPointCounter = 0;
@@ -250,7 +249,9 @@ public class Player {
     }
 
     public Resource getRandomResourceInHand(){
-        List<Map.Entry<Resource, Integer>> resourcesInHand = new ArrayList<>(getResourceCardsInHand().entrySet());
-        return resourcesInHand.get(random.nextInt(resourcesInHand.size())).getKey();
+        Random random = new Random();
+        Set<Resource> resourceSet = getResourceCardsInHand().keySet();
+        List<Resource> resourcesInHand = new ArrayList<>(resourceSet);
+        return resourcesInHand.get(random.nextInt(resourcesInHand.size()));
     }
 }
