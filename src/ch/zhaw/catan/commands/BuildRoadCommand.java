@@ -10,13 +10,13 @@ import org.beryx.textio.TextTerminal;
 
 import java.awt.*;
 
-public class buildRoadCommand implements Command {
+public class BuildRoadCommand implements Command {
     private final TextIO textIO = TextIoFactory.getTextIO();
     private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
     private final TurnOrderHandler turnOrderHandler;
     private final SettlersBoard settlersBoard;
 
-    public buildRoadCommand(TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
+    public BuildRoadCommand(TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
         this.turnOrderHandler = turnOrderHandler;
         this.settlersBoard = settlersBoard;
     }

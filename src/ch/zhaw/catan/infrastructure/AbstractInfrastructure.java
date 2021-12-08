@@ -32,11 +32,11 @@ public abstract class AbstractInfrastructure {
             for (Road road : surroundingRoads) {
                 Player roadOwner = road.getOwner();
                 if (roadOwner.equals(owner)) {
-                    break;
+                    return true;
                 }
-                return true;
             }
             return false;
+
         }
         return false;
     }

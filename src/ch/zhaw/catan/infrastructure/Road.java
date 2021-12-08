@@ -15,6 +15,8 @@ import java.awt.*;
  */
 public class Road extends AbstractInfrastructure {
 
+    private final Point endPoint;
+
     /**
      * Roads may only be built with the build method. Therefore constructor is private.
      *
@@ -25,6 +27,7 @@ public class Road extends AbstractInfrastructure {
      */
     private Road(Player owner, Point startPoint, Point endPoint) {
         super(owner, startPoint);
+        this.endPoint = endPoint;
         owner.increaseBuiltStructures(Structure.ROAD);
     }
 

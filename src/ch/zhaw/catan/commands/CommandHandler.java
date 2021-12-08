@@ -27,7 +27,7 @@ public class CommandHandler {
                 buildSettlementCommand.execute();
                 break;
             case BUILD_ROAD:
-                buildRoadCommand buildRoadCommand = new buildRoadCommand(turnOrderHandler, settlersBoard);
+                BuildRoadCommand buildRoadCommand = new BuildRoadCommand(turnOrderHandler, settlersBoard);
                 buildRoadCommand.execute();
                 break;
             case ROLL_DICE:
