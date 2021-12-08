@@ -17,7 +17,7 @@ import java.util.List;
  * @version 1.0.0
  * @author fupat002
  */
-public class RollDiceCommand {
+public class RollDiceCommand implements Command{
     private final Dice dice = new Dice();
     private final SettlersBoard settlersBoard;
     private final TurnOrderHandler turnOrderHandler;
@@ -38,6 +38,7 @@ public class RollDiceCommand {
     /**
      * Executes the Roll Dice Command.
      */
+    @Override
     public void execute() {
         int diceValue = dice.dice();
         if (diceValue == 7) {
