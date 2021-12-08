@@ -23,7 +23,7 @@ public class CommandHandler {
     public void executeCommand(Commands command) {
         switch (command) {
             case BUILD_SETTLEMENT:
-                buildSettlementCommand buildSettlementCommand = new buildSettlementCommand(turnOrderHandler, settlersBoard);
+                BuildSettlementCommand buildSettlementCommand = new BuildSettlementCommand(turnOrderHandler, settlersBoard);
                 buildSettlementCommand.execute();
                 break;
             case BUILD_ROAD:

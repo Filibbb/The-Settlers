@@ -10,13 +10,13 @@ import org.beryx.textio.TextTerminal;
 
 import java.awt.*;
 
-public class buildSettlementCommand implements Command {
+public class BuildSettlementCommand implements Command {
     private final TextIO textIO = TextIoFactory.getTextIO();
     private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
     private final TurnOrderHandler turnOrderHandler;
     private final SettlersBoard settlersBoard;
 
-    public buildSettlementCommand(TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
+    public BuildSettlementCommand(TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
         this.turnOrderHandler = turnOrderHandler;
         this.settlersBoard = settlersBoard;
     }
