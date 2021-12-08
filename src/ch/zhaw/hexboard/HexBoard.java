@@ -1,8 +1,5 @@
 package ch.zhaw.hexboard;
 
-import ch.zhaw.catan.infrastructure.Settlement;
-import ch.zhaw.catan.player.Player;
-
 import java.awt.*;
 import java.util.List;
 import java.util.*;
@@ -494,7 +491,7 @@ public class HexBoard<F, C, E, A> {
      * @return List with the occupied corners.
      * @author fupat002
      */
-    public ArrayList<Point> getCornerCoordinatesOfOccupiedField(Point field) {
+    public ArrayList<Point> getOccupiedCornerCoordinatesOfField(Point field) {
         ArrayList<Point> occupiedCornersOfField = new ArrayList<>();
         for (Point corner : getCornerCoordinatesOfField(field)) {
             if (getCorner(corner) != null) {

@@ -1,16 +1,11 @@
 package ch.zhaw.catan.commands;
 
 import ch.zhaw.catan.board.SettlersBoard;
+import ch.zhaw.catan.game.logic.Thief;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
-import ch.zhaw.catan.infrastructure.Settlement;
-import ch.zhaw.catan.player.Player;
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
 import org.beryx.textio.TextTerminal;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Handles all Commands.
@@ -20,10 +15,12 @@ public class CommandHandler {
     private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
     private final TurnOrderHandler turnOrderHandler;
     private final SettlersBoard settlersBoard;
+    private final Thief thief;
 
-    public CommandHandler(TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
+    public CommandHandler(TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard, Thief thief) {
         this.turnOrderHandler = turnOrderHandler;
         this.settlersBoard = settlersBoard;
+        this.thief = thief;
     }
 
     public void executeCommand(Commands command) {
@@ -32,7 +29,7 @@ public class CommandHandler {
                 //TODO: Implement
                 break;
             case ROLL_DICE:
-                RollDiceCommand rollDiceCommand = new RollDiceCommand(settlersBoard, turnOrderHandler);
+                RollDiceCommand rollDiceCommand = new RollDiceCommand(settlersBoard, turnOrderHandler, thief);
                 rollDiceCommand.execute();
                 break;
             case END_TURN:

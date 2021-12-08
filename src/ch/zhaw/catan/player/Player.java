@@ -3,8 +3,7 @@ package ch.zhaw.catan.player;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.Structure;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class manages the player data and faction.
@@ -247,5 +246,12 @@ public class Player {
 
     public Map<Structure, Integer> getBuiltStructuresCounter() {
         return builtStructuresCounter;
+    }
+
+    public Resource getRandomResourceInHand(){
+        Random random = new Random();
+        Set<Resource> resourceSet = getResourceCardsInHand().keySet();
+        List<Resource> resourcesInHand = new ArrayList<>(resourceSet);
+        return resourcesInHand.get(random.nextInt(resourcesInHand.size()));
     }
 }

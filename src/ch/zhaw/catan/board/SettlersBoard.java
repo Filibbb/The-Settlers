@@ -2,16 +2,17 @@ package ch.zhaw.catan.board;
 
 import ch.zhaw.catan.infrastructure.Road;
 import ch.zhaw.catan.infrastructure.Settlement;
+import ch.zhaw.catan.player.Player;
 import ch.zhaw.hexboard.HexBoard;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * This is the Settlers game board that is built on a hex board.
+ */
 public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
-    // Initial thief position (on the desert field)
-    public static final Point INITIAL_THIEF_POSITION = new Point(7, 11);
-
     private final Map<Point, Integer> diceNumberPlacements;
     private final Map<Point, Land> landTilePlacement;
 
@@ -106,6 +107,13 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         return diceNumberPlacements;
     }
 
+    /**
+     * Returns the resource of a specific field.
+     *
+     * @param field center coordinate sof a field
+     * @return the resource of the field
+     * @author fupat002
+     */
     public Resource getResourceOfField(Point field) {
         for (Map.Entry<Point, Land> fields : landTilePlacement.entrySet()) {
             if (fields.getKey().equals(field)) {
@@ -144,6 +152,42 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
 
     public Settlement getBuildingOnCorner(Point cornerCoordinates) {
         return getCorner(cornerCoordinates);
+    }
+
+    public boolean isWater(Point field) {
+        return landTilePlacement.get(field).equals(Land.WATER);
+    }
+
+    public boolean hasNeighborWithRessource(Point field, Player currentPlayer) {
+        List<Settlement> neighbors = getNeighborsWithResources(field, currentPlayer);
+        for (Settlement neighbor : neighbors) {
+            if (neighbor.getOwner().getTotalResourceCardCount() > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Player getNeighbor(Point field, Player currentPlayer) {
+        Random random = new Random();
+        List<Settlement> neighbors = getNeighborsWithResources(field, currentPlayer);
+        if (neighbors.size() > 1) {
+            return neighbors.get(random.nextInt(neighbors.size())).getOwner();
+        } else {
+            return neighbors.get(0).getOwner();
+        }
+    }
+
+    private List<Settlement> getNeighborsWithResources(Point field, Player currentPlayer) {
+        List<Point> occupiedCorners = getOccupiedCornerCoordinatesOfField(field);
+        List<Settlement> neighbors = new ArrayList<>();
+        for (Point occupiedCorner : occupiedCorners) {
+            Player neighbor = getBuildingOnCorner(occupiedCorner).getOwner();
+            if (!currentPlayer.equals(neighbor) && neighbor.getTotalResourceCardCount() > 0) {
+                neighbors.add(getBuildingOnCorner(occupiedCorner));
+            }
+        }
+        return neighbors;
     }
 
     private void addFieldsForLandPlacements(Map<Point, Land> landPlacement) {

@@ -7,6 +7,7 @@ import ch.zhaw.catan.commands.CommandHandler;
 import ch.zhaw.catan.commands.Commands;
 import ch.zhaw.catan.game.logic.Dice;
 import ch.zhaw.catan.game.logic.DiceResult;
+import ch.zhaw.catan.game.logic.Thief;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
@@ -18,7 +19,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static ch.zhaw.catan.commands.Commands.*;
 import static ch.zhaw.catan.infrastructure.Road.initialRoadBuild;
@@ -39,7 +39,8 @@ public class SettlersGame {
     private final TurnOrderHandler turnOrderHandler = new TurnOrderHandler();
     private final SettlersBoard settlersBoard = new SettlersBoard();
     private final SettlersBoardTextView settlersBoardTextView = new SettlersBoardTextView(settlersBoard);
-    private final CommandHandler commandHandler = new CommandHandler(turnOrderHandler, settlersBoard);
+    private final Thief thief = new Thief(settlersBoard);
+    private final CommandHandler commandHandler = new CommandHandler(turnOrderHandler, settlersBoard, thief);
     private final int requiredPointsToWin;
 
     /**
@@ -200,21 +201,5 @@ public class SettlersGame {
     public Faction getWinner() {
         // TODO: Implement
         return null;
-    }
-
-
-    /**
-     * Places the thief on the specified field and steals a random resource card (if
-     * the player has such cards) from a random player with a settlement at that
-     * field (if there is a settlement) and adds it to the resource cards of the
-     * current player.
-     *
-     * @param field the field on which to place the thief
-     * @return false, if the specified field is not a field or the thief cannot be
-     * placed there (e.g., on water)
-     */
-    public boolean placeThiefAndStealCard(Point field) {
-        //TODO: Implement (or longest road functionality)
-        return false;
     }
 }

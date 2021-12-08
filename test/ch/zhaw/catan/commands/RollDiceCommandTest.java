@@ -1,10 +1,8 @@
 package ch.zhaw.catan.commands;
 
-
 import ch.zhaw.catan.SettlersGameTestBasic;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.games.GameDataContainer;
-import ch.zhaw.catan.games.ThreePlayerStandard;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
 
@@ -35,7 +33,7 @@ public class RollDiceCommandTest {
     @BeforeEach
     public void setUp() {
         model = getAfterSetupPhase();
-        rollDiceCommand = new RollDiceCommand(model.getSettlersBoard(), model.getTurnOrderHandler());
+        rollDiceCommand = new RollDiceCommand(model.getSettlersBoard(), model.getTurnOrderHandler(), model.getThief());
     }
 
     /**
