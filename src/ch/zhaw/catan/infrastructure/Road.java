@@ -14,7 +14,8 @@ import java.awt.*;
  * @version 1.0.0
  */
 public class Road extends AbstractInfrastructure {
-    private Point endPoint;
+
+    private final Point endPoint;
 
     /**
      * Roads may only be built with the build method. Therefore constructor is private.
@@ -56,7 +57,7 @@ public class Road extends AbstractInfrastructure {
     }
 
     private static boolean canBuild(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
-        return (owner.checkLiquidity(Structure.ROAD) && owner.hasEnoughInStructureStock(Structure.ROAD) && board.hasEdge(startPoint, endPoint) && board.getEdge(startPoint, endPoint) == null && !board.getAdjacentEdges(startPoint).isEmpty()); //TODO check ownership of adjacent road
+        return (owner.checkLiquidity(Structure.ROAD) && owner.hasEnoughInStructureStock(Structure.ROAD) && board.hasEdge(startPoint, endPoint) && board.getEdge(startPoint, endPoint) == null && hasRoadAdjacent(owner, startPoint, board));
     }
 
     private static void payRoad(Player owner) {

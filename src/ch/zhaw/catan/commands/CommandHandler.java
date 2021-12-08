@@ -26,7 +26,12 @@ public class CommandHandler {
     public void executeCommand(Commands command) {
         switch (command) {
             case BUILD_SETTLEMENT:
-                //TODO: Implement
+                BuildSettlementCommand buildSettlementCommand = new BuildSettlementCommand(turnOrderHandler, settlersBoard);
+                buildSettlementCommand.execute();
+                break;
+            case BUILD_ROAD:
+                BuildRoadCommand buildRoadCommand = new BuildRoadCommand(turnOrderHandler, settlersBoard);
+                buildRoadCommand.execute();
                 break;
             case ROLL_DICE:
                 RollDiceCommand rollDiceCommand = new RollDiceCommand(settlersBoard, turnOrderHandler, thief);

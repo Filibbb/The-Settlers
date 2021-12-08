@@ -1,8 +1,10 @@
 package ch.zhaw.catan.infrastructure;
 
+import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.player.Player;
 
 import java.awt.*;
+import java.util.List;
 
 /**
  * AbstractClass that contains the logic regarding a Infrastructure.
@@ -22,6 +24,19 @@ public abstract class AbstractInfrastructure {
     protected AbstractInfrastructure(Player owner, Point position) {
         this.owner = owner;
         this.position = position;
+    }
+
+    protected static boolean hasRoadAdjacent(Player owner, Point coordinates, SettlersBoard board) {
+        if (!board.getAdjacentEdges(coordinates).isEmpty()) {
+            List<Road> surroundingRoads = board.getAdjacentEdges(coordinates);
+            for (Road road : surroundingRoads) {
+                Player roadOwner = road.getOwner();
+                if (roadOwner.equals(owner)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public Point getPosition() {
