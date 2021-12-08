@@ -18,7 +18,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static ch.zhaw.catan.commands.Commands.*;
 import static ch.zhaw.catan.infrastructure.Road.initialRoadBuild;

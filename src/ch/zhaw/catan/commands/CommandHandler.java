@@ -1,17 +1,10 @@
 package ch.zhaw.catan.commands;
 
-import ch.zhaw.catan.SettlersGame;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
-import ch.zhaw.catan.infrastructure.Settlement;
-import ch.zhaw.catan.player.Player;
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
 import org.beryx.textio.TextTerminal;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Handles all Commands.

@@ -1,8 +1,5 @@
 package ch.zhaw.hexboard;
 
-import ch.zhaw.catan.infrastructure.Settlement;
-import ch.zhaw.catan.player.Player;
-
 import java.awt.*;
 import java.util.List;
 import java.util.*;
