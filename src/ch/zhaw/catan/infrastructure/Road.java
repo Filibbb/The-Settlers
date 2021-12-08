@@ -54,7 +54,7 @@ public class Road extends AbstractInfrastructure {
     }
 
     private static boolean canBuild(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
-        return (owner.checkLiquidity(Structure.ROAD) && owner.hasEnoughInStructureStock(Structure.ROAD) && board.hasEdge(startPoint, endPoint) && board.getEdge(startPoint, endPoint) == null && hasRoad(owner, startPoint, board));
+        return (owner.checkLiquidity(Structure.ROAD) && owner.hasEnoughInStructureStock(Structure.ROAD) && board.hasEdge(startPoint, endPoint) && board.getEdge(startPoint, endPoint) == null && hasRoadAdjacent(owner, startPoint, board));
     }
 
     private static void payRoad(Player owner) {

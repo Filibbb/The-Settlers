@@ -4,7 +4,6 @@ import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.player.Player;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,15 +26,17 @@ public abstract class AbstractInfrastructure {
         this.position = position;
     }
 
-    static boolean hasRoad(Player owner, Point coordinates, SettlersBoard board) {
+    protected static boolean hasRoadAdjacent(Player owner, Point coordinates, SettlersBoard board) {
         if (!board.getAdjacentEdges(coordinates).isEmpty()) {
-            java.util.List<Road> roads = board.getAdjacentEdges(coordinates);
-            List<Player> roadOwners = new ArrayList<>();
-            for (Road road : roads) {
+            List<Road> surroundingRoads = board.getAdjacentEdges(coordinates);
+            for (Road road : surroundingRoads) {
                 Player roadOwner = road.getOwner();
-                roadOwners.add(roadOwner);
+                if (roadOwner.equals(owner)) {
+                    break;
+                }
+                return true;
             }
-            return roadOwners.contains(owner);
+            return false;
         }
         return false;
     }

@@ -7,7 +7,11 @@ package ch.zhaw.catan.commands;
  * @version 1.0.0
  */
 public enum Commands {
-    BUILD_SETTLEMENT("BUILD SETTLEMENT", "BUILD SETTLEMENT: Build a settlement on a corner."), BUILD_ROAD("BUILD ROAD", "Build a road adjacent to a settlement or another road."), ROLL_DICE("ROLL DICE", "ROLL DICE: Roll the dice"), END_TURN("END TURN", "END TURN: End the current turn"), SHOW_COMMANDS("SHOW COMMANDS", "SHOW COMMANDS : Show list of available commands.");
+    BUILD_SETTLEMENT("BUILD SETTLEMENT", "BUILD SETTLEMENT: Build a settlement on a corner."),
+    BUILD_ROAD("BUILD ROAD", "Build a road adjacent to a settlement or another road."),
+    ROLL_DICE("ROLL DICE", "ROLL DICE: Roll the dice"),
+    END_TURN("END TURN", "END TURN: End the current turn"),
+    SHOW_COMMANDS("SHOW COMMANDS", "SHOW COMMANDS : Show list of available commands.");
 
     private final String representation;
     private final String commandInfo;
