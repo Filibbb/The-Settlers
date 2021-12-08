@@ -7,7 +7,6 @@ import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.catan.player.Player;
 
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,13 +42,15 @@ public class RollDiceCommand {
         for (Point field : allFieldsWithDiceValue) {
             if (!settlersBoard.isThiefOnField(field)) {
                 Resource resourceOfRolledField = settlersBoard.getResourceOfField(field);
-                ArrayList<Point> occupiedCornersOfField = settlersBoard.getCornerCoordinatesOfOccupiedField(field);
+                ArrayList<Point> occupiedCornersOfField = settlersBoard.getOccupiedCornerCoordinatesOfField(field);
                 for (Point occupiedCorner : occupiedCornersOfField) {
                     Settlement buildingOnCorner = settlersBoard.getBuildingOnCorner(occupiedCorner);
                     Player owner = buildingOnCorner.getOwner();
                     owner.addResourceCardToHand(resourceOfRolledField);
                 }
-            }//todo Massage: "Factions ... doesn't get resources"
+            } else {
+                settlersBoard.printInfoOfFieldOccupiedByThief();
+            }
         }
     }
 
@@ -59,7 +60,6 @@ public class RollDiceCommand {
                 player.deletesHalfOfResources();
             }
         }
-        settlersBoard.placeThiefOnField();
-        settlersBoard.stealCardFromNeighborAfterThiefPlacement(turnOrderHandler);
+        settlersBoard.placeThiefOnField(turnOrderHandler);
     }
 }

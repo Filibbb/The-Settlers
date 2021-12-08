@@ -14,11 +14,11 @@ import java.util.*;
 import java.util.List;
 
 public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
+    private final TextIO textIO = TextIoFactory.getTextIO();
+    private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
     private Point thiefPosition;
     private final Map<Point, Integer> diceNumberPlacements;
     private final Map<Point, Land> landTilePlacement;
-    private final TextIO textIO = TextIoFactory.getTextIO();
-    private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
 
     /**
      * Creates a default settlers board with default initialization of board and dicenumber placements
@@ -151,38 +151,53 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         return getCorner(cornerCoordinates);
     }
 
-    public void placeThiefOnField() { //TODO refactor
+    public void placeThiefOnField(TurnOrderHandler turnOrderHandler) {
         int xCoordinate = textIO.newIntInputReader().read("You rolled a seven. Where do you want to place the thief? Enter the X coordinate of the center");
         int yCoordinate = textIO.newIntInputReader().read(" Enter the Y coordinate of the center");
         Point thiefPosition = new Point(xCoordinate, yCoordinate);
         if (isValidThiefPlacement(thiefPosition)) {
             setThiefPosition(thiefPosition);
+            stealCardFromNeighborAfterThiefPlacement(turnOrderHandler);
         } else {
             textTerminal.println("Place the thief in the Center of a Field!");
-            placeThiefOnField();
+            placeThiefOnField(turnOrderHandler);
         }
-        //Todo Ausgabe von Folgen der Besetzung dieses feldes.
-        // bsp. if field not occupied -> niemand ist betroffen, wenn besetzet, dann dieser spieler kriegt diese Ressource nicht bei diesem Würfelwert.
-        // textTerminal.println("With your placement on " + thiefPosition);
+        printConsequencesOfThiefPlacement();
+    }
+
+    private void printConsequencesOfThiefPlacement(){
+        if(!getOccupiedCornerCoordinatesOfField(thiefPosition).isEmpty()){
+            printInfoOfFieldOccupiedByThief();
+        }else{
+            textTerminal.println("So far nobody has been affected with this placement.");
+        }
+    }
+
+    public void printInfoOfFieldOccupiedByThief(){
+        textTerminal.println("The thief is on this field ("+ thiefPosition +").");
+        textTerminal.println("This Factions don't get any " + getResourceOfField(thiefPosition) + ":");
+        for(Point occupiedCorner : getOccupiedCornerCoordinatesOfField(thiefPosition)){
+            textTerminal.println(getBuildingOnCorner(occupiedCorner).getOwner().getPlayerFaction().toString());
+        }
     }
 
     public boolean isThiefOnField(Point field) {
-        if(thiefPosition != null){
+        if (thiefPosition != null) {
             return thiefPosition.equals(field);
-        }else{
+        } else {
             return false;
-        }
-    }
-
-    public void stealCardFromNeighborAfterThiefPlacement(TurnOrderHandler turnOrderHandler) {
-        Player currentPlayer = turnOrderHandler.getCurrentPlayer();
-        if (hasNeighborWithRessource(thiefPosition, currentPlayer)) {
-            stealRandomCard(turnOrderHandler.getCurrentPlayer(), getNeighbor(thiefPosition, currentPlayer));
         }
     }
 
     public void setThiefPosition(Point thiefPosition) {
         this.thiefPosition = thiefPosition;
+    }
+
+    void stealCardFromNeighborAfterThiefPlacement(TurnOrderHandler turnOrderHandler) {
+        Player currentPlayer = turnOrderHandler.getCurrentPlayer();
+        if (hasNeighborWithRessource(thiefPosition, currentPlayer)) {
+            stealRandomCard(turnOrderHandler.getCurrentPlayer(), getNeighbor(thiefPosition, currentPlayer));
+        }
     }
 
     private boolean isValidThiefPlacement(Point thiefPosition) {
@@ -215,7 +230,7 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
     }
 
     private List<Settlement> getNeighbors(Point field, Player currentPlayer) {
-        List<Point> occupiedCorners = getCornerCoordinatesOfOccupiedField(field);
+        List<Point> occupiedCorners = getOccupiedCornerCoordinatesOfField(field);
         List<Settlement> neighbors = new ArrayList<>();
         for (Point occupiedCorner : occupiedCorners) {
             if (!currentPlayer.equals(getBuildingOnCorner(occupiedCorner).getOwner())) {

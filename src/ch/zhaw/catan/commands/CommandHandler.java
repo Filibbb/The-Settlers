@@ -1,5 +1,6 @@
 package ch.zhaw.catan.commands;
 
+import ch.zhaw.catan.SettlersGame;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.infrastructure.Settlement;
