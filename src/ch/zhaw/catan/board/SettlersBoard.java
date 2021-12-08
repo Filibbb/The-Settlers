@@ -151,7 +151,7 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         return getCorner(cornerCoordinates);
     }
 
-    public void placeThiefOnField() {
+    public void placeThiefOnField() { //TODO refactor
         int xCoordinate = textIO.newIntInputReader().read("You rolled a seven. Where do you want to place the thief? Enter the X coordinate of the center");
         int yCoordinate = textIO.newIntInputReader().read(" Enter the Y coordinate of the center");
         Point thiefPosition = new Point(xCoordinate, yCoordinate);
@@ -174,7 +174,7 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         }
     }
 
-    public void stealCardFromNeighbor(TurnOrderHandler turnOrderHandler) {
+    public void stealCardFromNeighborAfterThiefPlacement(TurnOrderHandler turnOrderHandler) {
         Player currentPlayer = turnOrderHandler.getCurrentPlayer();
         if (hasNeighborWithRessource(thiefPosition, currentPlayer)) {
             stealRandomCard(turnOrderHandler.getCurrentPlayer(), getNeighbor(thiefPosition, currentPlayer));
@@ -218,7 +218,7 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         List<Point> occupiedCorners = getCornerCoordinatesOfOccupiedField(field);
         List<Settlement> neighbors = new ArrayList<>();
         for (Point occupiedCorner : occupiedCorners) {
-            if (currentPlayer.equals(getBuildingOnCorner(occupiedCorner).getOwner())) {
+            if (!currentPlayer.equals(getBuildingOnCorner(occupiedCorner).getOwner())) {
                 neighbors.add(getBuildingOnCorner(occupiedCorner));
             }
         }

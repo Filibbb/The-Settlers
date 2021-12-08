@@ -60,6 +60,6 @@ public class RollDiceCommand {
             }
         }
         settlersBoard.placeThiefOnField();
-        settlersBoard.stealCardFromNeighbor(turnOrderHandler);
+        settlersBoard.stealCardFromNeighborAfterThiefPlacement(turnOrderHandler);
     }
 }

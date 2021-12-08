@@ -3,8 +3,8 @@ package ch.zhaw.catan.commands;
 
 import ch.zhaw.catan.SettlersGameTestBasic;
 import ch.zhaw.catan.board.Resource;
+import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.games.GameDataContainer;
-import ch.zhaw.catan.games.ThreePlayerStandard;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
 
@@ -26,9 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @version 1.0.0
  */
 public class RollDiceCommandTest {
+    private static final Point THIEF_POSITION = new Point(6,8);
     private GameDataContainer model;
     private RollDiceCommand rollDiceCommand;
-    private final Point thiefPosition = new Point(6, 8);
+    private SettlersBoard settlersBoard;
 
     /**
      * Creates initial dice roll test.
@@ -37,6 +38,7 @@ public class RollDiceCommandTest {
     public void setUp() {
         model = getAfterSetupPhase();
         rollDiceCommand = new RollDiceCommand(model.getSettlersBoard(), model.getTurnOrderHandler());
+        settlersBoard = model.getSettlersBoard();
     }
 
     /**
@@ -84,7 +86,7 @@ public class RollDiceCommandTest {
 
     @Test
     public void blockedFieldByThief(){
-        model.getSettlersBoard().setThiefPosition(thiefPosition);
+        settlersBoard.setThiefPosition(THIEF_POSITION);
         for (int i : List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
             rollDiceCommand.handoutResourcesOfTheRolledField(i);
         }
@@ -104,7 +106,7 @@ public class RollDiceCommandTest {
     public void multipleSettlementsBlockedByThief() {
         final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
         assertTrue(initialSettlementBuild(currentPlayer, new Point(7, 7), model.getSettlersBoard()));
-        model.getSettlersBoard().setThiefPosition(thiefPosition);
+        settlersBoard.setThiefPosition(THIEF_POSITION);
         for (int diceValue : List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
             rollDiceCommand.handoutResourcesOfTheRolledField(diceValue);
         }
