@@ -11,12 +11,24 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The RollDiceCommand rolls the dice, handles the thief and hands out the resources of the rolled field.
+ *
+ * @version 1.0.0
+ * @author fupat002
+ */
 public class RollDiceCommand {
     private final Dice dice = new Dice();
     private final SettlersBoard settlersBoard;
     private final TurnOrderHandler turnOrderHandler;
     private final List<Player> players;
 
+    /**
+     * Creates the RollDiceCommand
+     *
+     * @param settlersBoard     The current settlers board
+     * @param turnOrderHandler  The current turn order handler with all players
+     */
     public RollDiceCommand(SettlersBoard settlersBoard, TurnOrderHandler turnOrderHandler) {
         this.settlersBoard = settlersBoard;
         this.turnOrderHandler = turnOrderHandler;
@@ -25,8 +37,6 @@ public class RollDiceCommand {
 
     /**
      * Executes the Roll Dice Command.
-     *
-     * @author fupat002
      */
     public void execute() {
         int diceValue = dice.dice();

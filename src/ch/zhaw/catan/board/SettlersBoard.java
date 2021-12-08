@@ -13,6 +13,9 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * This is the Settlers game board that is built on a hex board.
+ */
 public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
     private final TextIO textIO = TextIoFactory.getTextIO();
     private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
@@ -111,6 +114,13 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         return diceNumberPlacements;
     }
 
+    /**
+     * Returns the resource of a specific field.
+     *
+     * @param field     center coordinate sof a field
+     * @return          the resource of the field
+     * @author          fupat002
+     */
     public Resource getResourceOfField(Point field) {
         for (Map.Entry<Point, Land> fields : landTilePlacement.entrySet()) {
             if (fields.getKey().equals(field)) {
@@ -123,9 +133,9 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
     /**
      * Returns the fields associated with the specified dice value.
      *
-     * @param diceValue the dice value
-     * @return the fields associated with the dice value
-     * @author fupat002
+     * @param diceValue     the dice value
+     * @return              the fields associated with the dice value
+     * @author              fupat002
      */
     public List<Point> getFieldsByDiceValue(int diceValue) {
         List<Point> pointsOfFieldWithDiceValue = new ArrayList<>();
@@ -151,6 +161,12 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         return getCorner(cornerCoordinates);
     }
 
+    /**
+     * Asks the user for coordinates for the thief placement and handles the thief placements.
+     *
+     * @param turnOrderHandler  the current turn order handler
+     * @author                  fupat002
+     */
     public void placeThiefOnField(TurnOrderHandler turnOrderHandler) {
         int xCoordinate = textIO.newIntInputReader().read("You rolled a seven. Where do you want to place the thief? Enter the X coordinate of the center");
         int yCoordinate = textIO.newIntInputReader().read(" Enter the Y coordinate of the center");
@@ -165,14 +181,11 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         printConsequencesOfThiefPlacement();
     }
 
-    private void printConsequencesOfThiefPlacement(){
-        if(!getOccupiedCornerCoordinatesOfField(thiefPosition).isEmpty()){
-            printInfoOfFieldOccupiedByThief();
-        }else{
-            textTerminal.println("So far nobody has been affected with this placement.");
-        }
-    }
-
+    /**
+     * Prints the information of the field occupied by the thief.
+     *
+     * @author fupat002
+     */
     public void printInfoOfFieldOccupiedByThief(){
         textTerminal.println("The thief is on this field ("+ thiefPosition +").");
         textTerminal.println("This Factions don't get any " + getResourceOfField(thiefPosition) + ":");
@@ -181,6 +194,13 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         }
     }
 
+    /**
+     * Returns true if the thief is on the field.
+     *
+     * @param field     the coordinates of the field
+     * @return          the presence of the thief in the field
+     * @author          fupat002
+     */
     public boolean isThiefOnField(Point field) {
         if (thiefPosition != null) {
             return thiefPosition.equals(field);
@@ -197,6 +217,14 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         Player currentPlayer = turnOrderHandler.getCurrentPlayer();
         if (hasNeighborWithRessource(thiefPosition, currentPlayer)) {
             stealRandomCard(turnOrderHandler.getCurrentPlayer(), getNeighbor(thiefPosition, currentPlayer));
+        }
+    }
+
+    private void printConsequencesOfThiefPlacement(){
+        if(!getOccupiedCornerCoordinatesOfField(thiefPosition).isEmpty()){
+            printInfoOfFieldOccupiedByThief();
+        }else{
+            textTerminal.println("So far nobody has been affected with this placement.");
         }
     }
 

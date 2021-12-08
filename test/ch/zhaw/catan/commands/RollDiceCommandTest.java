@@ -84,6 +84,9 @@ public class RollDiceCommandTest {
         SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
     }
 
+    /**
+     * Tests whether the payout/non-payout works when the thief blocks the field.
+     */
     @Test
     public void blockedFieldByThief(){
         settlersBoard.setThiefPosition(THIEF_POSITION);
@@ -102,6 +105,9 @@ public class RollDiceCommandTest {
         SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
     }
 
+    /**
+     * Tests whether the payout/non-payout works when the thief blocks a field with multiple settlements.
+     */
     @Test
     public void multipleSettlementsBlockedByThief() {
         final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();

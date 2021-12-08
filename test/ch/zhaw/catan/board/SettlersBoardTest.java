@@ -66,6 +66,9 @@ class SettlersBoardTest {
         }
     }
 
+    /**
+     * Tests whether the thief works.
+     */
     @Test
     public void stealCardFromNeighborAfterThiefPlacementTest(){
         GameDataContainer model = getAfterSetupPhase();
