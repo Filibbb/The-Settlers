@@ -26,6 +26,10 @@ public class CommandHandler {
                 ShowBoardCommand showBoardCommand = new ShowBoardCommand(settlersBoard);
                 showBoardCommand.execute();
                 break;
+            case SHOW_HAND:
+                ShowHandCommand showHandCommand = new ShowHandCommand(turnOrderHandler);
+                showHandCommand.execute();
+                break;
             case BUILD_SETTLEMENT:
                 BuildSettlementCommand buildSettlementCommand = new BuildSettlementCommand(turnOrderHandler, settlersBoard);
                 buildSettlementCommand.execute();
