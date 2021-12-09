@@ -45,7 +45,7 @@ public class RollDice {
     /**
      * Executes the Roll Dice Command.
      */
-    public void execute() {
+    public void rollDice() {
         int diceValue = dice.dice();
         textTerminal.println(turnOrderHandler.getCurrentPlayer().getPlayerFaction() + "rolled a " + diceValue);
         if (diceValue == 7) {

@@ -68,7 +68,7 @@ public class SettlersGame {
             if (!samePlayerAsBefore) {
                 final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
                 textTerminal.println("It's " + currentPlayer.getPlayerFaction() + " turn.");
-                rollDice.execute();
+                rollDice.rollDice();
                 textTerminal.println("Choose your actions down below:");
                 textTerminal.println("If you are done with your turn, enter END TURN command.");
                 commandHandler.executeCommand(SHOW_COMMANDS);
