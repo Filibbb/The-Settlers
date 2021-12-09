@@ -1,7 +1,7 @@
 package ch.zhaw.catan.player;
 
 import ch.zhaw.catan.board.Resource;
-import ch.zhaw.catan.board.Structure;
+import ch.zhaw.catan.infrastructure.Structure;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
