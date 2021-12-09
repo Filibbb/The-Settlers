@@ -34,7 +34,7 @@ public class Road extends AbstractInfrastructure {
     /**
      * Build method for building a new road.
      *
-     * @param owner      player to whom the building should be assigned to.
+     * @param owner      player to whom the road should be assigned to.
      * @param startPoint start point where the road is being set to.
      * @param endPoint   end point where the road is being set to.
      * @return true if successfully built, false if not.
@@ -49,6 +49,16 @@ public class Road extends AbstractInfrastructure {
         } else return false;
     }
 
+    /**
+     * Method for the initial road builds in the founding phase where conditions differ from the main phase
+     *
+     * @param owner      player to whom the road should be assigned to.
+     * @param startPoint start point where the road is being set to.
+     * @param endPoint   end point where the road is being set to.
+     * @param board      the current SettlersBoard
+     * @return true if successfully built, false if not
+     * @author weberph5
+     */
     public static boolean initialRoadBuild(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
         if (board.hasEdge(startPoint, endPoint) && board.getEdge(startPoint, endPoint) == null && board.getCorner(startPoint) != null) {
             board.setEdge(startPoint, endPoint, new Road(owner, startPoint, endPoint));

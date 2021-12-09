@@ -27,10 +27,9 @@ import static ch.zhaw.catan.player.FactionsUtil.getRandomAvailableFaction;
 
 /**
  * This class performs all actions related to modifying the game state.
- * <p>
- * TODO: (your documentation)
  *
- * @author TODO
+ * @author abuechi, fupat002, weberph5
+ * @version 1.0.0
  */
 public class SettlersGame {
     private final TextIO textIO = TextIoFactory.getTextIO();
@@ -44,11 +43,9 @@ public class SettlersGame {
     private final int requiredPointsToWin;
 
     /**
-     * Constructs a SiedlerGame game state object.
+     * Constructs a SettlersGame game state object.
      *
      * @param winPoints the number of points required to win the game
-     * @throws IllegalArgumentException if winPoints is lower than
-     *                                  three or players is not between two and four
      */
     public SettlersGame(int winPoints) {
         requiredPointsToWin = winPoints;

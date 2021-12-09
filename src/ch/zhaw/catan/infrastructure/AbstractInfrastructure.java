@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * AbstractClass that contains the logic regarding a Infrastructure.
+ * AbstractClass that contains the logic regarding an Infrastructure.
  *
  * @author weberph5
  * @version 1.0.0
@@ -26,6 +26,14 @@ public abstract class AbstractInfrastructure {
         this.position = position;
     }
 
+    /**
+     * Checks if the position has a road adjacent to it since this is a requirement for building a settlement or road.
+     *
+     * @param owner       the player that owns the structure
+     * @param coordinates the coordinates where structure is being built
+     * @param board       the current SettlersBoard
+     * @return true if a road is adjacent, false if not
+     */
     protected static boolean hasRoadAdjacent(Player owner, Point coordinates, SettlersBoard board) {
         if (!board.getAdjacentEdges(coordinates).isEmpty()) {
             List<Road> surroundingRoads = board.getAdjacentEdges(coordinates);
@@ -39,10 +47,11 @@ public abstract class AbstractInfrastructure {
         return false;
     }
 
-    public Point getPosition() {
-        return position;
-    }
-
+    /**
+     * Method to get the owner of an infrastructure
+     *
+     * @return Player owner of the infrastructure
+     */
     public Player getOwner() {
         return owner;
     }

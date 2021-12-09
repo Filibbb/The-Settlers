@@ -29,7 +29,7 @@ public class Settlement extends AbstractInfrastructure {
     }
 
     /**
-     * Method for the Settlement builds in the founding phase.
+     * Method for the initial settlement builds in the founding phase where conditions differ from the main phase
      *
      * @param owner       player to whom the building should be assigned to.
      * @param coordinates Position where the settlement is being set to.
