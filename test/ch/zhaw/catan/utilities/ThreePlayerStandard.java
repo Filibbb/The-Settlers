@@ -89,7 +89,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author tebe
  */
 public class ThreePlayerStandard {
-    public final static int NUMBER_OF_PLAYERS = 3;
     public static final Map<Faction, Tuple<Point, Point>> INITIAL_SETTLEMENT_POSITIONS =
             Map.of(Faction.values()[0], new Tuple<>(new Point(5, 7), new Point(10, 16)),
                     Faction.values()[1], new Tuple<>(new Point(11, 13), new Point(8, 4)),
