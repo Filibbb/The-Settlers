@@ -4,9 +4,9 @@
 Java basiertes Projekt von einer abgespeckten Version von die Siedler von Catan.
 
 # Gruppen Mitglieder und Verantwortungsbereich
-* Adrian Büchi 
-* Philippe Weber  
-* Patric Fuchs 
+* Adrian Büchi - Teachlead, Refactorings, Reviews
+* Philippe Weber - HexBoard, Building, Commands
+* Patric Fuchs - Thief, RollDice, Dice throw, Commands
 
 # Teamrules
 
@@ -16,3 +16,17 @@ Java basiertes Projekt von einer abgespeckten Version von die Siedler von Catan.
 * Git Commits bitte auf Englisch und nur Zustände comitten, die mindestens kompilieren und nach Möglichkeit nur auf die eigenen Feature Branches.
 
 Wenn wir feststellen, dass etwas nicht funktioniert bitte frühzeitig melden, wenn die oben genannten Teamrules nur hinderlich sind dies ansprechen, dann werden die Neu definiert.
+
+# Spiel starten
+Starten kannst du die Siedler von Catan entweder durch starten von Application.java#main in einer Entwicklungsumgebung oder du lädts dir die kompilierte .jar-Datei hier oder durch die Release Section hier herunter und führst sie auf deinem System (Java muss natürlich installiert sein) mit dem Befehl java -jar Siedler_PAPP.jar aus.
+
+# Klassendiagramm
+
+TBD
+
+# Disclaimer
+
+## Refactorings
+Wir haben versucht den bestehenden Code möglichst so zu refactoren, dass er einigermassen verwendbar ist. Allerdings konnten wir bei weitem nicht alles des bestehenden Codes refactoren gerade `HexBoard.java` ist kaum angefasst worden aus zeitlichen Gründen.
+
+Refactorings wurden hauptsächlich von Adrian Büchi übernommen, da er aufgrund seiner Erfahrung am ehesten dazu geeignet war. Die Refactorings wurden allerdings in der Gruppe behandelt und zusammen angeschaut.
