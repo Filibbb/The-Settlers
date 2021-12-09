@@ -4,11 +4,11 @@ import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.catan.player.Player;
-import org.beryx.textio.TextIO;
-import org.beryx.textio.TextIoFactory;
-import org.beryx.textio.TextTerminal;
 
 import java.awt.*;
+
+import static ch.zhaw.catan.io.CommandLineHandler.printMessage;
+import static ch.zhaw.catan.io.CommandLineHandler.promptCoordinates;
 
 /**
  * Contains the logic for the BuildSettlementCommand
@@ -16,8 +16,6 @@ import java.awt.*;
  * @author weberph5
  */
 public class BuildSettlementCommand implements Command {
-    private final TextIO textIO = TextIoFactory.getTextIO();
-    private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
     private final TurnOrderHandler turnOrderHandler;
     private final SettlersBoard settlersBoard;
 
@@ -40,12 +38,12 @@ public class BuildSettlementCommand implements Command {
      */
     @Override
     public void execute() {
-        int coordinateX = textIO.newIntInputReader().withMinVal(2).withMaxVal(12).read("Enter x coordinate of corner");
-        int coordinateY = textIO.newIntInputReader().withMinVal(3).withMaxVal(19).read("Enter y coordinate of corner");
-        Point settlementCoordinates = new Point(coordinateX, coordinateY);
+        Point settlementCoordinates = promptCoordinates("Corner");
         Player player = turnOrderHandler.getCurrentPlayer();
         if (Settlement.build(player, settlementCoordinates, settlersBoard)) {
-            textTerminal.println("Settlement successfully built!");
-        } else textTerminal.println("Building the settlement was not successful!");
+            printMessage("Settlement successfully built!");
+        } else {
+            printMessage("Building the settlement was not successful!");
+        }
     }
 }

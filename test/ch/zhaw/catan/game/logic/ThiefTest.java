@@ -28,18 +28,18 @@ public class ThiefTest {
     @BeforeEach
     public void setUp() {
         model = getAfterSetupPhase();
-        thief = model.getThief();
-        rollDice = new RollDice(model.getSettlersBoard(), model.getTurnOrderHandler(), model.getThief());
+        thief = model.getSettlersBoard().getThief();
+        rollDice = new RollDice(model.getSettlersBoard(), model.getTurnOrderHandler());
     }
 
     /**
      * Tests whether the thief works.
      */
     @Test
-    public void stealCardFromNeighborAfterThiefPlacementTest(){
+    public void stealCardFromNeighborAfterThiefPlacementTest() {
         final TurnOrderHandler turnOrderHandler = model.getTurnOrderHandler();
 
-        for(Player player : turnOrderHandler.getPlayerTurnOrder()){
+        for (Player player : turnOrderHandler.getPlayerTurnOrder()) {
             player.addResourceCardToHand(Resource.ORE);
         }
         assertTrue(initialSettlementBuild(model.getTurnOrderHandler().getPlayerTurnOrder().get(1), new Point(7, 7), model.getSettlersBoard()));
@@ -58,7 +58,7 @@ public class ThiefTest {
      * Tests whether the payout/non-payout works when the thief blocks the field.
      */
     @Test
-    public void blockedFieldByThief(){
+    public void blockedFieldByThief() {
         thief.setThiefPosition(THIEF_POSITION);
         for (int i : java.util.List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
             rollDice.handoutResourcesOfTheRolledField(i);

@@ -6,7 +6,6 @@ import ch.zhaw.catan.game.logic.RollDice;
 import ch.zhaw.catan.games.GameDataContainer;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +33,7 @@ public class RollDiceTest {
     @BeforeEach
     public void setUp() {
         model = getAfterSetupPhase();
-        rollDice = new RollDice(model.getSettlersBoard(), model.getTurnOrderHandler(), model.getThief());
+        rollDice = new RollDice(model.getSettlersBoard(), model.getTurnOrderHandler());
     }
 
     /**

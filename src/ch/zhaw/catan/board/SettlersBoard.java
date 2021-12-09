@@ -1,5 +1,6 @@
 package ch.zhaw.catan.board;
 
+import ch.zhaw.catan.game.logic.Thief;
 import ch.zhaw.catan.infrastructure.AbstractInfrastructure;
 import ch.zhaw.catan.infrastructure.Road;
 import ch.zhaw.catan.player.Player;
@@ -9,12 +10,16 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
+import static ch.zhaw.catan.board.Land.*;
+
 /**
  * This is the Settlers game board that is built on a hex board.
  */
 public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, String> {
+    private static final Point INITIAL_THIEF_POSITION = new Point(7, 11);
     private final Map<Point, Integer> diceNumberPlacements;
     private final Map<Point, Land> landTilePlacement;
+    private final Thief thief;
 
     /**
      * Creates a default settlers board with default initialization of board and dice number placements
@@ -23,6 +28,8 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
         landTilePlacement = getDefaultLandTilePlacement();
         addFieldsForLandPlacements(landTilePlacement);
         diceNumberPlacements = getDefaultDiceNumberPlacement();
+        this.thief = new Thief(this);
+        thief.setThiefPosition(INITIAL_THIEF_POSITION);
     }
 
     /**
@@ -67,35 +74,39 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
      */
     public static Map<Point, Land> getDefaultLandTilePlacement() {
         Map<Point, Land> landPlacements = new HashMap<>();
-        Point[] water = {new Point(4, 2), new Point(6, 2), new Point(8, 2), new Point(10, 2), new Point(3, 5), new Point(11, 5), new Point(2, 8), new Point(12, 8), new Point(1, 11), new Point(13, 11), new Point(2, 14), new Point(12, 14), new Point(3, 17), new Point(11, 17), new Point(4, 20), new Point(6, 20), new Point(8, 20), new Point(10, 20)};
+        Point[] waterFields = {new Point(4, 2), new Point(6, 2), new Point(8, 2), new Point(10, 2),
+                new Point(3, 5), new Point(11, 5), new Point(2, 8), new Point(12, 8),
+                new Point(1, 11), new Point(13, 11), new Point(2, 14), new Point(12, 14),
+                new Point(3, 17), new Point(11, 17), new Point(4, 20), new Point(6, 20),
+                new Point(8, 20), new Point(10, 20)};
 
-        for (Point p : water) {
-            landPlacements.put(p, Land.WATER);
+        for (Point waterField : waterFields) {
+            landPlacements.put(waterField, WATER);
         }
 
-        landPlacements.put(new Point(5, 5), Land.FOREST);
-        landPlacements.put(new Point(7, 5), Land.PASTURE);
-        landPlacements.put(new Point(9, 5), Land.PASTURE);
+        landPlacements.put(new Point(5, 5), FOREST);
+        landPlacements.put(new Point(7, 5), PASTURE);
+        landPlacements.put(new Point(9, 5), PASTURE);
 
-        landPlacements.put(new Point(4, 8), Land.FIELDS);
-        landPlacements.put(new Point(6, 8), Land.MOUNTAIN);
-        landPlacements.put(new Point(8, 8), Land.FIELDS);
-        landPlacements.put(new Point(10, 8), Land.FOREST);
+        landPlacements.put(new Point(4, 8), FIELDS);
+        landPlacements.put(new Point(6, 8), MOUNTAIN);
+        landPlacements.put(new Point(8, 8), FIELDS);
+        landPlacements.put(new Point(10, 8), FOREST);
 
-        landPlacements.put(new Point(3, 11), Land.FOREST);
-        landPlacements.put(new Point(5, 11), Land.HILLS);
-        landPlacements.put(new Point(7, 11), Land.DESERT);
-        landPlacements.put(new Point(9, 11), Land.MOUNTAIN);
-        landPlacements.put(new Point(11, 11), Land.FIELDS);
+        landPlacements.put(new Point(3, 11), FOREST);
+        landPlacements.put(new Point(5, 11), HILLS);
+        landPlacements.put(new Point(7, 11), DESERT);
+        landPlacements.put(new Point(9, 11), MOUNTAIN);
+        landPlacements.put(new Point(11, 11), FIELDS);
 
-        landPlacements.put(new Point(4, 14), Land.FIELDS);
-        landPlacements.put(new Point(6, 14), Land.MOUNTAIN);
-        landPlacements.put(new Point(8, 14), Land.FOREST);
-        landPlacements.put(new Point(10, 14), Land.PASTURE);
+        landPlacements.put(new Point(4, 14), FIELDS);
+        landPlacements.put(new Point(6, 14), MOUNTAIN);
+        landPlacements.put(new Point(8, 14), FOREST);
+        landPlacements.put(new Point(10, 14), PASTURE);
 
-        landPlacements.put(new Point(5, 17), Land.PASTURE);
-        landPlacements.put(new Point(7, 17), Land.HILLS);
-        landPlacements.put(new Point(9, 17), Land.HILLS);
+        landPlacements.put(new Point(5, 17), PASTURE);
+        landPlacements.put(new Point(7, 17), HILLS);
+        landPlacements.put(new Point(9, 17), HILLS);
 
         return Collections.unmodifiableMap(landPlacements);
     }
@@ -152,7 +163,7 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
     }
 
     public boolean isWater(Point field) {
-        return landTilePlacement.get(field).equals(Land.WATER);
+        return landTilePlacement.get(field).equals(WATER);
     }
 
     public boolean hasNeighborWithResource(Point field, Player currentPlayer) {
@@ -191,5 +202,9 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
         for (Map.Entry<Point, Land> landEntry : landPlacement.entrySet()) {
             addField(landEntry.getKey(), landEntry.getValue());
         }
+    }
+
+    public Thief getThief() {
+        return thief;
     }
 }
