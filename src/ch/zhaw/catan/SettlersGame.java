@@ -1,11 +1,14 @@
 package ch.zhaw.catan;
 
+import ch.zhaw.catan.board.Land;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.board.SettlersBoardTextView;
 import ch.zhaw.catan.commands.CommandHandler;
 import ch.zhaw.catan.commands.Commands;
 import ch.zhaw.catan.game.logic.*;
+import ch.zhaw.catan.infrastructure.AbstractInfrastructure;
+import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
 import org.beryx.textio.TextIO;
@@ -84,15 +87,24 @@ public class SettlersGame {
     private void startFoundationPhase() {
         textTerminal.println("Now that everything is settled. Lets found your settlements!");
         final List<Player> playerTurnOrder = turnOrderHandler.getPlayerTurnOrder();
-
         foundationPhase(playerTurnOrder, false);
-
         textTerminal.println("First placement done. Now reverse order to place the last settlement of the foundation phase.");
-
         foundationPhase(playerTurnOrder, true);
-
+        handoutResourcesAfterFoundationPhase();
         textTerminal.println("Foundation phase complete! Swapping to normal game now! Good luck!");
         textTerminal.println(settlersBoardTextView.toString());
+    }
+
+    private void handoutResourcesAfterFoundationPhase(){
+        for(AbstractInfrastructure infrastructure : settlersBoard.getNonNullCorners()){
+            if(infrastructure instanceof Settlement){
+                for(Land land: settlersBoard.getFieldsOfCorner(infrastructure.getPosition())){
+                    if(!land.equals(Land.WATER)){
+                        infrastructure.getOwner().addResourceCardToHand(land.getResource());
+                    }
+                }
+            }
+        }
     }
 
     private void foundationPhase(final List<Player> playerTurnOrder, boolean reverse) {
@@ -104,7 +116,6 @@ public class SettlersGame {
             Point settlementCoordinates = buildInitialSettlement(player);
             buildInitialRoad(player, settlementCoordinates);
         }
-
     }
 
     private Point buildInitialSettlement(Player player) {

@@ -137,16 +137,6 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
         return pointsOfFieldWithDiceValue;
     }
 
-    /**
-     * Returns the {@link Land}s adjacent to the specified corner.
-     *
-     * @param corner the corner
-     * @return the list with the adjacent {@link Land}s
-     */
-    public List<Land> getLandsForCorner(Point corner) {
-        return getFields(corner);
-    }
-
     public AbstractInfrastructure getBuildingOnCorner(Point cornerCoordinates) {
         return getCorner(cornerCoordinates);
     }
@@ -155,6 +145,12 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
         return landTilePlacement.get(field).equals(Land.WATER);
     }
 
+    /**
+     *
+     * @param field
+     * @param currentPlayer
+     * @return
+     */
     public boolean hasNeighborWithResource(Point field, Player currentPlayer) {
         List<AbstractInfrastructure> neighbors = getNeighborsWithResources(field, currentPlayer);
         for (AbstractInfrastructure neighbor : neighbors) {
@@ -165,6 +161,12 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
         return false;
     }
 
+    /**
+     *
+     * @param field
+     * @param currentPlayer
+     * @return
+     */
     public Player getNeighbor(Point field, Player currentPlayer) {
         Random random = new Random();
         List<AbstractInfrastructure> neighbors = getNeighborsWithResources(field, currentPlayer);
