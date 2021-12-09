@@ -7,8 +7,6 @@ import ch.zhaw.catan.commands.build.BuildSettlementCommand;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.player.Player;
 
-import static ch.zhaw.catan.io.CommandLineHandler.printMessage;
-
 /**
  * Handles all Commands.
  *
@@ -19,45 +17,24 @@ public class CommandHandler {
     /**
      * Executes a command based on what was entered
      *
-     * @param command the user inputted command
+     * @param selectedCommand the user inputted command
      */
-    public void executeCommand(Commands command, TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
+    public void executeCommand(Commands selectedCommand, TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
+        final Command commandToExecute = getSelectedCommand(selectedCommand, turnOrderHandler, settlersBoard);
+        commandToExecute.execute();
+    }
+
+    private Command getSelectedCommand(Commands selectedCommand, TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
         final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
-        switch (command) {
-            case SHOW_BOARD:
-                ShowBoardCommand showBoardCommand = new ShowBoardCommand(settlersBoard);
-                showBoardCommand.execute();
-                break;
-            case SHOW_HAND:
-                ShowHandCommand showHandCommand = new ShowHandCommand(currentPlayer);
-                showHandCommand.execute();
-                break;
-            case BUILD_SETTLEMENT:
-                BuildSettlementCommand buildSettlementCommand = new BuildSettlementCommand(currentPlayer, settlersBoard);
-                buildSettlementCommand.execute();
-                break;
-            case BUILD_ROAD:
-                BuildRoadCommand buildRoadCommand = new BuildRoadCommand(currentPlayer, settlersBoard);
-                buildRoadCommand.execute();
-                break;
-            case BUILD_CITY:
-                BuildCityCommand buildCityCommand = new BuildCityCommand(currentPlayer, settlersBoard);
-                buildCityCommand.execute();
-                break;
-            case END_TURN:
-                final EndTurnCommand endTurnCommand = new EndTurnCommand(turnOrderHandler);
-                endTurnCommand.execute();
-            case SHOW_COMMANDS:
-                final ShowCommand showCommand = new ShowCommand();
-                showCommand.execute();
-                break;
-            case EXIT_COMMAND:
-                final QuitGameCommand exitCommand = new QuitGameCommand();
-                exitCommand.execute();
-                break;
-            default:
-                printMessage("This command is not available. Use 'SHOW COMMANDS' for available commands.");
-                break;
-        }
+        return switch (selectedCommand) {
+            case SHOW_BOARD -> new ShowBoardCommand(settlersBoard);
+            case SHOW_HAND -> new ShowHandCommand(currentPlayer);
+            case BUILD_SETTLEMENT -> new BuildSettlementCommand(currentPlayer, settlersBoard);
+            case BUILD_ROAD -> new BuildRoadCommand(currentPlayer, settlersBoard);
+            case BUILD_CITY -> new BuildCityCommand(currentPlayer, settlersBoard);
+            case END_TURN -> new EndTurnCommand(turnOrderHandler);
+            case EXIT_COMMAND -> new QuitGameCommand();
+            case SHOW_COMMANDS -> new ShowCommand();
+        };
     }
 }

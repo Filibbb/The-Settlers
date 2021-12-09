@@ -35,7 +35,7 @@ public class RollDice {
      */
     public void rollDice() {
         int diceValue = dice.throwDice();
-        printMessage(turnOrderHandler.getCurrentPlayer().getPlayerFaction() + "rolled a " + diceValue);
+        printMessage(turnOrderHandler.getCurrentPlayer().getPlayerFaction() + " rolled a " + diceValue);
         if (diceValue == 7) {
             sevenRolled();
         } else {
