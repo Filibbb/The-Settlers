@@ -40,9 +40,7 @@ public class City extends AbstractInfrastructure {
     }
 
     private static boolean canBuild(Player owner, Point coordinates, SettlersBoard board) {
-        if (board.getCorner(coordinates).getOwner().equals(owner)) {
-            return (owner.checkLiquidity(Structure.CITY) && owner.hasEnoughInStructureStock(Structure.CITY));
-        } else return false;
+        return board.getCorner(coordinates) != null && board.getCorner(coordinates).getOwner().equals(owner) && owner.checkLiquidity(Structure.CITY) && owner.hasEnoughInStructureStock(Structure.CITY);
     }
 
     private static void payCity(Player owner) {

@@ -9,6 +9,9 @@ import ch.zhaw.catan.infrastructure.AbstractInfrastructure;
 import ch.zhaw.catan.infrastructure.City;
 import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.catan.player.Player;
+import org.beryx.textio.TextIO;
+import org.beryx.textio.TextIoFactory;
+import org.beryx.textio.TextTerminal;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,6 +29,8 @@ public class RollDiceCommand implements Command {
     private final TurnOrderHandler turnOrderHandler;
     private final List<Player> players;
     private final Thief thief;
+    private final TextIO textIO = TextIoFactory.getTextIO();
+    private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
 
     /**
      * Creates the RollDiceCommand
@@ -67,7 +72,7 @@ public class RollDiceCommand implements Command {
                     } else if (buildingOnCorner instanceof City) {
                         owner.addResourceCardToHand(resourceOfRolledField);
                         owner.addResourceCardToHand(resourceOfRolledField);
-                    } else throw new RuntimeException("Unexpected result: Structure on corner is not valid");
+                    } else textTerminal.println("Something went wrong. Corner is not valid");
                 }
             } else {
                 thief.printInfoOfFieldOccupiedByThief();
