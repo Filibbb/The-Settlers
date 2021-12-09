@@ -1,7 +1,6 @@
 package ch.zhaw.catan.commands;
 
 import ch.zhaw.catan.board.SettlersBoard;
-import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.catan.player.Player;
 
@@ -15,20 +14,16 @@ import static ch.zhaw.catan.io.CommandLineHandler.promptCoordinates;
  *
  * @author weberph5
  */
-public class BuildSettlementCommand implements Command {
-    private final TurnOrderHandler turnOrderHandler;
-    private final SettlersBoard settlersBoard;
-
+public class BuildSettlementCommand extends AbstractBuildCommand {
     /**
      * Creates an instance of the BuildSettlementCommand
      *
-     * @param turnOrderHandler the TurnOrderHandler for the current game.
-     * @param settlersBoard    the current SettlersBoard.
+     * @param currentPlayer the current player that wants to build.
+     * @param settlersBoard the current SettlersBoard.
      * @author weberph5
      */
-    public BuildSettlementCommand(TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
-        this.turnOrderHandler = turnOrderHandler;
-        this.settlersBoard = settlersBoard;
+    public BuildSettlementCommand(Player currentPlayer, SettlersBoard settlersBoard) {
+        super(currentPlayer, settlersBoard);
     }
 
     /**
@@ -39,8 +34,7 @@ public class BuildSettlementCommand implements Command {
     @Override
     public void execute() {
         Point settlementCoordinates = promptCoordinates("Corner");
-        Player player = turnOrderHandler.getCurrentPlayer();
-        if (Settlement.build(player, settlementCoordinates, settlersBoard)) {
+        if (Settlement.build(getCurrentPlayer(), settlementCoordinates, getSettlersBoard())) {
             printMessage("Settlement successfully built!");
         } else {
             printMessage("Building the settlement was not successful!");

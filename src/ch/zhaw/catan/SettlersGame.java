@@ -35,7 +35,7 @@ public class SettlersGame {
     private final SettlersBoard settlersBoard = new SettlersBoard();
     private final SettlersBoardTextView settlersBoardTextView = new SettlersBoardTextView(settlersBoard);
     private final RollDice rollDice = new RollDice(settlersBoard, turnOrderHandler);
-    private final CommandHandler commandHandler = new CommandHandler(turnOrderHandler, settlersBoard);
+    private final CommandHandler commandHandler = new CommandHandler();
     private final int requiredPointsToWin;
 
     /**
@@ -66,13 +66,13 @@ public class SettlersGame {
                 rollDice.rollDice();
                 printMessage("Choose your actions down below:");
                 printMessage("If you are done with your turn, enter END TURN command.");
-                commandHandler.executeCommand(SHOW_COMMANDS);
+                commandHandler.executeCommand(SHOW_COMMANDS, turnOrderHandler, settlersBoard);
             }
             final String userInput = promptNextUserAction();
             final Commands commandByRepresentation = getCommandByRepresentation(userInput);
             samePlayerAsBefore = commandByRepresentation != null && commandByRepresentation != END_TURN;
             if (commandByRepresentation != null) {
-                commandHandler.executeCommand(commandByRepresentation);
+                commandHandler.executeCommand(commandByRepresentation, turnOrderHandler, settlersBoard);
             } else {
                 printMessage("This command is not available. Use 'SHOW COMMANDS' for available commands.");
             }

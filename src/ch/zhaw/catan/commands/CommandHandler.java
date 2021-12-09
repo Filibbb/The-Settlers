@@ -2,33 +2,35 @@ package ch.zhaw.catan.commands;
 
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
+import ch.zhaw.catan.player.Player;
 
 import static ch.zhaw.catan.io.CommandLineHandler.printMessage;
 
 /**
  * Handles all Commands.
+ *
+ * @author abuechi
  */
 public class CommandHandler {
-    private final TurnOrderHandler turnOrderHandler;
-    private final SettlersBoard settlersBoard;
 
-    public CommandHandler(TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
-        this.turnOrderHandler = turnOrderHandler;
-        this.settlersBoard = settlersBoard;
-    }
-
-    public void executeCommand(Commands command) {
+    /**
+     * Executes a command based on what was entered
+     *
+     * @param command the user inputted command
+     */
+    public void executeCommand(Commands command, TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
+        final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
         switch (command) {
             case BUILD_SETTLEMENT:
-                BuildSettlementCommand buildSettlementCommand = new BuildSettlementCommand(turnOrderHandler, settlersBoard);
+                BuildSettlementCommand buildSettlementCommand = new BuildSettlementCommand(currentPlayer, settlersBoard);
                 buildSettlementCommand.execute();
                 break;
             case BUILD_ROAD:
-                BuildRoadCommand buildRoadCommand = new BuildRoadCommand(turnOrderHandler, settlersBoard);
+                BuildRoadCommand buildRoadCommand = new BuildRoadCommand(currentPlayer, settlersBoard);
                 buildRoadCommand.execute();
                 break;
             case BUILD_CITY:
-                BuildCityCommand buildCityCommand = new BuildCityCommand(turnOrderHandler, settlersBoard);
+                BuildCityCommand buildCityCommand = new BuildCityCommand(currentPlayer, settlersBoard);
                 buildCityCommand.execute();
                 break;
             case END_TURN:

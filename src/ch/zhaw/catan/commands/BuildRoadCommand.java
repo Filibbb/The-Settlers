@@ -1,7 +1,6 @@
 package ch.zhaw.catan.commands;
 
 import ch.zhaw.catan.board.SettlersBoard;
-import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.infrastructure.Road;
 import ch.zhaw.catan.player.Player;
 
@@ -15,20 +14,17 @@ import static ch.zhaw.catan.io.CommandLineHandler.promptCoordinates;
  *
  * @author weberph5
  */
-public class BuildRoadCommand implements Command {
-    private final TurnOrderHandler turnOrderHandler;
-    private final SettlersBoard settlersBoard;
+public class BuildRoadCommand extends AbstractBuildCommand {
 
     /**
      * Creates an instance of the BuildRoadCommand
      *
-     * @param turnOrderHandler the TurnOrderHandler for the current game.
-     * @param settlersBoard    the current SettlersBoard.
+     * @param currentPlayer the current player that wants to build.
+     * @param settlersBoard the current SettlersBoard.
      * @author weberph5
      */
-    public BuildRoadCommand(TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
-        this.turnOrderHandler = turnOrderHandler;
-        this.settlersBoard = settlersBoard;
+    public BuildRoadCommand(Player currentPlayer, SettlersBoard settlersBoard) {
+        super(currentPlayer, settlersBoard);
     }
 
     /**
@@ -40,8 +36,7 @@ public class BuildRoadCommand implements Command {
     public void execute() {
         Point roadStartPoint = promptCoordinates("Road start point");
         Point roadEndPoint = promptCoordinates("Road end point");
-        Player player = turnOrderHandler.getCurrentPlayer();
-        if (Road.build(player, roadStartPoint, roadEndPoint, settlersBoard)) {
+        if (Road.build(getCurrentPlayer(), roadStartPoint, roadEndPoint, getSettlersBoard())) {
             printMessage("Road successfully built!");
         } else {
             printMessage("Building the road was not successful!");
