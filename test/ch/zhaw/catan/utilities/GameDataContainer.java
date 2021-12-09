@@ -1,7 +1,6 @@
 package ch.zhaw.catan.utilities;
 
 import ch.zhaw.catan.board.SettlersBoard;
-import ch.zhaw.catan.game.logic.Thief;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
 
 /**
@@ -20,7 +19,7 @@ public class GameDataContainer {
      * @param settlersBoard    the board instance used for the current game
      * @param turnOrderHandler the turnorder handler containing informations about the players
      */
-    public GameDataContainer(SettlersBoard settlersBoard, TurnOrderHandler turnOrderHandler, Thief thief) {
+    public GameDataContainer(SettlersBoard settlersBoard, TurnOrderHandler turnOrderHandler) {
         this.settlersBoard = settlersBoard;
         this.turnOrderHandler = turnOrderHandler;
     }

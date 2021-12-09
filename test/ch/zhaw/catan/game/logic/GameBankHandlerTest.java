@@ -1,7 +1,6 @@
 package ch.zhaw.catan.game.logic;
 
 import ch.zhaw.catan.GameBankHandler;
-import ch.zhaw.catan.SettlersGameTestBasic;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
@@ -14,7 +13,9 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
+import static ch.zhaw.catan.board.Resource.*;
 import static ch.zhaw.catan.infrastructure.Settlement.initialSettlementBuild;
+import static ch.zhaw.catan.utilities.PlayerResourceStockUtility.assertPlayerResourceCardStockEquals;
 import static ch.zhaw.catan.utilities.ThreePlayerStandard.getAfterSetupPhase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -47,10 +48,10 @@ public class GameBankHandlerTest {
             gameBankHandler.handoutResourcesOfTheRolledField(i, model.getSettlersBoard());
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
-                Faction.values()[0], Map.of(Resource.GRAIN, 1, Resource.WOOL, 1, Resource.BRICK, 1, Resource.ORE, 1, Resource.LUMBER, 1),
-                Faction.values()[1], Map.of(Resource.GRAIN, 1, Resource.WOOL, 3, Resource.BRICK, 0, Resource.ORE, 0, Resource.LUMBER, 0),
-                Faction.values()[2], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1, Resource.ORE, 0, Resource.LUMBER, 1));
-        SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
+                Faction.values()[0], Map.of(GRAIN, 1, WOOL, 1, BRICK, 1, ORE, 1, LUMBER, 1),
+                Faction.values()[1], Map.of(GRAIN, 1, WOOL, 3, BRICK, 0, ORE, 0, LUMBER, 0),
+                Faction.values()[2], Map.of(GRAIN, 0, WOOL, 0, BRICK, 1, ORE, 0, LUMBER, 1));
+        assertPlayerResourceCardStockEquals(model, expected);
     }
 
     /**
@@ -64,33 +65,29 @@ public class GameBankHandlerTest {
             gameBankHandler.handoutResourcesOfTheRolledField(diceValue, model.getSettlersBoard());
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
-                Faction.values()[0], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 6, Resource.LUMBER, 0),
-                Faction.values()[1], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 0, Resource.LUMBER, 0),
-                Faction.values()[2], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 3, Resource.ORE, 0, Resource.LUMBER, 0));
-        SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
+                Faction.values()[0], Map.of(GRAIN, 0, WOOL, 0, BRICK, 0, ORE, 6, LUMBER, 0),
+                Faction.values()[1], Map.of(GRAIN, 0, WOOL, 0, BRICK, 0, ORE, 0, LUMBER, 0),
+                Faction.values()[2], Map.of(GRAIN, 0, WOOL, 0, BRICK, 3, ORE, 0, LUMBER, 0));
+        assertPlayerResourceCardStockEquals(model, expected);
     }
 
     /**
-     * Tests whether player two can trade in resources with the bank and has the
+     * Tests whether a player can trade in resources with the bank and has the
      * correct number of resource cards afterwards. The test starts from game state
-     * {@link ThreePlayerStandard#getAfterSetupPhaseAlmostEmptyBank()}.
+     * {@link ThreePlayerStandard#getAfterSetupPhase()} ()}.
      */
     @Test
     public void requirementCanTradeFourToOneWithBank() {
-        GameDataContainer model = ThreePlayerStandard.getAfterSetupPhaseAlmostEmptyBank();
-        GameBankHandler gameBankHandler = new GameBankHandler();
-        model.getTurnOrderHandler().switchToNextPlayer();
-
+        GameDataContainer model = ThreePlayerStandard.getAfterSetupPhase();
         final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
-        Map<Resource, Integer> expectedResourceCards = ThreePlayerStandard.BANK_ALMOST_EMPTY_RESOURCE_CARD_STOCK.get(currentPlayer.getPlayerFaction());
-        assertEquals(expectedResourceCards.get(Resource.WOOL), currentPlayer.getResourceCardCountFor(Resource.WOOL));
-        assertEquals(expectedResourceCards.get(Resource.LUMBER), currentPlayer.getResourceCardCountFor((Resource.LUMBER)));
-
-        gameBankHandler.tradeWithBankFourToOne(Resource.WOOL, Resource.LUMBER, currentPlayer);
-
+        final int initialLumberCount = 10;
         int cardsOffered = 4;
         int cardsReceived = 1;
-        assertEquals(expectedResourceCards.get(Resource.WOOL) - cardsOffered, currentPlayer.getResourceCardCountFor(Resource.WOOL));
-        assertEquals(expectedResourceCards.get(Resource.LUMBER) + cardsReceived, currentPlayer.getResourceCardCountFor(Resource.LUMBER));
+        currentPlayer.addResourceCardToHand(LUMBER, initialLumberCount);
+
+        gameBankHandler.tradeWithBankFourToOne(LUMBER, WOOL, currentPlayer);
+
+        assertEquals(initialLumberCount - cardsOffered, currentPlayer.getResourceCardCountFor(LUMBER));
+        assertEquals(currentPlayer.getResourceCardCountFor(WOOL), cardsReceived);
     }
 }

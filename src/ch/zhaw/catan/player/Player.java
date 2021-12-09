@@ -162,7 +162,7 @@ public class Player {
     }
 
     private void addResource(Resource resource, int count) {
-        if (count > 0) {
+        if (count >= 0) {
             if (resourceCardsInHand.containsKey(resource)) {
                 final Integer cardCount = resourceCardsInHand.get(resource);
                 resourceCardsInHand.put(resource, cardCount + count);

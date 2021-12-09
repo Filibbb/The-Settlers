@@ -1,7 +1,6 @@
 package ch.zhaw.catan.game.logic;
 
 import ch.zhaw.catan.GameBankHandler;
-import ch.zhaw.catan.SettlersGameTestBasic;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
@@ -14,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static ch.zhaw.catan.infrastructure.Settlement.initialSettlementBuild;
+import static ch.zhaw.catan.utilities.PlayerResourceStockUtility.assertPlayerResourceCardStockEquals;
 import static ch.zhaw.catan.utilities.ThreePlayerStandard.getAfterSetupPhase;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -47,10 +47,10 @@ public class ThiefTest {
         thief.stealCardFromNeighbor(model.getTurnOrderHandler());
 
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
-                Faction.values()[0], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 2, Resource.LUMBER, 0),
-                Faction.values()[1], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 0, Resource.LUMBER, 0),
-                Faction.values()[2], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 1, Resource.LUMBER, 0));
-        SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
+                Faction.RED, Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 2, Resource.LUMBER, 0),
+                Faction.BLUE, Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 0, Resource.LUMBER, 0),
+                Faction.GREEN, Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 1, Resource.LUMBER, 0));
+        assertPlayerResourceCardStockEquals(model, expected);
     }
 
 
@@ -60,7 +60,7 @@ public class ThiefTest {
     @Test
     public void blockedFieldByThief() {
         thief.setThiefPosition(THIEF_POSITION);
-        for (int i : java.util.List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
+        for (int i : List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
             gameBankHandler.handoutResourcesOfTheRolledField(i, model.getSettlersBoard());
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
@@ -72,7 +72,7 @@ public class ThiefTest {
                 Faction.values()[2],
                 Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
                         Resource.ORE, 0, Resource.LUMBER, 1));
-        SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
+        assertPlayerResourceCardStockEquals(model, expected);
     }
 
     /**
@@ -95,6 +95,6 @@ public class ThiefTest {
                 Faction.values()[2],
                 Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
                         Resource.ORE, 0, Resource.LUMBER, 1));
-        SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
+        assertPlayerResourceCardStockEquals(model, expected);
     }
 }
