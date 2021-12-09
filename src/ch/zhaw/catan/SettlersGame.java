@@ -28,9 +28,7 @@ import static ch.zhaw.catan.player.FactionsUtil.getRandomAvailableFaction;
 /**
  * This class performs all actions related to modifying the game state.
  *
- * @author weberph5
- * @author abuechi
- * @author fupat2
+ * @author abuechi, fupat002, weberph5
  * @version 1.0.0
  */
 public class SettlersGame {
@@ -48,8 +46,6 @@ public class SettlersGame {
      * Constructs a SettlersGame game state object.
      *
      * @param winPoints the number of points required to win the game
-     * @throws IllegalArgumentException if winPoints is lower than
-     *                                  three or players is not between two and four
      */
     public SettlersGame(int winPoints) {
         requiredPointsToWin = winPoints;
