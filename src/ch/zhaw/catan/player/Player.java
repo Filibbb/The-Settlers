@@ -191,7 +191,7 @@ public class Player {
      * @param count    the count on how many resource cards are required to be added
      * @author abuechi
      */
-    private void removeResourceCardFromHand(Resource resource, int count) {
+    public void removeResourceCardFromHand(Resource resource, int count) {
         removeResource(resource, count);
     }
 

@@ -1,11 +1,12 @@
 package ch.zhaw.catan.commands;
 
+import ch.zhaw.catan.GameBankHandler;
 import ch.zhaw.catan.SettlersGameTestBasic;
 import ch.zhaw.catan.board.Resource;
-import ch.zhaw.catan.game.logic.RollDice;
-import ch.zhaw.catan.games.GameDataContainer;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
+import ch.zhaw.catan.utilities.GameDataContainer;
+import ch.zhaw.catan.utilities.ThreePlayerStandard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +14,9 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-import static ch.zhaw.catan.games.ThreePlayerStandard.getAfterSetupPhase;
 import static ch.zhaw.catan.infrastructure.Settlement.initialSettlementBuild;
+import static ch.zhaw.catan.utilities.ThreePlayerStandard.getAfterSetupPhase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -23,9 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author fupat002
  * @version 1.0.0
  */
-public class RollDiceTest {
+public class GameBankHandlerTest {
+    private final GameBankHandler gameBankHandler = new GameBankHandler();
     private GameDataContainer model;
-    private RollDice rollDice;
 
     /**
      * Creates initial dice roll test.
@@ -33,7 +35,6 @@ public class RollDiceTest {
     @BeforeEach
     public void setUp() {
         model = getAfterSetupPhase();
-        rollDice = new RollDice(model.getSettlersBoard(), model.getTurnOrderHandler());
     }
 
     /**
@@ -43,7 +44,7 @@ public class RollDiceTest {
     @Test
     public void requirementDiceThrowPlayerResourceCardStockUpdateTest() {
         for (int i : List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
-            rollDice.handoutResourcesOfTheRolledField(i);
+            gameBankHandler.handoutResourcesOfTheRolledField(i, model.getSettlersBoard());
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
                 Faction.values()[0], Map.of(Resource.GRAIN, 1, Resource.WOOL, 1,
@@ -65,7 +66,7 @@ public class RollDiceTest {
         final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
         assertTrue(initialSettlementBuild(currentPlayer, new Point(7, 7), model.getSettlersBoard()));
         for (int diceValue : List.of(4, 4, 4)) {
-            rollDice.handoutResourcesOfTheRolledField(diceValue);
+            gameBankHandler.handoutResourcesOfTheRolledField(diceValue, model.getSettlersBoard());
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
                 Faction.values()[0], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0,
@@ -77,5 +78,29 @@ public class RollDiceTest {
                 Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 3,
                         Resource.ORE, 0, Resource.LUMBER, 0));
         SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
+    }
+
+    /**
+     * Tests whether player two can trade in resources with the bank and has the
+     * correct number of resource cards afterwards. The test starts from game state
+     * {@link ThreePlayerStandard#getAfterSetupPhaseAlmostEmptyBank()}.
+     */
+    @Test
+    public void requirementCanTradeFourToOneWithBank() {
+        GameDataContainer model = ThreePlayerStandard.getAfterSetupPhaseAlmostEmptyBank();
+        GameBankHandler gameBankHandler = new GameBankHandler();
+        model.getTurnOrderHandler().switchToNextPlayer();
+
+        final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
+        Map<Resource, Integer> expectedResourceCards = ThreePlayerStandard.BANK_ALMOST_EMPTY_RESOURCE_CARD_STOCK.get(currentPlayer.getPlayerFaction());
+        assertEquals(expectedResourceCards.get(Resource.WOOL), currentPlayer.getResourceCardCountFor(Resource.WOOL));
+        assertEquals(expectedResourceCards.get(Resource.LUMBER), currentPlayer.getResourceCardCountFor((Resource.LUMBER)));
+
+        gameBankHandler.tradeWithBankFourToOne(Resource.WOOL, Resource.LUMBER, currentPlayer);
+
+        int cardsOffered = 4;
+        int cardsReceived = 1;
+        assertEquals(expectedResourceCards.get(Resource.WOOL) - cardsOffered, currentPlayer.getResourceCardCountFor(Resource.WOOL));
+        assertEquals(expectedResourceCards.get(Resource.LUMBER) + cardsReceived, currentPlayer.getResourceCardCountFor(Resource.LUMBER));
     }
 }

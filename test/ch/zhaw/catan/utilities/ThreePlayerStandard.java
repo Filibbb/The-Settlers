@@ -1,7 +1,6 @@
-package ch.zhaw.catan.games;
+package ch.zhaw.catan.utilities;
 
 import ch.zhaw.catan.SettlersGame;
-import ch.zhaw.catan.Tuple;
 import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.game.logic.DiceResult;

@@ -1,15 +1,8 @@
 package ch.zhaw.catan.game.logic;
 
-import ch.zhaw.catan.board.Resource;
+import ch.zhaw.catan.GameBankHandler;
 import ch.zhaw.catan.board.SettlersBoard;
-import ch.zhaw.catan.infrastructure.AbstractInfrastructure;
-import ch.zhaw.catan.infrastructure.City;
-import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.catan.player.Player;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import static ch.zhaw.catan.io.CommandLineHandler.printMessage;
 
@@ -23,7 +16,7 @@ public class RollDice {
     private final Dice dice = new Dice();
     private final SettlersBoard settlersBoard;
     private final TurnOrderHandler turnOrderHandler;
-    private final List<Player> players;
+    private final GameBankHandler gameBankHandler;
 
     /**
      * Creates the RollDiceCommand
@@ -31,14 +24,14 @@ public class RollDice {
      * @param settlersBoard    The current settlers board
      * @param turnOrderHandler The current turn order handler with all players
      */
-    public RollDice(SettlersBoard settlersBoard, TurnOrderHandler turnOrderHandler) {
+    public RollDice(final SettlersBoard settlersBoard, final TurnOrderHandler turnOrderHandler) {
         this.settlersBoard = settlersBoard;
         this.turnOrderHandler = turnOrderHandler;
-        this.players = turnOrderHandler.getPlayerTurnOrder();
+        this.gameBankHandler = new GameBankHandler();
     }
 
     /**
-     * Executes the Roll Dice Command.
+     * Rolls dice and reacts accordingly to the diced value.
      */
     public void rollDice() {
         int diceValue = dice.throwDice();
@@ -46,39 +39,12 @@ public class RollDice {
         if (diceValue == 7) {
             sevenRolled();
         } else {
-            handoutResourcesOfTheRolledField(diceValue);
-        }
-    }
-
-    //move to bank
-    public void handoutResourcesOfTheRolledField(int diceValue) {
-        List<Point> allFieldsWithDiceValue = settlersBoard.getFieldsByDiceValue(diceValue);
-        for (Point field : allFieldsWithDiceValue) {
-            final Thief thief = settlersBoard.getThief();
-            if (!thief.isThiefOnField(field)) {
-                Resource resourceOfRolledField = settlersBoard.getResourceOfField(field);
-                ArrayList<Point> occupiedCornersOfField = settlersBoard.getOccupiedCornerCoordinatesOfField(field);
-                for (Point occupiedCorner : occupiedCornersOfField) {
-                    AbstractInfrastructure buildingOnCorner = settlersBoard.getBuildingOnCorner(occupiedCorner);
-                    Player owner = buildingOnCorner.getOwner();
-                    if (buildingOnCorner instanceof Settlement) {
-                        owner.addResourceCardToHand(resourceOfRolledField);
-                    } else if (buildingOnCorner instanceof City) {
-                        owner.addResourceCardToHand(resourceOfRolledField, 2);
-                    } else {
-                        printMessage("Something went wrong. Corner is not valid");
-                    }
-                    printMessage(owner.getPlayerFaction() + " has a settlement on on this field.");
-                    printMessage("This resource: " + resourceOfRolledField + " got added to your hand.");
-                }
-            } else {
-                thief.printInfoOfFieldOccupiedByThief();
-            }
+            gameBankHandler.handoutResourcesOfTheRolledField(diceValue, settlersBoard);
         }
     }
 
     private void sevenRolled() {
-        for (Player player : players) {
+        for (Player player : turnOrderHandler.getPlayerTurnOrder()) {
             if (player.playerHasMoreThanSevenResources()) {
                 player.deletesHalfOfResources();
                 printMessage("The faction " + player.getPlayerFaction() + " had more than seven resources, that's why half of it has been deleted");

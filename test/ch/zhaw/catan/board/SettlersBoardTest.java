@@ -1,10 +1,10 @@
 package ch.zhaw.catan.board;
 
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
-import ch.zhaw.catan.games.GameDataContainer;
-import ch.zhaw.catan.games.ThreePlayerStandard;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
+import ch.zhaw.catan.utilities.GameDataContainer;
+import ch.zhaw.catan.utilities.ThreePlayerStandard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,8 +12,8 @@ import java.awt.*;
 import java.util.Map;
 
 import static ch.zhaw.catan.board.BoardUtil.getDefaultLandTilePlacement;
-import static ch.zhaw.catan.games.ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS;
-import static ch.zhaw.catan.games.ThreePlayerStandard.getAfterSetupPhase;
+import static ch.zhaw.catan.utilities.ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS;
+import static ch.zhaw.catan.utilities.ThreePlayerStandard.getAfterSetupPhase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

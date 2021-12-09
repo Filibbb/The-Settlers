@@ -1,10 +1,11 @@
 package ch.zhaw.catan.game.logic;
 
+import ch.zhaw.catan.GameBankHandler;
 import ch.zhaw.catan.SettlersGameTestBasic;
 import ch.zhaw.catan.board.Resource;
-import ch.zhaw.catan.games.GameDataContainer;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
+import ch.zhaw.catan.utilities.GameDataContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,15 +13,15 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-import static ch.zhaw.catan.games.ThreePlayerStandard.getAfterSetupPhase;
 import static ch.zhaw.catan.infrastructure.Settlement.initialSettlementBuild;
+import static ch.zhaw.catan.utilities.ThreePlayerStandard.getAfterSetupPhase;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ThiefTest {
     private final static Point THIEF_POSITION = new Point(6, 8);
     private GameDataContainer model;
     private Thief thief;
-    private RollDice rollDice;
+    private GameBankHandler gameBankHandler = new GameBankHandler();
 
     /**
      * Creates thief test.
@@ -29,7 +30,6 @@ public class ThiefTest {
     public void setUp() {
         model = getAfterSetupPhase();
         thief = model.getSettlersBoard().getThief();
-        rollDice = new RollDice(model.getSettlersBoard(), model.getTurnOrderHandler());
     }
 
     /**
@@ -61,7 +61,7 @@ public class ThiefTest {
     public void blockedFieldByThief() {
         thief.setThiefPosition(THIEF_POSITION);
         for (int i : java.util.List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
-            rollDice.handoutResourcesOfTheRolledField(i);
+            gameBankHandler.handoutResourcesOfTheRolledField(i, model.getSettlersBoard());
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
                 Faction.values()[0], Map.of(Resource.GRAIN, 1, Resource.WOOL, 1,
@@ -84,7 +84,7 @@ public class ThiefTest {
         assertTrue(initialSettlementBuild(currentPlayer, new Point(7, 7), model.getSettlersBoard()));
         thief.setThiefPosition(THIEF_POSITION);
         for (int diceValue : List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
-            rollDice.handoutResourcesOfTheRolledField(diceValue);
+            gameBankHandler.handoutResourcesOfTheRolledField(diceValue, model.getSettlersBoard());
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
                 Faction.values()[0], Map.of(Resource.GRAIN, 2, Resource.WOOL, 2,

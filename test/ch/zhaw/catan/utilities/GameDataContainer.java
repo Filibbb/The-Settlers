@@ -1,4 +1,4 @@
-package ch.zhaw.catan.games;
+package ch.zhaw.catan.utilities;
 
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.game.logic.Thief;

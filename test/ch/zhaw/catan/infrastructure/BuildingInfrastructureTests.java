@@ -4,9 +4,9 @@ import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.game.logic.DiceResult;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
-import ch.zhaw.catan.games.ThreePlayerStandard;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
+import ch.zhaw.catan.utilities.ThreePlayerStandard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,14 +14,14 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.zhaw.catan.games.ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS;
-import static ch.zhaw.catan.games.ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS;
 import static ch.zhaw.catan.infrastructure.Road.build;
 import static ch.zhaw.catan.infrastructure.Road.initialRoadBuild;
 import static ch.zhaw.catan.infrastructure.Settlement.build;
 import static ch.zhaw.catan.infrastructure.Settlement.initialSettlementBuild;
 import static ch.zhaw.catan.infrastructure.Structure.ROAD;
 import static ch.zhaw.catan.infrastructure.Structure.SETTLEMENT;
+import static ch.zhaw.catan.utilities.ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS;
+import static ch.zhaw.catan.utilities.ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
