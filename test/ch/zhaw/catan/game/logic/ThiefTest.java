@@ -19,9 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ThiefTest {
     private final static Point THIEF_POSITION = new Point(6, 8);
+    private final GameBankHandler gameBankHandler = new GameBankHandler();
     private GameDataContainer model;
     private Thief thief;
-    private GameBankHandler gameBankHandler = new GameBankHandler();
 
     /**
      * Creates thief test.

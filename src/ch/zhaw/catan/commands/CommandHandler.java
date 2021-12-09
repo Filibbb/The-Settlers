@@ -29,7 +29,7 @@ public class CommandHandler {
                 showBoardCommand.execute();
                 break;
             case SHOW_HAND:
-                ShowHandCommand showHandCommand = new ShowHandCommand(turnOrderHandler);
+                ShowHandCommand showHandCommand = new ShowHandCommand(currentPlayer);
                 showHandCommand.execute();
                 break;
             case BUILD_SETTLEMENT:
@@ -50,6 +50,10 @@ public class CommandHandler {
             case SHOW_COMMANDS:
                 final ShowCommand showCommand = new ShowCommand();
                 showCommand.execute();
+                break;
+            case EXIT_COMMAND:
+                final QuitGameCommand exitCommand = new QuitGameCommand();
+                exitCommand.execute();
                 break;
             default:
                 printMessage("This command is not available. Use 'SHOW COMMANDS' for available commands.");

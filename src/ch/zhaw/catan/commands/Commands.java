@@ -7,6 +7,7 @@ package ch.zhaw.catan.commands;
  * @version 1.0.0
  */
 public enum Commands {
+    EXIT_COMMAND("EXIT", "EXIT: Exits the game early without a winner"),
     SHOW_HAND("SHOW HAND", "SHOW HAND: See how many resources you own"),
     SHOW_BOARD("SHOW BOARD", "SHOW BOARD: Show the game board"),
     BUILD_SETTLEMENT("BUILD SETTLEMENT", "BUILD SETTLEMENT: Build a settlement on a corner."),
