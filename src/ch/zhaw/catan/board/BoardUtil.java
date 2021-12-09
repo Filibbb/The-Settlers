@@ -7,6 +7,11 @@ import java.util.Map;
 
 import static ch.zhaw.catan.board.Land.*;
 
+/**
+ * A utility class for creating a board
+ *
+ * @author abuechi
+ */
 public class BoardUtil {
 
     /**

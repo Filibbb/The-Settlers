@@ -42,7 +42,7 @@ public class Road extends AbstractInfrastructure {
     public static boolean initialRoadBuild(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
         final Road road = new Road(owner, startPoint, endPoint);
         if (road.isValidBuildPositionForRoad(board) && board.getCorner(startPoint) != null) {
-            build(board, road);
+            buildRoad(board, road);
             return true;
         } else {
             return false;
@@ -61,14 +61,14 @@ public class Road extends AbstractInfrastructure {
     public static boolean build(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
         final Road road = new Road(owner, startPoint, endPoint);
         if (road.canBuild(board)) {
-            build(board, road);
+            buildRoad(board, road);
             owner.payForStructure(road.getStructureType());
             return true;
         }
         return false;
     }
 
-    private static void build(SettlersBoard board, Road road) {
+    private static void buildRoad(SettlersBoard board, Road road) {
         board.buildRoad(road);
         road.finalizeBuild();
     }

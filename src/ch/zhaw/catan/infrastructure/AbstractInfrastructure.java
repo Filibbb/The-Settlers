@@ -78,4 +78,14 @@ public abstract class AbstractInfrastructure {
     public Point getPosition() {
         return position;
     }
+
+    /**
+     * Overrides toString() so it displays faction in letters on board.
+     *
+     * @return player faction representation in  letters
+     */
+    @Override
+    public String toString() {
+        return owner.getPlayerFaction().toString();
+    }
 }

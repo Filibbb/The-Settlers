@@ -38,7 +38,7 @@ public class Settlement extends AbstractInfrastructure {
     public static boolean initialSettlementBuild(Player owner, Point coordinates, SettlersBoard board) {
         if (board.hasCorner(coordinates) && board.getCorner(coordinates) == null && board.getNeighboursOfCorner(coordinates).isEmpty() && board.isNotWaterOnlyCorner(coordinates)) {
             final Settlement settlement = new Settlement(owner, coordinates);
-            build(board, settlement);
+            buildSettlement(board, settlement);
             return true;
         } else {
             return false;
@@ -57,7 +57,7 @@ public class Settlement extends AbstractInfrastructure {
     public static boolean build(Player owner, Point coordinates, SettlersBoard board) {
         final Settlement settlement = new Settlement(owner, coordinates);
         if (settlement.canBuild(board)) {
-            build(board, settlement);
+            buildSettlement(board, settlement);
             owner.payForStructure(settlement.getStructureType());
             return true;
         } else {
@@ -65,7 +65,7 @@ public class Settlement extends AbstractInfrastructure {
         }
     }
 
-    private static void build(SettlersBoard board, Settlement settlement) {
+    private static void buildSettlement(SettlersBoard board, Settlement settlement) {
         board.buildSettlement(settlement);
         settlement.finalizeBuild();
     }

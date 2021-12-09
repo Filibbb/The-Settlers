@@ -181,6 +181,4 @@ public class SettlersGame {
         }
         return players;
     }
-
-
 }

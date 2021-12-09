@@ -79,4 +79,14 @@ public class City extends AbstractInfrastructure {
                 && owner.hasEnoughLiquidityFor(getStructureType())
                 && owner.hasEnoughInStructureStock(getStructureType());
     }
+
+    /**
+     * Overrides toString() so it displays faction in capitol letters on board.
+     *
+     * @return player faction representation in capital letters
+     */
+    @Override
+    public String toString() {
+        return super.toString().toUpperCase();
+    }
 }
