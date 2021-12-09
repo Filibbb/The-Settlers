@@ -1,7 +1,7 @@
 package ch.zhaw.catan.board;
 
+import ch.zhaw.catan.infrastructure.AbstractInfrastructure;
 import ch.zhaw.catan.infrastructure.Road;
-import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.hexboard.HexBoardTextView;
 
 import java.awt.*;
@@ -15,7 +15,7 @@ import static ch.zhaw.hexboard.Label.convertToFieldValueToLabel;
  * @author abuechi
  * @version 1.0.0
  */
-public class SettlersBoardTextView extends HexBoardTextView<Land, Settlement, Road, String> {
+public class SettlersBoardTextView extends HexBoardTextView<Land, AbstractInfrastructure, Road, String> {
 
     /**
      * Creates a TextView based on given board.

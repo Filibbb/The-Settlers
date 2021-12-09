@@ -35,7 +35,7 @@ public class Player {
     /**
      * Increments the total winning points of a player
      *
-     * @param winningPoints increments winningpoint counter by specified winningPoints
+     * @param winningPoints increments winning point counter by specified winningPoints
      */
     public void incrementWinningPoints(int winningPoints) {
         winningPointCounter = winningPointCounter + winningPoints;
@@ -95,7 +95,7 @@ public class Player {
     }
 
     /**
-     * Increases the build counter for the structure by one.
+     * Increases the build counter for the structure by 1.
      *
      * @param structure the structure the player built.
      * @author weberph5
@@ -109,9 +109,30 @@ public class Player {
         }
     }
 
+    /**
+     * Decreases the build counter for the structure by 1.
+     * This is used to put a settlement back into the stock when it is upgraded to a city.
+     *
+     * @param structure the structure the player removes.
+     * @author weberph5
+     */
+    public void decreaseBuiltStructures(Structure structure) {
+        switch (structure) {
+            case ROAD -> decreaseCounterFor(Structure.ROAD);
+            case SETTLEMENT -> decreaseCounterFor(Structure.SETTLEMENT);
+            case CITY -> decreaseCounterFor(Structure.CITY);
+            default -> throw new RuntimeException("FATAL! Unexpected structure type " + structure + " . Please contact developers to update.");
+        }
+    }
+
     private void incrementCounterFor(Structure structureType) {
         final Integer currentCounter = builtStructuresCounter.get(structureType);
         builtStructuresCounter.put(structureType, currentCounter + 1);
+    }
+
+    private void decreaseCounterFor(Structure structureType) {
+        final Integer currentCounter = builtStructuresCounter.get(structureType);
+        builtStructuresCounter.put(structureType, currentCounter - 1);
     }
 
     /**
@@ -248,7 +269,7 @@ public class Player {
         return builtStructuresCounter;
     }
 
-    public Resource getRandomResourceInHand(){
+    public Resource getRandomResourceInHand() {
         Random random = new Random();
         Set<Resource> resourceSet = getResourceCardsInHand().keySet();
         List<Resource> resourcesInHand = new ArrayList<>(resourceSet);

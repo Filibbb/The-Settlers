@@ -30,6 +30,10 @@ public class CommandHandler {
                 BuildRoadCommand buildRoadCommand = new BuildRoadCommand(turnOrderHandler, settlersBoard);
                 buildRoadCommand.execute();
                 break;
+            case BUILD_CITY:
+                BuildCityCommand buildCityCommand = new BuildCityCommand(turnOrderHandler, settlersBoard);
+                buildCityCommand.execute();
+                break;
             case END_TURN:
                 final EndTurnCommand endTurnCommand = new EndTurnCommand(turnOrderHandler);
                 endTurnCommand.execute();
