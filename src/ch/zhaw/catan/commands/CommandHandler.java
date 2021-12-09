@@ -1,7 +1,6 @@
 package ch.zhaw.catan.commands;
 
 import ch.zhaw.catan.board.SettlersBoard;
-import ch.zhaw.catan.game.logic.Thief;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
@@ -15,12 +14,10 @@ public class CommandHandler {
     private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
     private final TurnOrderHandler turnOrderHandler;
     private final SettlersBoard settlersBoard;
-    private final Thief thief;
 
-    public CommandHandler(TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard, Thief thief) {
+    public CommandHandler(TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
         this.turnOrderHandler = turnOrderHandler;
         this.settlersBoard = settlersBoard;
-        this.thief = thief;
     }
 
     public void executeCommand(Commands command) {
@@ -32,10 +29,6 @@ public class CommandHandler {
             case BUILD_ROAD:
                 BuildRoadCommand buildRoadCommand = new BuildRoadCommand(turnOrderHandler, settlersBoard);
                 buildRoadCommand.execute();
-                break;
-            case ROLL_DICE:
-                RollDiceCommand rollDiceCommand = new RollDiceCommand(settlersBoard, turnOrderHandler, thief);
-                rollDiceCommand.execute();
                 break;
             case END_TURN:
                 final EndTurnCommand endTurnCommand = new EndTurnCommand(turnOrderHandler);

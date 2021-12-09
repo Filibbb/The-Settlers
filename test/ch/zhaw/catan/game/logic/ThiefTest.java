@@ -2,7 +2,6 @@ package ch.zhaw.catan.game.logic;
 
 import ch.zhaw.catan.SettlersGameTestBasic;
 import ch.zhaw.catan.board.Resource;
-import ch.zhaw.catan.commands.RollDiceCommand;
 import ch.zhaw.catan.games.GameDataContainer;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
@@ -21,7 +20,7 @@ public class ThiefTest {
     private final static Point THIEF_POSITION = new Point(6, 8);
     private GameDataContainer model;
     private Thief thief;
-    private RollDiceCommand rollDiceCommand;
+    private RollDice rollDice;
 
     /**
      * Creates thief test.
@@ -30,7 +29,7 @@ public class ThiefTest {
     public void setUp() {
         model = getAfterSetupPhase();
         thief = model.getThief();
-        rollDiceCommand = new RollDiceCommand(model.getSettlersBoard(), model.getTurnOrderHandler(), model.getThief());
+        rollDice = new RollDice(model.getSettlersBoard(), model.getTurnOrderHandler(), model.getThief());
     }
 
     /**
@@ -62,7 +61,7 @@ public class ThiefTest {
     public void blockedFieldByThief(){
         thief.setThiefPosition(THIEF_POSITION);
         for (int i : java.util.List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
-            rollDiceCommand.handoutResourcesOfTheRolledField(i);
+            rollDice.handoutResourcesOfTheRolledField(i);
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
                 Faction.values()[0], Map.of(Resource.GRAIN, 1, Resource.WOOL, 1,
@@ -85,7 +84,7 @@ public class ThiefTest {
         assertTrue(initialSettlementBuild(currentPlayer, new Point(7, 7), model.getSettlersBoard()));
         thief.setThiefPosition(THIEF_POSITION);
         for (int diceValue : List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
-            rollDiceCommand.handoutResourcesOfTheRolledField(diceValue);
+            rollDice.handoutResourcesOfTheRolledField(diceValue);
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
                 Faction.values()[0], Map.of(Resource.GRAIN, 2, Resource.WOOL, 2,
