@@ -60,14 +60,14 @@ public class Road extends AbstractInfrastructure {
      * @author weberph5
      */
     public static boolean initialRoadBuild(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
-        if (board.hasEdge(startPoint, endPoint) && board.getEdge(startPoint, endPoint) == null && board.getCorner(startPoint) != null) {
+        if (board.hasEdge(startPoint, endPoint) && board.getEdge(startPoint, endPoint) == null && board.getCorner(startPoint) != null && isNotWaterOnlyCorner(endPoint, board)) {
             board.setEdge(startPoint, endPoint, new Road(owner, startPoint, endPoint));
             return true;
         } else return false;
     }
 
     private static boolean canBuild(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
-        return (owner.checkLiquidity(Structure.ROAD) && owner.hasEnoughInStructureStock(Structure.ROAD) && board.hasEdge(startPoint, endPoint) && board.getEdge(startPoint, endPoint) == null && hasRoadAdjacent(owner, startPoint, board));
+        return (owner.checkLiquidity(Structure.ROAD) && owner.hasEnoughInStructureStock(Structure.ROAD) && board.hasEdge(startPoint, endPoint) && board.getEdge(startPoint, endPoint) == null && hasRoadAdjacent(owner, startPoint, board) && isNotWaterOnlyCorner(endPoint, board));
     }
 
     private static void payRoad(Player owner) {

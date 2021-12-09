@@ -1,5 +1,6 @@
 package ch.zhaw.catan.infrastructure;
 
+import ch.zhaw.catan.board.Land;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.player.Player;
 
@@ -42,6 +43,23 @@ public abstract class AbstractInfrastructure {
                 if (roadOwner.equals(owner)) {
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the corner is not on the edge of the board surrounded by water only
+     *
+     * @param coordinates the coordinates where structure is being built
+     * @param board       the coordinates where structure is being built
+     * @return true if at least one surrounding field is not water
+     */
+    protected static boolean isNotWaterOnlyCorner(Point coordinates, SettlersBoard board) {
+        List<Land> fieldsAroundCorner = board.getFields(coordinates);
+        for (Land land : fieldsAroundCorner) {
+            if (land.getResource() != null) {
+                return true;
             }
         }
         return false;
