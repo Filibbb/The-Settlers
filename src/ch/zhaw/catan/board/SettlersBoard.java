@@ -141,15 +141,22 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
         return getCorner(cornerCoordinates);
     }
 
+    /**
+     * Checks if the field is water
+     * 
+     * @param field     center point of field
+     * @return          true if the field is water
+     */
     public boolean isWater(Point field) {
         return landTilePlacement.get(field).equals(Land.WATER);
     }
 
     /**
+     * Returns true if there are other players with resources settled on the field.
      *
-     * @param field
-     * @param currentPlayer
-     * @return
+     * @param field         to check the neighbors from
+     * @param currentPlayer the current player
+     * @return              true if the player has a neighbor with resources
      */
     public boolean hasNeighborWithResource(Point field, Player currentPlayer) {
         List<AbstractInfrastructure> neighbors = getNeighborsWithResources(field, currentPlayer);
@@ -162,12 +169,13 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
     }
 
     /**
+     * Returns a random neighbor of a player on a specific field.
      *
-     * @param field
-     * @param currentPlayer
-     * @return
+     * @param field         a field
+     * @param currentPlayer the current player
+     * @return              a random neighbor on the field
      */
-    public Player getNeighbor(Point field, Player currentPlayer) {
+    public Player getRandomNeighbor(Point field, Player currentPlayer) {
         Random random = new Random();
         List<AbstractInfrastructure> neighbors = getNeighborsWithResources(field, currentPlayer);
         if (neighbors.size() > 1) {

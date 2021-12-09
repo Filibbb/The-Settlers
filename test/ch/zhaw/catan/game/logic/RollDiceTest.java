@@ -1,4 +1,4 @@
-package ch.zhaw.catan.commands;
+package ch.zhaw.catan.game.logic;
 
 import ch.zhaw.catan.SettlersGameTestBasic;
 import ch.zhaw.catan.board.Resource;
@@ -47,14 +47,9 @@ public class RollDiceTest {
             rollDice.handoutResourcesOfTheRolledField(i);
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
-                Faction.values()[0], Map.of(Resource.GRAIN, 1, Resource.WOOL, 1,
-                        Resource.BRICK, 1, Resource.ORE, 1, Resource.LUMBER, 1),
-                Faction.values()[1],
-                Map.of(Resource.GRAIN, 1, Resource.WOOL, 3, Resource.BRICK, 0,
-                        Resource.ORE, 0, Resource.LUMBER, 0),
-                Faction.values()[2],
-                Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
-                        Resource.ORE, 0, Resource.LUMBER, 1));
+                Faction.values()[0], Map.of(Resource.GRAIN, 1, Resource.WOOL, 1, Resource.BRICK, 1, Resource.ORE, 1, Resource.LUMBER, 1),
+                Faction.values()[1], Map.of(Resource.GRAIN, 1, Resource.WOOL, 3, Resource.BRICK, 0, Resource.ORE, 0, Resource.LUMBER, 0),
+                Faction.values()[2], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1, Resource.ORE, 0, Resource.LUMBER, 1));
         SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
     }
 
@@ -69,14 +64,9 @@ public class RollDiceTest {
             rollDice.handoutResourcesOfTheRolledField(diceValue);
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
-                Faction.values()[0], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0,
-                        Resource.BRICK, 0, Resource.ORE, 6, Resource.LUMBER, 0),
-                Faction.values()[1],
-                Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0,
-                        Resource.ORE, 0, Resource.LUMBER, 0),
-                Faction.values()[2],
-                Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 3,
-                        Resource.ORE, 0, Resource.LUMBER, 0));
+                Faction.values()[0], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 6, Resource.LUMBER, 0),
+                Faction.values()[1], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 0, Resource.LUMBER, 0),
+                Faction.values()[2], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 3, Resource.ORE, 0, Resource.LUMBER, 0));
         SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
     }
 }
