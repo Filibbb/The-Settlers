@@ -90,7 +90,7 @@ public class Road extends AbstractInfrastructure {
 
     private boolean isValidBuildPositionForRoad(SettlersBoard board) {
         return board.hasEdge(getPosition(), endPoint)
-                && board.isNotWaterOnlyCorner(endPoint)
+                && board.isCornerNotSurroundedByWater(endPoint)
                 && board.getEdge(getPosition(), endPoint) == null;
     }
 

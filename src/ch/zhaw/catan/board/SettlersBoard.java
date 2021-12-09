@@ -183,7 +183,7 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
      * @param coordinates the coordinates where structure is being built
      * @return true if at least one surrounding field is not water
      */
-    public boolean isNotWaterOnlyCorner(Point coordinates) {
+    public boolean isCornerNotSurroundedByWater(Point coordinates) {
         List<Land> fieldsAroundCorner = getFieldsOfCorner(coordinates);
         for (Land land : fieldsAroundCorner) {
             if (land.getResource() != null) {

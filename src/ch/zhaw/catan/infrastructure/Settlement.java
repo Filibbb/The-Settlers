@@ -36,7 +36,7 @@ public class Settlement extends AbstractInfrastructure {
      * @author weberph5
      */
     public static boolean initialSettlementBuild(Player owner, Point coordinates, SettlersBoard board) {
-        if (board.hasCorner(coordinates) && board.getCorner(coordinates) == null && board.getNeighboursOfCorner(coordinates).isEmpty() && board.isNotWaterOnlyCorner(coordinates)) {
+        if (board.hasCorner(coordinates) && board.getCorner(coordinates) == null && board.getNeighboursOfCorner(coordinates).isEmpty() && board.isCornerNotSurroundedByWater(coordinates)) {
             final Settlement settlement = new Settlement(owner, coordinates);
             buildSettlement(board, settlement);
             return true;
@@ -85,7 +85,7 @@ public class Settlement extends AbstractInfrastructure {
                 hasOwnRoadAdjacent(getPosition(), board) &&
                 owner.hasEnoughLiquidityFor(SETTLEMENT) &&
                 owner.hasEnoughInStructureStock(SETTLEMENT)) &&
-                board.isNotWaterOnlyCorner(getPosition());
+                board.isCornerNotSurroundedByWater(getPosition());
     }
 
     /**
