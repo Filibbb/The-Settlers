@@ -27,7 +27,6 @@ public class Road extends AbstractInfrastructure {
     private Road(Player owner, Point startPoint, Point endPoint) {
         super(owner, startPoint);
         this.endPoint = endPoint;
-        owner.incrementStructureCounterFor(getStructureType());
     }
 
     /**
@@ -43,7 +42,7 @@ public class Road extends AbstractInfrastructure {
     public static boolean initialRoadBuild(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
         final Road road = new Road(owner, startPoint, endPoint);
         if (road.isValidBuildPositionForRoad(board) && board.getCorner(startPoint) != null) {
-            board.buildRoad(road);
+            build(board, road);
             return true;
         } else {
             return false;
@@ -62,13 +61,18 @@ public class Road extends AbstractInfrastructure {
     public static boolean build(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
         final Road road = new Road(owner, startPoint, endPoint);
         if (road.canBuild(board)) {
-            board.buildRoad(road);
+            build(board, road);
             owner.payForStructure(road.getStructureType());
             return true;
 
         } else {
             return false;
         }
+    }
+
+    private static void build(SettlersBoard board, Road road) {
+        board.buildRoad(road);
+        road.finalizeBuild();
     }
 
     /**
@@ -85,7 +89,7 @@ public class Road extends AbstractInfrastructure {
                 && isValidBuildPositionForRoad(board)
                 && (hasOwnRoadAdjacent(getPosition(), board) || hasOwnRoadAdjacent(endPoint, board));
     }
-
+    
     private boolean isValidBuildPositionForRoad(SettlersBoard board) {
         return board.hasEdge(getPosition(), endPoint)
                 && board.getEdge(getPosition(), endPoint) == null;

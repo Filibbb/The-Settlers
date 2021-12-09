@@ -24,8 +24,6 @@ public class Settlement extends AbstractInfrastructure {
      */
     private Settlement(Player owner, Point position) {
         super(owner, position);
-        owner.incrementStructureCounterFor(getStructureType());
-        owner.incrementWinningPoints();
     }
 
     /**
@@ -39,7 +37,8 @@ public class Settlement extends AbstractInfrastructure {
      */
     public static boolean initialSettlementBuild(Player owner, Point coordinates, SettlersBoard board) {
         if (board.hasCorner(coordinates) && board.getCorner(coordinates) == null && board.getNeighboursOfCorner(coordinates).isEmpty()) {
-            board.buildSettlement(new Settlement(owner, coordinates));
+            final Settlement settlement = new Settlement(owner, coordinates);
+            build(board, settlement);
             return true;
         } else {
             return false;
@@ -58,12 +57,17 @@ public class Settlement extends AbstractInfrastructure {
     public static boolean build(Player owner, Point coordinates, SettlersBoard board) {
         final Settlement settlement = new Settlement(owner, coordinates);
         if (settlement.canBuild(board)) {
-            board.buildSettlement(settlement);
+            build(board, settlement);
             owner.payForStructure(settlement.getStructureType());
             return true;
         } else {
             return false;
         }
+    }
+
+    private static void build(SettlersBoard board, Settlement settlement) {
+        board.buildSettlement(settlement);
+        settlement.finalizeBuild();
     }
 
     /**
@@ -81,6 +85,15 @@ public class Settlement extends AbstractInfrastructure {
                 hasOwnRoadAdjacent(getPosition(), board) &&
                 owner.hasEnoughLiquidityFor(SETTLEMENT) &&
                 owner.hasEnoughInStructureStock(SETTLEMENT));
+    }
+
+    /**
+     * Increments winning points and structure count
+     */
+    @Override
+    protected void finalizeBuild() {
+        super.finalizeBuild();
+        getOwner().incrementWinningPoints();
     }
 
     /**

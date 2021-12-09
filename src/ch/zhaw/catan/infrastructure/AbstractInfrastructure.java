@@ -60,6 +60,13 @@ public abstract class AbstractInfrastructure {
     }
 
     /**
+     * Method for finalizing build of structure. Increments counter for owner of the currently built structure
+     */
+    protected void finalizeBuild() {
+        owner.incrementStructureCounterFor(getStructureType());
+    }
+
+    /**
      * Method to get the owner of an infrastructure
      *
      * @return Player owner of the infrastructure

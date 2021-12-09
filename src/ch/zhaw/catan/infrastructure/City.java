@@ -23,9 +23,7 @@ public class City extends AbstractInfrastructure {
      */
     private City(Player owner, Point position) {
         super(owner, position);
-        owner.incrementStructureCounterFor(getStructureType());
-        owner.decreaseStructureCounterFor(SETTLEMENT);
-        owner.incrementWinningPoints();
+
     }
 
     /**
@@ -41,11 +39,19 @@ public class City extends AbstractInfrastructure {
         final City city = new City(owner, coordinates);
         if (city.canBuild(board)) {
             board.buildCity(city);
+            city.finalizeBuild();
             owner.payForStructure(city.getStructureType());
             return true;
         } else {
             return false;
         }
+    }
+
+    @Override
+    protected void finalizeBuild() {
+        super.finalizeBuild();
+        getOwner().decreaseStructureCounterFor(SETTLEMENT);
+        getOwner().incrementWinningPoints();
     }
 
     /**
