@@ -22,6 +22,10 @@ public class CommandHandler {
 
     public void executeCommand(Commands command) {
         switch (command) {
+            case SHOW_BOARD:
+                ShowBoardCommand showBoardCommand = new ShowBoardCommand(settlersBoard);
+                showBoardCommand.execute();
+                break;
             case BUILD_SETTLEMENT:
                 BuildSettlementCommand buildSettlementCommand = new BuildSettlementCommand(turnOrderHandler, settlersBoard);
                 buildSettlementCommand.execute();
