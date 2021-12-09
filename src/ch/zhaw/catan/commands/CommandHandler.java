@@ -35,6 +35,7 @@ public class CommandHandler {
             case END_TURN -> new EndTurnCommand(turnOrderHandler);
             case EXIT_COMMAND -> new QuitGameCommand();
             case SHOW_COMMANDS -> new ShowCommand();
+            case TRADE_WITH_BANK -> new TradeWithBankCommand(currentPlayer);
         };
     }
 }

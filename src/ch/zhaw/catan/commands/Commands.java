@@ -13,6 +13,7 @@ public enum Commands {
     BUILD_SETTLEMENT("BUILD SETTLEMENT", "BUILD SETTLEMENT: Build a settlement on a corner."),
     BUILD_ROAD("BUILD ROAD", "BUILD ROAD: Build a road adjacent to a settlement or another road."),
     BUILD_CITY("BUILD CITY", "BUILD CITY: Upgrade a settlement to a city"),
+    TRADE_WITH_BANK("BANK TRADE", "BANK TRADE: Trade 4 of your resources to any resource"),
     END_TURN("END TURN", "END TURN: End the current turn"),
     SHOW_COMMANDS("SHOW COMMANDS", "SHOW COMMANDS : Show list of available commands.");
 

@@ -38,7 +38,17 @@ public class CommandLineHandler {
      * @author abuechi
      */
     public static String promptNextUserAction() {
-        return TEXT_IO.newStringInputReader().read("Please enter your next action:");
+        return promptNextUserInput("Please enter your next action:");
+    }
+
+    /**
+     * Prompts the user to enter something depending on the context
+     *
+     * @param contextMessage the context that is displayed as a hint for the user on what to enter
+     * @return the entered string
+     */
+    public static String promptNextUserInput(String contextMessage) {
+        return TEXT_IO.newStringInputReader().read(contextMessage);
     }
 
     /**
