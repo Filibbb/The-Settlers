@@ -24,6 +24,14 @@ public class CommandHandler {
     public void executeCommand(Commands command, TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
         final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
         switch (command) {
+            case SHOW_BOARD:
+                ShowBoardCommand showBoardCommand = new ShowBoardCommand(settlersBoard);
+                showBoardCommand.execute();
+                break;
+            case SHOW_HAND:
+                ShowHandCommand showHandCommand = new ShowHandCommand(turnOrderHandler);
+                showHandCommand.execute();
+                break;
             case BUILD_SETTLEMENT:
                 BuildSettlementCommand buildSettlementCommand = new BuildSettlementCommand(currentPlayer, settlersBoard);
                 buildSettlementCommand.execute();

@@ -64,10 +64,8 @@ public class Road extends AbstractInfrastructure {
             build(board, road);
             owner.payForStructure(road.getStructureType());
             return true;
-
-        } else {
-            return false;
         }
+        return false;
     }
 
     private static void build(SettlersBoard board, Road road) {
@@ -89,9 +87,10 @@ public class Road extends AbstractInfrastructure {
                 && isValidBuildPositionForRoad(board)
                 && (hasOwnRoadAdjacent(getPosition(), board) || hasOwnRoadAdjacent(endPoint, board));
     }
-    
+
     private boolean isValidBuildPositionForRoad(SettlersBoard board) {
         return board.hasEdge(getPosition(), endPoint)
+                && board.isNotWaterOnlyCorner(endPoint)
                 && board.getEdge(getPosition(), endPoint) == null;
     }
 

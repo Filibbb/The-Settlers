@@ -7,8 +7,10 @@ package ch.zhaw.catan.commands;
  * @version 1.0.0
  */
 public enum Commands {
+    SHOW_HAND("SHOW HAND", "SHOW HAND: See how many resources you own"),
+    SHOW_BOARD("SHOW BOARD", "SHOW BOARD: Show the game board"),
     BUILD_SETTLEMENT("BUILD SETTLEMENT", "BUILD SETTLEMENT: Build a settlement on a corner."),
-    BUILD_ROAD("BUILD ROAD", "Build a road adjacent to a settlement or another road."),
+    BUILD_ROAD("BUILD ROAD", "BUILD ROAD: Build a road adjacent to a settlement or another road."),
     BUILD_CITY("BUILD CITY", "BUILD CITY: Upgrade a settlement to a city"),
     END_TURN("END TURN", "END TURN: End the current turn"),
     SHOW_COMMANDS("SHOW COMMANDS", "SHOW COMMANDS : Show list of available commands.");
