@@ -1,6 +1,7 @@
-package ch.zhaw.catan.commands;
+package ch.zhaw.catan.commands.build;
 
 import ch.zhaw.catan.board.SettlersBoard;
+import ch.zhaw.catan.commands.Command;
 import ch.zhaw.catan.player.Player;
 
 /**

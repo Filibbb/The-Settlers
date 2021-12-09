@@ -27,19 +27,31 @@ public abstract class AbstractInfrastructure {
     }
 
     /**
+     * Get Structure Type as Enum implemented by subclasses
+     *
+     * @return the structure type as enum
+     */
+    protected abstract Structure getStructureType();
+
+    /**
+     * Abstract method to check if structure can be built
+     *
+     * @return boolean if structure can be built
+     */
+    protected abstract boolean canBuild(SettlersBoard board);
+
+    /**
      * Checks if the position has a road adjacent to it since this is a requirement for building a settlement or road.
      *
-     * @param owner       the player that owns the structure
-     * @param coordinates the coordinates where structure is being built
-     * @param board       the current SettlersBoard
+     * @param cornerCoordinates the cornerCoordinates where structure is being built
+     * @param board             the current SettlersBoard
      * @return true if a road is adjacent, false if not
      */
-    protected static boolean hasRoadAdjacent(Player owner, Point coordinates, SettlersBoard board) {
-        if (!board.getAdjacentEdges(coordinates).isEmpty()) {
-            List<Road> surroundingRoads = board.getAdjacentEdges(coordinates);
-            for (Road road : surroundingRoads) {
-                Player roadOwner = road.getOwner();
-                if (roadOwner.equals(owner)) {
+    protected boolean hasOwnRoadAdjacent(Point cornerCoordinates, SettlersBoard board) {
+        final List<Road> adjacentEdges = board.getAdjacentEdges(cornerCoordinates);
+        if (!adjacentEdges.isEmpty()) {
+            for (Road adjacentRoads : adjacentEdges) {
+                if (adjacentRoads.getOwner().getPlayerFaction().equals(owner.getPlayerFaction())) {
                     return true;
                 }
             }
@@ -54,5 +66,9 @@ public abstract class AbstractInfrastructure {
      */
     public Player getOwner() {
         return owner;
+    }
+
+    public Point getPosition() {
+        return position;
     }
 }

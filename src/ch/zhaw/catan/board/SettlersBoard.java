@@ -2,15 +2,21 @@ package ch.zhaw.catan.board;
 
 import ch.zhaw.catan.game.logic.Thief;
 import ch.zhaw.catan.infrastructure.AbstractInfrastructure;
+import ch.zhaw.catan.infrastructure.City;
 import ch.zhaw.catan.infrastructure.Road;
+import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.catan.player.Player;
 import ch.zhaw.hexboard.HexBoard;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
+import java.util.Random;
 
-import static ch.zhaw.catan.board.Land.*;
+import static ch.zhaw.catan.board.BoardUtil.getDefaultDiceNumberPlacement;
+import static ch.zhaw.catan.board.BoardUtil.getDefaultLandTilePlacement;
+import static ch.zhaw.catan.board.Land.WATER;
 
 /**
  * This is the Settlers game board that is built on a hex board.
@@ -32,84 +38,6 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
         thief.setThiefPosition(INITIAL_THIEF_POSITION);
     }
 
-    /**
-     * Returns the default mapping of the dice values per field.
-     *
-     * @return the dice values per field
-     * @author tebe
-     */
-    public static Map<Point, Integer> getDefaultDiceNumberPlacement() {
-        Map<Point, Integer> diceNumberAssignments = new HashMap<>();
-        diceNumberAssignments.put(new Point(4, 8), 2);
-        diceNumberAssignments.put(new Point(7, 5), 3);
-        diceNumberAssignments.put(new Point(8, 14), 3);
-        diceNumberAssignments.put(new Point(6, 8), 4);
-        diceNumberAssignments.put(new Point(7, 17), 4);
-
-        diceNumberAssignments.put(new Point(3, 11), 5);
-        diceNumberAssignments.put(new Point(8, 8), 5);
-        diceNumberAssignments.put(new Point(5, 5), 6);
-        diceNumberAssignments.put(new Point(9, 11), 6);
-
-        diceNumberAssignments.put(new Point(7, 11), 7);
-        diceNumberAssignments.put(new Point(9, 5), 8);
-        diceNumberAssignments.put(new Point(5, 17), 8);
-        diceNumberAssignments.put(new Point(5, 11), 9);
-        diceNumberAssignments.put(new Point(11, 11), 9);
-        diceNumberAssignments.put(new Point(4, 14), 10);
-        diceNumberAssignments.put(new Point(10, 8), 10);
-        diceNumberAssignments.put(new Point(6, 14), 11);
-        diceNumberAssignments.put(new Point(9, 17), 11);
-        diceNumberAssignments.put(new Point(10, 14), 12);
-        return Collections.unmodifiableMap(diceNumberAssignments);
-    }
-
-    /**
-     * Returns the field (coordinate) to {@link Land} mapping for the <a href=
-     * "https://www.catan.de/files/downloads/4002051693602_catan_-_das_spiel_0.pdf">standard
-     * setup</a> of the game Catan..
-     *
-     * @return the field to {@link Land} mapping for the standard setup
-     * @author tebe
-     */
-    public static Map<Point, Land> getDefaultLandTilePlacement() {
-        Map<Point, Land> landPlacements = new HashMap<>();
-        Point[] waterFields = {new Point(4, 2), new Point(6, 2), new Point(8, 2), new Point(10, 2),
-                new Point(3, 5), new Point(11, 5), new Point(2, 8), new Point(12, 8),
-                new Point(1, 11), new Point(13, 11), new Point(2, 14), new Point(12, 14),
-                new Point(3, 17), new Point(11, 17), new Point(4, 20), new Point(6, 20),
-                new Point(8, 20), new Point(10, 20)};
-
-        for (Point waterField : waterFields) {
-            landPlacements.put(waterField, WATER);
-        }
-
-        landPlacements.put(new Point(5, 5), FOREST);
-        landPlacements.put(new Point(7, 5), PASTURE);
-        landPlacements.put(new Point(9, 5), PASTURE);
-
-        landPlacements.put(new Point(4, 8), FIELDS);
-        landPlacements.put(new Point(6, 8), MOUNTAIN);
-        landPlacements.put(new Point(8, 8), FIELDS);
-        landPlacements.put(new Point(10, 8), FOREST);
-
-        landPlacements.put(new Point(3, 11), FOREST);
-        landPlacements.put(new Point(5, 11), HILLS);
-        landPlacements.put(new Point(7, 11), DESERT);
-        landPlacements.put(new Point(9, 11), MOUNTAIN);
-        landPlacements.put(new Point(11, 11), FIELDS);
-
-        landPlacements.put(new Point(4, 14), FIELDS);
-        landPlacements.put(new Point(6, 14), MOUNTAIN);
-        landPlacements.put(new Point(8, 14), FOREST);
-        landPlacements.put(new Point(10, 14), PASTURE);
-
-        landPlacements.put(new Point(5, 17), PASTURE);
-        landPlacements.put(new Point(7, 17), HILLS);
-        landPlacements.put(new Point(9, 17), HILLS);
-
-        return Collections.unmodifiableMap(landPlacements);
-    }
 
     public Map<Point, Integer> getDiceNumberPlacements() {
         return diceNumberPlacements;
@@ -202,6 +130,37 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
         for (Map.Entry<Point, Land> landEntry : landPlacement.entrySet()) {
             addField(landEntry.getKey(), landEntry.getValue());
         }
+    }
+
+    /**
+     * Sets a road on the edge
+     *
+     * @param road a road object destined to be set upon the board
+     */
+    public void buildRoad(Road road) {
+        setEdge(road.getPosition(), road.getEndPoint(), road);
+    }
+
+    /**
+     * Sets a settlement on the corner
+     *
+     * @param settlement Settlement instance with its owner
+     */
+    public void buildSettlement(Settlement settlement) {
+        buildLivingInfrastructure(settlement);
+    }
+
+    /**
+     * Sets a city on the corner
+     *
+     * @param city City instance with its owner
+     */
+    public void buildCity(City city) {
+        buildLivingInfrastructure(city);
+    }
+
+    private <T extends AbstractInfrastructure> void buildLivingInfrastructure(T infrastructure) {
+        setCorner(infrastructure.getPosition(), infrastructure);
     }
 
     public Thief getThief() {

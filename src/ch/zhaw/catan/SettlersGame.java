@@ -90,7 +90,7 @@ public class SettlersGame {
         foundationPhase(playerTurnOrder, true);
 
         printMessage("Foundation phase complete! Swapping to normal game now! Good luck!");
-        printMessage(settlersBoardTextView.toString());
+        settlersBoardTextView.printBoard();
     }
 
     private void foundationPhase(final List<Player> playerTurnOrder, boolean reverse) {
@@ -139,7 +139,7 @@ public class SettlersGame {
     private void setupNewGame() {
         int numberOfPlayers = promptMinMaxValueInt("Please enter the number of players. 2, 3 or 4 players are supported.", MINIMUM_PLAYERS, MAX_PLAYERS);
         final List<Player> players = createPlayers(numberOfPlayers);
-        printMessage(settlersBoardTextView.toString());
+        settlersBoardTextView.printBoard();
         determineTurnOrder(players);
     }
 
@@ -160,7 +160,7 @@ public class SettlersGame {
      * @param numberOfPlayers the selected numbers of players
      * @return an unordered list of players with the specified number as size
      */
-    public List<Player> createPlayers(int numberOfPlayers) {
+    private List<Player> createPlayers(int numberOfPlayers) {
         List<Player> players = new ArrayList<>(numberOfPlayers);
         for (int playerNumber = 1; playerNumber <= numberOfPlayers; playerNumber++) {
             players.add(new Player(getRandomAvailableFaction()));

@@ -1,11 +1,11 @@
-package ch.zhaw.catan.commands;
+package ch.zhaw.catan.commands.build;
 
 import ch.zhaw.catan.board.SettlersBoard;
-import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.catan.player.Player;
 
 import java.awt.*;
 
+import static ch.zhaw.catan.infrastructure.Settlement.build;
 import static ch.zhaw.catan.io.CommandLineHandler.printMessage;
 import static ch.zhaw.catan.io.CommandLineHandler.promptCoordinates;
 
@@ -33,8 +33,8 @@ public class BuildSettlementCommand extends AbstractBuildCommand {
      */
     @Override
     public void execute() {
-        Point settlementCoordinates = promptCoordinates("Corner");
-        if (Settlement.build(getCurrentPlayer(), settlementCoordinates, getSettlersBoard())) {
+        final Point settlementCoordinates = promptCoordinates("Corner");
+        if (build(getCurrentPlayer(), settlementCoordinates, getSettlersBoard())) {
             printMessage("Settlement successfully built!");
         } else {
             printMessage("Building the settlement was not successful!");

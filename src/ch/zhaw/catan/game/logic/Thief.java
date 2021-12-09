@@ -83,7 +83,11 @@ public class Thief {
 
     private void stealRandomCard(Player stealer, Player robbedPerson) {
         Resource resource = robbedPerson.getRandomResourceInHand();
-        robbedPerson.removeResourceCardFromHand(resource);
-        stealer.addResourceCardToHand(resource);
+        if (resource != null) {
+            robbedPerson.removeResourceCardFromHand(resource);
+            stealer.addResourceCardToHand(resource);
+        } else {
+            printMessage("Couldn't steal a resource card from your neighbors.");
+        }
     }
 }

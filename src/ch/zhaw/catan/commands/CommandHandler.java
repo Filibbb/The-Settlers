@@ -1,6 +1,9 @@
 package ch.zhaw.catan.commands;
 
 import ch.zhaw.catan.board.SettlersBoard;
+import ch.zhaw.catan.commands.build.BuildCityCommand;
+import ch.zhaw.catan.commands.build.BuildRoadCommand;
+import ch.zhaw.catan.commands.build.BuildSettlementCommand;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.player.Player;
 

@@ -11,10 +11,11 @@ import org.junit.jupiter.api.Test;
 import java.awt.*;
 import java.util.Map;
 
-import static ch.zhaw.catan.board.SettlersBoard.getDefaultLandTilePlacement;
+import static ch.zhaw.catan.board.BoardUtil.getDefaultLandTilePlacement;
 import static ch.zhaw.catan.games.ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS;
 import static ch.zhaw.catan.games.ThreePlayerStandard.getAfterSetupPhase;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests for {Settlerboard}

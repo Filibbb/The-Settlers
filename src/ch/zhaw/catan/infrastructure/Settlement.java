@@ -1,11 +1,11 @@
 package ch.zhaw.catan.infrastructure;
 
-import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoard;
-import ch.zhaw.catan.board.Structure;
 import ch.zhaw.catan.player.Player;
 
 import java.awt.*;
+
+import static ch.zhaw.catan.infrastructure.Structure.SETTLEMENT;
 
 /**
  * Class that contains the logic regarding a settlement.
@@ -24,7 +24,7 @@ public class Settlement extends AbstractInfrastructure {
      */
     private Settlement(Player owner, Point position) {
         super(owner, position);
-        owner.increaseBuiltStructures(Structure.SETTLEMENT);
+        owner.incrementStructureCounterFor(getStructureType());
         owner.incrementWinningPoints();
     }
 
@@ -39,9 +39,11 @@ public class Settlement extends AbstractInfrastructure {
      */
     public static boolean initialSettlementBuild(Player owner, Point coordinates, SettlersBoard board) {
         if (board.hasCorner(coordinates) && board.getCorner(coordinates) == null && board.getNeighboursOfCorner(coordinates).isEmpty()) {
-            board.setCorner(coordinates, new Settlement(owner, coordinates));
+            board.buildSettlement(new Settlement(owner, coordinates));
             return true;
-        } else return false;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -54,21 +56,40 @@ public class Settlement extends AbstractInfrastructure {
      * @author weberph5
      */
     public static boolean build(Player owner, Point coordinates, SettlersBoard board) {
-        if (canBuild(owner, coordinates, board)) {
-            board.setCorner(coordinates, new Settlement(owner, coordinates));
-            paySettlement(owner);
+        final Settlement settlement = new Settlement(owner, coordinates);
+        if (settlement.canBuild(board)) {
+            board.buildSettlement(settlement);
+            owner.payForStructure(settlement.getStructureType());
             return true;
-        } else return false;
+        } else {
+            return false;
+        }
     }
 
-    private static boolean canBuild(Player owner, Point coordinates, SettlersBoard board) {
-        return (board.hasCorner(coordinates) && board.getCorner(coordinates) == null && board.getNeighboursOfCorner(coordinates).isEmpty() && hasRoadAdjacent(owner, coordinates, board) && owner.checkLiquidity(Structure.SETTLEMENT) && owner.hasEnoughInStructureStock(Structure.SETTLEMENT));
+    /**
+     * Checks if settlement can be built.
+     *
+     * @param board the board to check it upon
+     * @return true if it can be built, false otherwise
+     */
+    @Override
+    protected boolean canBuild(SettlersBoard board) {
+        final Player owner = getOwner();
+        return (board.hasCorner(getPosition()) &&
+                board.getCorner(getPosition()) == null &&
+                board.getNeighboursOfCorner(getPosition()).isEmpty() &&
+                hasOwnRoadAdjacent(getPosition(), board) &&
+                owner.hasEnoughLiquidityFor(SETTLEMENT) &&
+                owner.hasEnoughInStructureStock(SETTLEMENT));
     }
 
-    private static void paySettlement(Player owner) {
-        owner.removeResourceCardFromHand(Resource.BRICK);
-        owner.removeResourceCardFromHand(Resource.GRAIN);
-        owner.removeResourceCardFromHand(Resource.WOOL);
-        owner.removeResourceCardFromHand(Resource.LUMBER);
+    /**
+     * Get Structure Type as Enum
+     *
+     * @return the structure type as enum
+     */
+    @Override
+    protected Structure getStructureType() {
+        return SETTLEMENT;
     }
 }

@@ -1,10 +1,10 @@
 package ch.zhaw.catan.player;
 
-import ch.zhaw.catan.board.Resource;
-import ch.zhaw.catan.infrastructure.Structure;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static ch.zhaw.catan.board.Resource.*;
+import static ch.zhaw.catan.infrastructure.Structure.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -27,9 +27,9 @@ class PlayerTest {
     @BeforeEach
     public void setUp() {
         player = new Player(Faction.RED);
-        player.addResourceCardToHand(Resource.BRICK);
-        player.addResourceCardToHand(Resource.LUMBER, LUMBER_COUNT);
-        player.addResourceCardToHand(Resource.ORE, ORE_COUNT);
+        player.addResourceCardToHand(BRICK);
+        player.addResourceCardToHand(LUMBER, LUMBER_COUNT);
+        player.addResourceCardToHand(ORE, ORE_COUNT);
     }
 
     /**
@@ -45,8 +45,8 @@ class PlayerTest {
      */
     @Test
     public void testAddSingleResourceCardToHand() {
-        player.addResourceCardToHand(Resource.BRICK);
-        assertEquals(player.getResourceCardsInHand().get(Resource.BRICK), 2);
+        player.addResourceCardToHand(BRICK);
+        assertEquals(player.getResourceCardsInHand().get(BRICK), 2);
     }
 
     /**
@@ -54,8 +54,8 @@ class PlayerTest {
      */
     @Test
     public void testAddResourceCardsToHand() {
-        player.addResourceCardToHand(Resource.BRICK, 2);
-        assertEquals(player.getResourceCardsInHand().get(Resource.BRICK), LUMBER_COUNT);
+        player.addResourceCardToHand(BRICK, 2);
+        assertEquals(player.getResourceCardsInHand().get(BRICK), LUMBER_COUNT);
     }
 
     /**
@@ -64,7 +64,7 @@ class PlayerTest {
      */
     @Test
     public void testAddResourceCardToHandWithNegativeCount() {
-        assertThrows(RuntimeException.class, () -> player.addResourceCardToHand(Resource.BRICK, -2));
+        assertThrows(RuntimeException.class, () -> player.addResourceCardToHand(BRICK, -2));
     }
 
     /**
@@ -72,9 +72,9 @@ class PlayerTest {
      */
     @Test
     public void getResourceCardCountFor() {
-        assertEquals(player.getResourceCardCountFor(Resource.BRICK), ORE_COUNT);
-        assertEquals(player.getResourceCardCountFor(Resource.LUMBER), LUMBER_COUNT);
-        assertEquals(player.getResourceCardCountFor(Resource.GRAIN), 0);
+        assertEquals(player.getResourceCardCountFor(BRICK), ORE_COUNT);
+        assertEquals(player.getResourceCardCountFor(LUMBER), LUMBER_COUNT);
+        assertEquals(player.getResourceCardCountFor(GRAIN), 0);
     }
 
     /**
@@ -82,29 +82,8 @@ class PlayerTest {
      */
     @Test
     public void removeResourceCardFromHand() {
-        player.removeResourceCardFromHand(Resource.LUMBER);
-        assertEquals(player.getResourceCardCountFor(Resource.LUMBER), 2);
-    }
-
-    /**
-     * Tests if removing multiple resources from hand works
-     */
-    @Test
-    public void testRemoveResourceCardsFromHand() {
-        player.removeResourceCardFromHand(Resource.LUMBER, 2);
-        assertEquals(player.getResourceCardCountFor(Resource.LUMBER), ORE_COUNT);
-    }
-
-    /**
-     * Tests if removing a resource card that is not in hand works
-     */
-    @Test
-    public void testRemoveResourceCardThatIsNoneFromHand() {
-        player.removeResourceCardFromHand(Resource.GRAIN);
-        assertEquals(player.getResourceCardCountFor(Resource.GRAIN), 0);
-
-        player.removeResourceCardFromHand(Resource.GRAIN, 5);
-        assertEquals(player.getResourceCardCountFor(Resource.GRAIN), 0);
+        player.removeResourceCardFromHand(LUMBER);
+        assertEquals(player.getResourceCardCountFor(LUMBER), 2);
     }
 
     /**
@@ -112,14 +91,14 @@ class PlayerTest {
      */
     @Test
     public void increaseBuiltStructures() {
-        player.increaseBuiltStructures(Structure.ROAD);
-        player.increaseBuiltStructures(Structure.ROAD);
-        player.increaseBuiltStructures(Structure.SETTLEMENT);
-        player.increaseBuiltStructures(Structure.SETTLEMENT);
+        player.incrementStructureCounterFor(ROAD);
+        player.incrementStructureCounterFor(ROAD);
+        player.incrementStructureCounterFor(SETTLEMENT);
+        player.incrementStructureCounterFor(SETTLEMENT);
 
-        assertEquals(player.getBuiltStructuresCounter().get(Structure.ROAD), 2);
-        assertEquals(player.getBuiltStructuresCounter().get(Structure.SETTLEMENT), 2);
-        assertEquals(player.getBuiltStructuresCounter().get(Structure.CITY), 0);
+        assertEquals(player.getBuiltStructuresCounter().get(ROAD), 2);
+        assertEquals(player.getBuiltStructuresCounter().get(SETTLEMENT), 2);
+        assertEquals(player.getBuiltStructuresCounter().get(CITY), 0);
     }
 
     /**
@@ -127,11 +106,11 @@ class PlayerTest {
      */
     @Test
     public void checkStructureStock() {
-        player.increaseBuiltStructures(Structure.ROAD);
-        player.increaseBuiltStructures(Structure.ROAD);
-        player.increaseBuiltStructures(Structure.ROAD);
+        player.incrementStructureCounterFor(ROAD);
+        player.incrementStructureCounterFor(ROAD);
+        player.incrementStructureCounterFor(ROAD);
 
-        final boolean stockStatusForRoads = player.hasEnoughInStructureStock(Structure.ROAD);
+        final boolean stockStatusForRoads = player.hasEnoughInStructureStock(ROAD);
         assertTrue(stockStatusForRoads);
     }
 
@@ -140,11 +119,11 @@ class PlayerTest {
      */
     @Test
     public void checkStructureStockForNoMoreRemainingStructures() {
-        for (int index = 0; index < Structure.CITY.getStockPerPlayer(); index++) {
-            player.increaseBuiltStructures(Structure.CITY);
+        for (int index = 0; index < CITY.getStockPerPlayer(); index++) {
+            player.incrementStructureCounterFor(CITY);
         }
 
-        final boolean stockStatusForCities = player.hasEnoughInStructureStock(Structure.CITY);
+        final boolean stockStatusForCities = player.hasEnoughInStructureStock(CITY);
         assertFalse(stockStatusForCities);
     }
 
@@ -153,7 +132,7 @@ class PlayerTest {
      */
     @Test
     public void hasEnoughLiquidityForRoad() {
-        final boolean hasEnoughForRoad = player.checkLiquidity(Structure.ROAD);
+        final boolean hasEnoughForRoad = player.hasEnoughLiquidityFor(ROAD);
         assertTrue(hasEnoughForRoad);
     }
 
@@ -162,7 +141,7 @@ class PlayerTest {
      */
     @Test
     public void hasNotEnoughLiquidityForCity() {
-        final boolean hasEnoughForCity = player.checkLiquidity(Structure.CITY);
+        final boolean hasEnoughForCity = player.hasEnoughLiquidityFor(CITY);
         assertFalse(hasEnoughForCity);
     }
 

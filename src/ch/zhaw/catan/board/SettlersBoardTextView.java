@@ -7,6 +7,7 @@ import ch.zhaw.hexboard.HexBoardTextView;
 import java.awt.*;
 import java.util.Map;
 
+import static ch.zhaw.catan.io.CommandLineHandler.printMessage;
 import static ch.zhaw.hexboard.Label.convertToFieldValueToLabel;
 
 /**
@@ -31,5 +32,12 @@ public class SettlersBoardTextView extends HexBoardTextView<Land, AbstractInfras
         for (Map.Entry<Point, Integer> gameField : board.getDiceNumberPlacements().entrySet()) {
             setLowerFieldLabel(gameField.getKey(), convertToFieldValueToLabel(gameField.getValue()));
         }
+    }
+
+    /**
+     * Prints the current board in the console
+     */
+    public void printBoard() {
+        printMessage(toString());
     }
 }
