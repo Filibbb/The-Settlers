@@ -5,10 +5,7 @@ import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.board.SettlersBoardTextView;
 import ch.zhaw.catan.commands.CommandHandler;
 import ch.zhaw.catan.commands.Commands;
-import ch.zhaw.catan.game.logic.Dice;
-import ch.zhaw.catan.game.logic.DiceResult;
-import ch.zhaw.catan.game.logic.Thief;
-import ch.zhaw.catan.game.logic.TurnOrderHandler;
+import ch.zhaw.catan.game.logic.*;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
 import org.beryx.textio.TextIO;
@@ -39,7 +36,8 @@ public class SettlersGame {
     private final SettlersBoard settlersBoard = new SettlersBoard();
     private final SettlersBoardTextView settlersBoardTextView = new SettlersBoardTextView(settlersBoard);
     private final Thief thief = new Thief(settlersBoard);
-    private final CommandHandler commandHandler = new CommandHandler(turnOrderHandler, settlersBoard, thief);
+    private final RollDice rollDice = new RollDice(settlersBoard, turnOrderHandler, thief);
+    private final CommandHandler commandHandler = new CommandHandler(turnOrderHandler, settlersBoard);
     private final int requiredPointsToWin;
 
     /**
@@ -66,7 +64,9 @@ public class SettlersGame {
         while (!hasWinner()) {
             if (!samePlayerAsBefore) {
                 final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
-                textTerminal.println("It's " + currentPlayer.getPlayerFaction() + " turn. Choose your actions down below:");
+                textTerminal.println("It's " + currentPlayer.getPlayerFaction() + " turn.");
+                rollDice.rollDice();
+                textTerminal.println("Choose your actions down below:");
                 textTerminal.println("If you are done with your turn, enter END TURN command.");
                 commandHandler.executeCommand(SHOW_COMMANDS);
             }
