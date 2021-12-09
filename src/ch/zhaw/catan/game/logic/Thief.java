@@ -15,7 +15,7 @@ public class Thief {
     private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
     private Point thiefPosition;
 
-    public Thief(SettlersBoard settlersBoard){
+    public Thief(SettlersBoard settlersBoard) {
         this.settlersBoard = settlersBoard;
     }
 
@@ -42,10 +42,10 @@ public class Thief {
      *
      * @author fupat002
      */
-    public void printInfoOfFieldOccupiedByThief(){
-        textTerminal.println("The thief is on this field ("+ thiefPosition +").");
+    public void printInfoOfFieldOccupiedByThief() {
+        textTerminal.println("The thief is on this field (" + thiefPosition + ").");
         textTerminal.println("This Factions don't get any " + settlersBoard.getResourceOfField(thiefPosition) + ":");
-        for(Point occupiedCorner : settlersBoard.getOccupiedCornerCoordinatesOfField(thiefPosition)){
+        for (Point occupiedCorner : settlersBoard.getOccupiedCornerCoordinatesOfField(thiefPosition)) {
             textTerminal.println(settlersBoard.getBuildingOnCorner(occupiedCorner).getOwner().getPlayerFaction().toString());
         }
     }
@@ -53,9 +53,9 @@ public class Thief {
     /**
      * Returns true if the thief is on the field.
      *
-     * @param field     the coordinates of the field
-     * @return          the presence of the thief in the field
-     * @author          fupat002
+     * @param field the coordinates of the field
+     * @return the presence of the thief in the field
+     * @author fupat002
      */
     public boolean isThiefOnField(Point field) {
         return thiefPosition != null && thiefPosition.equals(field);
@@ -67,15 +67,15 @@ public class Thief {
 
     public void stealCardFromNeighbor(TurnOrderHandler turnOrderHandler) {
         Player currentPlayer = turnOrderHandler.getCurrentPlayer();
-        if (settlersBoard.hasNeighborWithRessource(thiefPosition, currentPlayer)) {
+        if (settlersBoard.hasNeighborWithResource(thiefPosition, currentPlayer)) {
             stealRandomCard(turnOrderHandler.getCurrentPlayer(), settlersBoard.getNeighbor(thiefPosition, currentPlayer));
         }
     }
 
-    private void printConsequencesOfThiefPlacement(){
-        if(!settlersBoard.getOccupiedCornerCoordinatesOfField(thiefPosition).isEmpty()){
+    private void printConsequencesOfThiefPlacement() {
+        if (!settlersBoard.getOccupiedCornerCoordinatesOfField(thiefPosition).isEmpty()) {
             printInfoOfFieldOccupiedByThief();
-        }else{
+        } else {
             textTerminal.println("So far nobody has been affected with this placement.");
         }
     }

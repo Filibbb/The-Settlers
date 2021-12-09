@@ -1,18 +1,18 @@
 package ch.zhaw.catan.board;
 
+import ch.zhaw.catan.infrastructure.AbstractInfrastructure;
 import ch.zhaw.catan.infrastructure.Road;
-import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.catan.player.Player;
 import ch.zhaw.hexboard.HexBoard;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * This is the Settlers game board that is built on a hex board.
  */
-public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
+public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, String> {
     private final Map<Point, Integer> diceNumberPlacements;
     private final Map<Point, Land> landTilePlacement;
 
@@ -67,10 +67,7 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
      */
     public static Map<Point, Land> getDefaultLandTilePlacement() {
         Map<Point, Land> landPlacements = new HashMap<>();
-        Point[] water = {new Point(4, 2), new Point(6, 2), new Point(8, 2), new Point(10, 2),
-                new Point(3, 5), new Point(11, 5), new Point(2, 8), new Point(12, 8), new Point(1, 11),
-                new Point(13, 11), new Point(2, 14), new Point(12, 14), new Point(3, 17), new Point(11, 17),
-                new Point(4, 20), new Point(6, 20), new Point(8, 20), new Point(10, 20)};
+        Point[] water = {new Point(4, 2), new Point(6, 2), new Point(8, 2), new Point(10, 2), new Point(3, 5), new Point(11, 5), new Point(2, 8), new Point(12, 8), new Point(1, 11), new Point(13, 11), new Point(2, 14), new Point(12, 14), new Point(3, 17), new Point(11, 17), new Point(4, 20), new Point(6, 20), new Point(8, 20), new Point(10, 20)};
 
         for (Point p : water) {
             landPlacements.put(p, Land.WATER);
@@ -150,7 +147,7 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         return getFields(corner);
     }
 
-    public Settlement getBuildingOnCorner(Point cornerCoordinates) {
+    public AbstractInfrastructure getBuildingOnCorner(Point cornerCoordinates) {
         return getCorner(cornerCoordinates);
     }
 
@@ -158,9 +155,9 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         return landTilePlacement.get(field).equals(Land.WATER);
     }
 
-    public boolean hasNeighborWithRessource(Point field, Player currentPlayer) {
-        List<Settlement> neighbors = getNeighborsWithResources(field, currentPlayer);
-        for (Settlement neighbor : neighbors) {
+    public boolean hasNeighborWithResource(Point field, Player currentPlayer) {
+        List<AbstractInfrastructure> neighbors = getNeighborsWithResources(field, currentPlayer);
+        for (AbstractInfrastructure neighbor : neighbors) {
             if (neighbor.getOwner().getTotalResourceCardCount() > 0) {
                 return true;
             }
@@ -170,7 +167,7 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
 
     public Player getNeighbor(Point field, Player currentPlayer) {
         Random random = new Random();
-        List<Settlement> neighbors = getNeighborsWithResources(field, currentPlayer);
+        List<AbstractInfrastructure> neighbors = getNeighborsWithResources(field, currentPlayer);
         if (neighbors.size() > 1) {
             return neighbors.get(random.nextInt(neighbors.size())).getOwner();
         } else {
@@ -178,9 +175,9 @@ public class SettlersBoard extends HexBoard<Land, Settlement, Road, String> {
         }
     }
 
-    private List<Settlement> getNeighborsWithResources(Point field, Player currentPlayer) {
+    private List<AbstractInfrastructure> getNeighborsWithResources(Point field, Player currentPlayer) {
         List<Point> occupiedCorners = getOccupiedCornerCoordinatesOfField(field);
-        List<Settlement> neighbors = new ArrayList<>();
+        List<AbstractInfrastructure> neighbors = new ArrayList<>();
         for (Point occupiedCorner : occupiedCorners) {
             Player neighbor = getBuildingOnCorner(occupiedCorner).getOwner();
             if (!currentPlayer.equals(neighbor) && neighbor.getTotalResourceCardCount() > 0) {

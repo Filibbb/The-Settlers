@@ -28,6 +28,15 @@ public class Settlement extends AbstractInfrastructure {
         owner.incrementWinningPoints();
     }
 
+    /**
+     * Method for the Settlement builds in the founding phase.
+     *
+     * @param owner       player to whom the building should be assigned to.
+     * @param coordinates Position where the settlement is being set to.
+     * @param board       the current board to place the settlements on.
+     * @return true if building was successful, false if not.
+     * @author weberph5
+     */
     public static boolean initialSettlementBuild(Player owner, Point coordinates, SettlersBoard board) {
         if (board.hasCorner(coordinates) && board.getCorner(coordinates) == null && board.getNeighboursOfCorner(coordinates).isEmpty()) {
             board.setCorner(coordinates, new Settlement(owner, coordinates));
@@ -38,7 +47,7 @@ public class Settlement extends AbstractInfrastructure {
     /**
      * Build method for building a new Settlement.
      *
-     * @param owner       player to whom the building should be assigned to.
+     * @param owner       player to whom the settlement should be assigned to.
      * @param coordinates position where the settlement is being set to.
      * @param board       the current board to place the settlements on.
      * @return true if successfully built, false if not.
@@ -53,7 +62,7 @@ public class Settlement extends AbstractInfrastructure {
     }
 
     private static boolean canBuild(Player owner, Point coordinates, SettlersBoard board) {
-        return (board.hasCorner(coordinates) && board.getCorner(coordinates) == null && board.getNeighboursOfCorner(coordinates).isEmpty() && hasRoadAdjacent(owner, coordinates, board) && owner.checkLiquidity(Structure.SETTLEMENT) && (owner.hasEnoughInStructureStock(Structure.SETTLEMENT)));
+        return (board.hasCorner(coordinates) && board.getCorner(coordinates) == null && board.getNeighboursOfCorner(coordinates).isEmpty() && hasRoadAdjacent(owner, coordinates, board) && owner.checkLiquidity(Structure.SETTLEMENT) && owner.hasEnoughInStructureStock(Structure.SETTLEMENT));
     }
 
     private static void paySettlement(Player owner) {
