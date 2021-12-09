@@ -304,7 +304,7 @@ public class HexBoard<F, C, E, A> {
      *
      * @return the non-null corner data elements
      */
-    public List<C> getCorners() {
+    public List<C> getNonNullCorners() {
         List<C> result = new LinkedList<>();
         for (C c : this.corner.values()) {
             if (c != null) {
@@ -358,7 +358,7 @@ public class HexBoard<F, C, E, A> {
      * @param corner the location of the corner
      * @return the list with the (non-null) field data
      */
-    public List<F> getFields(Point corner) {
+    public List<F> getFieldsOfCorner(Point corner) {
         List<F> result = new LinkedList<>();
         if (isCornerCoordinate(corner)) {
             for (Point f : getAdjacentFields(corner)) {

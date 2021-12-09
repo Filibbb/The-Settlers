@@ -73,4 +73,8 @@ public abstract class AbstractInfrastructure {
     public Player getOwner() {
         return owner;
     }
+
+    public Point getPosition() {
+        return position;
+    }
 }
