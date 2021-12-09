@@ -44,7 +44,7 @@ public class Player {
     /**
      * Check if the current player has enough structures remaining of that type to build specified structure
      *
-     * @param structure the structure the player wanted to build
+     * @param structure the structure the player wants to build
      * @return true if player has enough remaining structures, false otherwise.
      * @throws RuntimeException if unknown structure type is entered.
      * @author weberph5

@@ -17,7 +17,7 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
     private final Map<Point, Land> landTilePlacement;
 
     /**
-     * Creates a default settlers board with default initialization of board and dicenumber placements
+     * Creates a default settlers board with default initialization of board and dice number placements
      */
     public SettlersBoard() {
         landTilePlacement = getDefaultLandTilePlacement();
@@ -26,7 +26,7 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
     }
 
     /**
-     * Returns the defaults mapping of the dice values per field.
+     * Returns the default mapping of the dice values per field.
      *
      * @return the dice values per field
      * @author tebe
