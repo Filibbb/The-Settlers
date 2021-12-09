@@ -1,5 +1,6 @@
 package ch.zhaw.catan;
 
+import ch.zhaw.catan.board.Land;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.board.SettlersBoardTextView;
 import ch.zhaw.catan.commands.CommandHandler;
@@ -8,6 +9,8 @@ import ch.zhaw.catan.game.logic.Dice;
 import ch.zhaw.catan.game.logic.DiceResult;
 import ch.zhaw.catan.game.logic.RollDice;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
+import ch.zhaw.catan.infrastructure.AbstractInfrastructure;
+import ch.zhaw.catan.infrastructure.Settlement;
 import ch.zhaw.catan.player.Player;
 
 import java.awt.*;
@@ -82,7 +85,6 @@ public class SettlersGame {
     private void startFoundationPhase() {
         printMessage("Now that everything is settled. Lets found your settlements!");
         final List<Player> playerTurnOrder = turnOrderHandler.getPlayerTurnOrder();
-
         foundationPhase(playerTurnOrder, false);
 
         printMessage("First placement done. Now reverse order to place the last settlement of the foundation phase.");
@@ -90,7 +92,20 @@ public class SettlersGame {
         foundationPhase(playerTurnOrder, true);
 
         printMessage("Foundation phase complete! Swapping to normal game now! Good luck!");
+        handoutResourcesAfterFoundationPhase();
         settlersBoardTextView.printBoard();
+    }
+
+    private void handoutResourcesAfterFoundationPhase() {
+        for (AbstractInfrastructure infrastructure : settlersBoard.getNonNullCorners()) {
+            if (infrastructure instanceof Settlement) {
+                for (Land land : settlersBoard.getFieldsOfCorner(infrastructure.getPosition())) {
+                    if (!land.equals(Land.WATER)) {
+                        infrastructure.getOwner().addResourceCardToHand(land.getResource());
+                    }
+                }
+            }
+        }
     }
 
     private void foundationPhase(final List<Player> playerTurnOrder, boolean reverse) {
@@ -102,7 +117,6 @@ public class SettlersGame {
             Point settlementCoordinates = buildInitialSettlement(player);
             buildInitialRoad(player, settlementCoordinates);
         }
-
     }
 
     private Point buildInitialSettlement(Player player) {

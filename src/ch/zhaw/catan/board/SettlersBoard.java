@@ -76,24 +76,27 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
         return pointsOfFieldWithDiceValue;
     }
 
-    /**
-     * Returns the {@link Land}s adjacent to the specified corner.
-     *
-     * @param corner the corner
-     * @return the list with the adjacent {@link Land}s
-     */
-    public List<Land> getLandsForCorner(Point corner) {
-        return getFields(corner);
-    }
-
     public AbstractInfrastructure getBuildingOnCorner(Point cornerCoordinates) {
         return getCorner(cornerCoordinates);
     }
 
+    /**
+     * Checks if the field is water
+     *
+     * @param field center point of field
+     * @return true if the field is water
+     */
     public boolean isWater(Point field) {
         return landTilePlacement.get(field).equals(WATER);
     }
 
+    /**
+     * Returns true if there are other players with resources settled on the field.
+     *
+     * @param field         to check the neighbors from
+     * @param currentPlayer the current player
+     * @return true if the player has a neighbor with resources
+     */
     public boolean hasNeighborWithResource(Point field, Player currentPlayer) {
         List<AbstractInfrastructure> neighbors = getNeighborsWithResources(field, currentPlayer);
         for (AbstractInfrastructure neighbor : neighbors) {
@@ -104,7 +107,14 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
         return false;
     }
 
-    public Player getNeighbor(Point field, Player currentPlayer) {
+    /**
+     * Returns a random neighbor of a player on a specific field.
+     *
+     * @param field         a field
+     * @param currentPlayer the current player
+     * @return a random neighbor on the field
+     */
+    public Player getRandomNeighbor(Point field, Player currentPlayer) {
         Random random = new Random();
         List<AbstractInfrastructure> neighbors = getNeighborsWithResources(field, currentPlayer);
         if (neighbors.size() > 1) {
@@ -174,7 +184,7 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
      * @return true if at least one surrounding field is not water
      */
     public boolean isNotWaterOnlyCorner(Point coordinates) {
-        List<Land> fieldsAroundCorner = getFields(coordinates);
+        List<Land> fieldsAroundCorner = getFieldsOfCorner(coordinates);
         for (Land land : fieldsAroundCorner) {
             if (land.getResource() != null) {
                 return true;

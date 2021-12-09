@@ -65,7 +65,7 @@ public class Thief {
     public void stealCardFromNeighbor(TurnOrderHandler turnOrderHandler) {
         Player currentPlayer = turnOrderHandler.getCurrentPlayer();
         if (settlersBoard.hasNeighborWithResource(thiefPosition, currentPlayer)) {
-            stealRandomCard(turnOrderHandler.getCurrentPlayer(), settlersBoard.getNeighbor(thiefPosition, currentPlayer));
+            stealRandomCard(turnOrderHandler.getCurrentPlayer(), settlersBoard.getRandomNeighbor(thiefPosition, currentPlayer));
         }
     }
 

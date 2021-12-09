@@ -99,14 +99,9 @@ public class ThreePlayerStandard {
             new Tuple<>(new Point(12, 12), new Point(8, 6)), Faction.values()[2],
             new Tuple<>(new Point(2, 10), new Point(8, 18)));
     public static final Map<Faction, Map<Resource, Integer>> INITIAL_PLAYER_CARD_STOCK = Map.of(
-            Faction.values()[0], Map.of(Resource.GRAIN, 0, Resource.WOOL, 1,
-                    Resource.BRICK, 1, Resource.ORE, 0, Resource.LUMBER, 0),
-            Faction.values()[1],
-            Map.of(Resource.GRAIN, 0, Resource.WOOL, 2, Resource.BRICK, 0,
-                    Resource.ORE, 0, Resource.LUMBER, 0),
-            Faction.values()[2],
-            Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
-                    Resource.ORE, 0, Resource.LUMBER, 0));
+            Faction.values()[0], Map.of(Resource.GRAIN, 1, Resource.WOOL, 1, Resource.BRICK, 1, Resource.ORE, 1, Resource.LUMBER, 1),
+            Faction.values()[1], Map.of(Resource.GRAIN, 1, Resource.WOOL, 3, Resource.BRICK, 0, Resource.ORE, 0, Resource.LUMBER, 0),
+            Faction.values()[2], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1, Resource.ORE, 0, Resource.LUMBER, 1));
     public static final Map<Faction, Map<Resource, Integer>> BANK_ALMOST_EMPTY_RESOURCE_CARD_STOCK = Map.of(
             Faction.values()[0], Map.of(Resource.GRAIN, 8, Resource.WOOL, 9,
                     Resource.BRICK, 9, Resource.ORE, 7, Resource.LUMBER, 9),
@@ -203,7 +198,7 @@ public class ThreePlayerStandard {
             final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
             Faction faction = currentPlayer.getPlayerFaction();
             assertTrue(initialSettlementBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, settlersBoard));
-            //add payout here
+
             assertTrue(initialRoadBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, INITIAL_ROAD_ENDPOINTS.get(faction).second, settlersBoard));
         }
 
