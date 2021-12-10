@@ -18,7 +18,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static ch.zhaw.catan.commands.Commands.*;
+import static ch.zhaw.catan.commands.Commands.SHOW_COMMANDS;
+import static ch.zhaw.catan.commands.Commands.getCommandByRepresentation;
 import static ch.zhaw.catan.infrastructure.Road.initialRoadBuild;
 import static ch.zhaw.catan.infrastructure.Settlement.initialSettlementBuild;
 import static ch.zhaw.catan.io.CommandLineHandler.*;
@@ -61,24 +62,25 @@ public class SettlersGame {
     }
 
     private void startMainPhase() {
-        boolean samePlayerAsBefore = false;
         while (!hasWinner()) {
-            if (!samePlayerAsBefore) {
-                final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
-                printMessage("It's " + currentPlayer.getPlayerFaction() + " turn.");
-                rollDice.rollDice();
-                printMessage("Choose your actions down below:");
-                printMessage("If you are done with your turn, enter END TURN command.");
-                commandHandler.executeCommand(SHOW_COMMANDS, turnOrderHandler, settlersBoard);
-            }
-            final String userInput = promptNextUserAction();
-            final Commands commandByRepresentation = getCommandByRepresentation(userInput);
-            samePlayerAsBefore = commandByRepresentation != null && commandByRepresentation != END_TURN;
-            if (commandByRepresentation != null) {
-                commandHandler.executeCommand(commandByRepresentation, turnOrderHandler, settlersBoard);
-            } else {
-                printMessage("This command is not available. Use 'SHOW COMMANDS' for available commands.");
-            }
+            final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
+            printMessage("It's " + currentPlayer.getPlayerFaction() + " turn.");
+            rollDice.rollDice();
+            printMessage("Choose your actions down below:");
+            printMessage("If you are done with your turn, enter END TURN command.");
+            commandHandler.executeCommand(SHOW_COMMANDS, turnOrderHandler, settlersBoard);
+            playerActionPhase();
+        }
+    }
+
+    private void playerActionPhase() {
+        final String userInput = promptNextUserAction();
+        final Commands commandByRepresentation = getCommandByRepresentation(userInput);
+        if (commandByRepresentation != null) {
+            commandHandler.executeCommand(commandByRepresentation, turnOrderHandler, settlersBoard);
+        } else {
+            printMessage("This command is not available. Use 'SHOW COMMANDS' for available commands.");
+            playerActionPhase();
         }
     }
 
