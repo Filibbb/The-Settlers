@@ -1,10 +1,10 @@
 package ch.zhaw.catan.game.logic;
 
-import ch.zhaw.catan.SettlersGameTestBasic;
+import ch.zhaw.catan.GameBankHandler;
 import ch.zhaw.catan.board.Resource;
-import ch.zhaw.catan.games.GameDataContainer;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
+import ch.zhaw.catan.utilities.GameDataContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,15 +12,16 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-import static ch.zhaw.catan.games.ThreePlayerStandard.getAfterSetupPhase;
 import static ch.zhaw.catan.infrastructure.Settlement.initialSettlementBuild;
+import static ch.zhaw.catan.utilities.PlayerResourceStockUtility.assertPlayerResourceCardStockEquals;
+import static ch.zhaw.catan.utilities.ThreePlayerStandard.getAfterSetupPhase;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ThiefTest {
     private final static Point THIEF_POSITION = new Point(6, 8);
+    private final GameBankHandler gameBankHandler = new GameBankHandler();
     private GameDataContainer model;
     private Thief thief;
-    private RollDice rollDice;
 
     /**
      * Creates thief test.
@@ -28,18 +29,17 @@ public class ThiefTest {
     @BeforeEach
     public void setUp() {
         model = getAfterSetupPhase();
-        thief = model.getThief();
-        rollDice = new RollDice(model.getSettlersBoard(), model.getTurnOrderHandler(), model.getThief());
+        thief = model.getSettlersBoard().getThief();
     }
 
     /**
      * Tests whether the thief works.
      */
     @Test
-    public void stealCardFromNeighborAfterThiefPlacementTest(){
+    public void stealCardFromNeighborAfterThiefPlacementTest() {
         final TurnOrderHandler turnOrderHandler = model.getTurnOrderHandler();
 
-        for(Player player : turnOrderHandler.getPlayerTurnOrder()){
+        for (Player player : turnOrderHandler.getPlayerTurnOrder()) {
             player.addResourceCardToHand(Resource.ORE);
         }
         assertTrue(initialSettlementBuild(model.getTurnOrderHandler().getPlayerTurnOrder().get(1), new Point(7, 7), model.getSettlersBoard()));
@@ -47,10 +47,10 @@ public class ThiefTest {
         thief.stealCardFromNeighbor(model.getTurnOrderHandler());
 
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
-                Faction.values()[0], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 2, Resource.LUMBER, 0),
-                Faction.values()[1], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 0, Resource.LUMBER, 0),
-                Faction.values()[2], Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 1, Resource.LUMBER, 0));
-        SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
+                Faction.RED, Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 2, Resource.LUMBER, 0),
+                Faction.BLUE, Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 0, Resource.LUMBER, 0),
+                Faction.GREEN, Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 0, Resource.ORE, 1, Resource.LUMBER, 0));
+        assertPlayerResourceCardStockEquals(model, expected);
     }
 
 
@@ -58,10 +58,10 @@ public class ThiefTest {
      * Tests whether the payout/non-payout works when the thief blocks the field.
      */
     @Test
-    public void blockedFieldByThief(){
+    public void blockedFieldByThief() {
         thief.setThiefPosition(THIEF_POSITION);
-        for (int i : java.util.List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
-            rollDice.handoutResourcesOfTheRolledField(i);
+        for (int i : List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
+            gameBankHandler.handoutResourcesOfTheRolledField(i, model.getSettlersBoard());
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
                 Faction.values()[0], Map.of(Resource.GRAIN, 1, Resource.WOOL, 1,
@@ -72,7 +72,7 @@ public class ThiefTest {
                 Faction.values()[2],
                 Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
                         Resource.ORE, 0, Resource.LUMBER, 1));
-        SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
+        assertPlayerResourceCardStockEquals(model, expected);
     }
 
     /**
@@ -84,7 +84,7 @@ public class ThiefTest {
         assertTrue(initialSettlementBuild(currentPlayer, new Point(7, 7), model.getSettlersBoard()));
         thief.setThiefPosition(THIEF_POSITION);
         for (int diceValue : List.of(2, 3, 4, 5, 6, 8, 9, 10, 11, 12)) {
-            rollDice.handoutResourcesOfTheRolledField(diceValue);
+            gameBankHandler.handoutResourcesOfTheRolledField(diceValue, model.getSettlersBoard());
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
                 Faction.values()[0], Map.of(Resource.GRAIN, 2, Resource.WOOL, 2,
@@ -95,6 +95,6 @@ public class ThiefTest {
                 Faction.values()[2],
                 Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
                         Resource.ORE, 0, Resource.LUMBER, 1));
-        SettlersGameTestBasic.assertPlayerResourceCardStockEquals(model, expected);
+        assertPlayerResourceCardStockEquals(model, expected);
     }
 }

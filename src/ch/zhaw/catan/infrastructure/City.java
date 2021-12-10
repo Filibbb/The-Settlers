@@ -1,12 +1,18 @@
 package ch.zhaw.catan.infrastructure;
 
-import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoard;
-import ch.zhaw.catan.board.Structure;
 import ch.zhaw.catan.player.Player;
 
 import java.awt.*;
 
+import static ch.zhaw.catan.infrastructure.Structure.CITY;
+import static ch.zhaw.catan.infrastructure.Structure.SETTLEMENT;
+
+/**
+ * The city class
+ *
+ * @author weberph5
+ */
 public class City extends AbstractInfrastructure {
     /**
      * Cities may only be built with the build method. Therefore, constructor is private.
@@ -17,9 +23,6 @@ public class City extends AbstractInfrastructure {
      */
     private City(Player owner, Point position) {
         super(owner, position);
-        owner.increaseBuiltStructures(Structure.CITY);
-        owner.decreaseBuiltStructures(Structure.SETTLEMENT);
-        owner.incrementWinningPoints();
     }
 
     /**
@@ -32,19 +35,57 @@ public class City extends AbstractInfrastructure {
      * @author weberph5
      */
     public static boolean build(Player owner, Point coordinates, SettlersBoard board) {
-        if (canBuild(owner, coordinates, board)) {
-            board.setCorner(coordinates, new City(owner, coordinates));
-            payCity(owner);
+        final City city = new City(owner, coordinates);
+        if (city.canBuild(board)) {
+            board.buildCity(city);
+            city.finalizeBuild();
+            owner.payForStructure(city.getStructureType());
             return true;
-        } else return false;
+        } else {
+            return false;
+        }
     }
 
-    private static boolean canBuild(Player owner, Point coordinates, SettlersBoard board) {
-        return board.getCorner(coordinates) != null && board.getCorner(coordinates).getOwner().equals(owner) && owner.checkLiquidity(Structure.CITY) && owner.hasEnoughInStructureStock(Structure.CITY);
+    @Override
+    protected void finalizeBuild() {
+        super.finalizeBuild();
+        getOwner().decreaseStructureCounterFor(SETTLEMENT);
+        getOwner().incrementWinningPoints();
     }
 
-    private static void payCity(Player owner) {
-        owner.removeResourceCardFromHand(Resource.ORE, 3);
-        owner.removeResourceCardFromHand(Resource.WOOL, 2);
+    /**
+     * Get Structure Type as Enum
+     *
+     * @return the structure type as enum
+     */
+    @Override
+    protected Structure getStructureType() {
+        return CITY;
+    }
+
+    /**
+     * Checks if City can be built.
+     *
+     * @param board the board to check it upon
+     * @return true if it can be built, false otherwise
+     */
+    @Override
+    protected boolean canBuild(SettlersBoard board) {
+        final Player owner = getOwner();
+        return board.getCorner(getPosition()) != null
+                && board.getCorner(getPosition()).getOwner().equals(owner)
+                && board.getCorner(getPosition()).getStructureType().equals(SETTLEMENT)
+                && owner.hasEnoughLiquidityFor(getStructureType())
+                && owner.hasEnoughInStructureStock(getStructureType());
+    }
+
+    /**
+     * Overrides toString() so it displays faction in capitol letters on board.
+     *
+     * @return player faction representation in capital letters
+     */
+    @Override
+    public String toString() {
+        return super.toString().toUpperCase();
     }
 }

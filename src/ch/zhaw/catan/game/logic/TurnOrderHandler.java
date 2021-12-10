@@ -25,7 +25,7 @@ public class TurnOrderHandler {
      * @return boolean value expressing the success of determining the initial turnorder
      * @author fupat002, abuechi
      */
-    public boolean determineInitialTurnOrder(List<DiceResult> diceResults) {
+    public boolean determineInitialTurnOrder(final List<DiceResult> diceResults) {
         int highestDiceValue = getMaxDiceValue(diceResults);
         if (highestValueIsDuplicated(diceResults, highestDiceValue)) {
             return false;

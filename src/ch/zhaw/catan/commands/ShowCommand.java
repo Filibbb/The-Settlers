@@ -1,8 +1,6 @@
 package ch.zhaw.catan.commands;
 
-import org.beryx.textio.TextIO;
-import org.beryx.textio.TextIoFactory;
-import org.beryx.textio.TextTerminal;
+import static ch.zhaw.catan.io.CommandLineHandler.printMessage;
 
 /**
  * Command class for the ShowCommand command
@@ -11,8 +9,6 @@ import org.beryx.textio.TextTerminal;
  * @version 1.0.0
  */
 public class ShowCommand implements Command {
-    private final TextIO textIO = TextIoFactory.getTextIO();
-    private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
 
     /**
      * Shows a list and description of all available commands.
@@ -21,11 +17,11 @@ public class ShowCommand implements Command {
      */
     @Override
     public void execute() {
-        textTerminal.println("Available Commands (Case sensitive!):");
-        textTerminal.println("");
+        printMessage("Available Commands (Case sensitive!):");
+        printMessage("");
         for (Commands commands : Commands.values()) {
-            textTerminal.println(commands.getCommandInfo());
+            printMessage(commands.getCommandInfo());
         }
-        textTerminal.println("");
+        printMessage("");
     }
 }

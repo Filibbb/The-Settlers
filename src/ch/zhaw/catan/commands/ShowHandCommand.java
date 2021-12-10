@@ -1,10 +1,8 @@
 package ch.zhaw.catan.commands;
 
-import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.player.Player;
-import org.beryx.textio.TextIO;
-import org.beryx.textio.TextIoFactory;
-import org.beryx.textio.TextTerminal;
+
+import static ch.zhaw.catan.io.CommandLineHandler.printMessage;
 
 /**
  * Contains the logic for the ShowHandCommand
@@ -13,9 +11,7 @@ import org.beryx.textio.TextTerminal;
  */
 public class ShowHandCommand implements Command {
 
-    private final TurnOrderHandler turnOrderHandler;
-    private final TextIO textIO = TextIoFactory.getTextIO();
-    private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
+    private final Player currentPlayer;
 
     /**
      * Creates an instance of ShowHandCommand
@@ -23,8 +19,8 @@ public class ShowHandCommand implements Command {
      * @param turnOrderHandler the current turnOrderHandler
      * @author weberph5
      */
-    public ShowHandCommand(TurnOrderHandler turnOrderHandler) {
-        this.turnOrderHandler = turnOrderHandler;
+    public ShowHandCommand(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 
     /**
@@ -34,7 +30,6 @@ public class ShowHandCommand implements Command {
      */
     @Override
     public void execute() {
-        Player currentPlayer = turnOrderHandler.getCurrentPlayer();
-        textTerminal.println(currentPlayer.getResourceCardsInHand().toString());
+        printMessage(currentPlayer.getResourceCardsInHand().toString());
     }
 }

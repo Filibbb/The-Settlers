@@ -107,7 +107,7 @@ public class HexBoardTextView<F, C, E, A> {
     private final Label defaultDiagonalEdgeDownLabel = new Label('\\', '\\');
     private final Label defaultDiagonalEdgeUpLabel = new Label('/', '/');
     private final Label defaultVerticalEdgeLabel = new Label('|', '|');
-    private Map<Point, Label> fixedLowerFieldLabels;
+    private final Map<Point, Label> fixedLowerFieldLabels;
 
     /**
      * Creates a view for the specified board.

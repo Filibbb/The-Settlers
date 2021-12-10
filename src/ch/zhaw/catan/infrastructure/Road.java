@@ -1,11 +1,11 @@
 package ch.zhaw.catan.infrastructure;
 
-import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoard;
-import ch.zhaw.catan.board.Structure;
 import ch.zhaw.catan.player.Player;
 
 import java.awt.*;
+
+import static ch.zhaw.catan.infrastructure.Structure.ROAD;
 
 /**
  * Class that contains the logic regarding a roads.
@@ -14,11 +14,10 @@ import java.awt.*;
  * @version 1.0.0
  */
 public class Road extends AbstractInfrastructure {
-
     private final Point endPoint;
 
     /**
-     * Roads may only be built with the build method. Therefore constructor is private.
+     * Roads may only be built with the build method. Therefore, constructor is private.
      *
      * @param owner      player owner of the street
      * @param startPoint startPoint where the road starts.
@@ -28,25 +27,6 @@ public class Road extends AbstractInfrastructure {
     private Road(Player owner, Point startPoint, Point endPoint) {
         super(owner, startPoint);
         this.endPoint = endPoint;
-        owner.increaseBuiltStructures(Structure.ROAD);
-    }
-
-    /**
-     * Build method for building a new road.
-     *
-     * @param owner      player to whom the road should be assigned to.
-     * @param startPoint start point where the road is being set to.
-     * @param endPoint   end point where the road is being set to.
-     * @return true if successfully built, false if not.
-     * @author weberph5
-     */
-    public static boolean build(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
-        if (canBuild(owner, startPoint, endPoint, board)) {
-            board.setEdge(startPoint, endPoint, new Road(owner, startPoint, endPoint));
-            payRoad(owner);
-            return true;
-
-        } else return false;
     }
 
     /**
@@ -60,18 +40,71 @@ public class Road extends AbstractInfrastructure {
      * @author weberph5
      */
     public static boolean initialRoadBuild(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
-        if (board.hasEdge(startPoint, endPoint) && board.getEdge(startPoint, endPoint) == null && board.getCorner(startPoint) != null && isNotWaterOnlyCorner(endPoint, board)) {
-            board.setEdge(startPoint, endPoint, new Road(owner, startPoint, endPoint));
+        final Road road = new Road(owner, startPoint, endPoint);
+        if (road.isValidBuildPositionForRoad(board) && board.getCorner(startPoint) != null) {
+            buildRoad(board, road);
             return true;
-        } else return false;
+        } else {
+            return false;
+        }
     }
 
-    private static boolean canBuild(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
-        return (owner.checkLiquidity(Structure.ROAD) && owner.hasEnoughInStructureStock(Structure.ROAD) && board.hasEdge(startPoint, endPoint) && board.getEdge(startPoint, endPoint) == null && hasRoadAdjacent(owner, startPoint, board) && isNotWaterOnlyCorner(endPoint, board));
+    /**
+     * Build method for building a new road.
+     *
+     * @param owner      player to whom the road should be assigned to.
+     * @param startPoint start point where the road is being set to.
+     * @param endPoint   end point where the road is being set to.
+     * @return true if successfully built, false if not.
+     * @author weberph5
+     */
+    public static boolean build(Player owner, Point startPoint, Point endPoint, SettlersBoard board) {
+        final Road road = new Road(owner, startPoint, endPoint);
+        if (road.canBuild(board)) {
+            buildRoad(board, road);
+            owner.payForStructure(road.getStructureType());
+            return true;
+        }
+        return false;
     }
 
-    private static void payRoad(Player owner) {
-        owner.removeResourceCardFromHand(Resource.LUMBER);
-        owner.removeResourceCardFromHand(Resource.BRICK);
+    private static void buildRoad(SettlersBoard board, Road road) {
+        board.buildRoad(road);
+        road.finalizeBuild();
+    }
+
+    /**
+     * Checks if road can be built.
+     *
+     * @param board the board to check it upon
+     * @return true if it can be built, false otherwise
+     */
+    @Override
+    protected boolean canBuild(SettlersBoard board) {
+        final Player owner = getOwner();
+        return owner.hasEnoughLiquidityFor(getStructureType())
+                && owner.hasEnoughInStructureStock(getStructureType())
+                && isValidBuildPositionForRoad(board)
+                && (hasOwnRoadAdjacent(getPosition(), board) || hasOwnRoadAdjacent(endPoint, board));
+    }
+
+    private boolean isValidBuildPositionForRoad(SettlersBoard board) {
+        return board.hasEdge(getPosition(), endPoint)
+                && board.isCornerNotSurroundedByWater(endPoint)
+                && board.getEdge(getPosition(), endPoint) == null;
+    }
+
+    /**
+     * Get Structure Type as Enum
+     *
+     * @return the structure type as enum
+     */
+    @Override
+    protected Structure getStructureType() {
+        return ROAD;
+    }
+
+    public Point getEndPoint() {
+        return endPoint;
     }
 }

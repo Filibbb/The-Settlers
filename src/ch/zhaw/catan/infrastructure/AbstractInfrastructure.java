@@ -1,6 +1,5 @@
 package ch.zhaw.catan.infrastructure;
 
-import ch.zhaw.catan.board.Land;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.player.Player;
 
@@ -28,19 +27,31 @@ public abstract class AbstractInfrastructure {
     }
 
     /**
+     * Get Structure Type as Enum implemented by subclasses
+     *
+     * @return the structure type as enum
+     */
+    protected abstract Structure getStructureType();
+
+    /**
+     * Abstract method to check if structure can be built
+     *
+     * @return boolean if structure can be built
+     */
+    protected abstract boolean canBuild(SettlersBoard board);
+
+    /**
      * Checks if the position has a road adjacent to it since this is a requirement for building a settlement or road.
      *
-     * @param owner       the player that owns the structure
-     * @param coordinates the coordinates where structure is being built
-     * @param board       the current SettlersBoard
+     * @param cornerCoordinates the cornerCoordinates where structure is being built
+     * @param board             the current SettlersBoard
      * @return true if a road is adjacent, false if not
      */
-    protected static boolean hasRoadAdjacent(Player owner, Point coordinates, SettlersBoard board) {
-        if (!board.getAdjacentEdges(coordinates).isEmpty()) {
-            List<Road> surroundingRoads = board.getAdjacentEdges(coordinates);
-            for (Road road : surroundingRoads) {
-                Player roadOwner = road.getOwner();
-                if (roadOwner.equals(owner)) {
+    protected boolean hasOwnRoadAdjacent(Point cornerCoordinates, SettlersBoard board) {
+        final List<Road> adjacentEdges = board.getAdjacentEdges(cornerCoordinates);
+        if (!adjacentEdges.isEmpty()) {
+            for (Road adjacentRoads : adjacentEdges) {
+                if (adjacentRoads.getOwner().getPlayerFaction().equals(owner.getPlayerFaction())) {
                     return true;
                 }
             }
@@ -49,20 +60,10 @@ public abstract class AbstractInfrastructure {
     }
 
     /**
-     * Checks if the corner is not on the edge of the board surrounded by water only
-     *
-     * @param coordinates the coordinates where structure is being built
-     * @param board       the coordinates where structure is being built
-     * @return true if at least one surrounding field is not water
+     * Method for finalizing build of structure. Increments counter for owner of the currently built structure
      */
-    protected static boolean isNotWaterOnlyCorner(Point coordinates, SettlersBoard board) {
-        List<Land> fieldsAroundCorner = board.getFields(coordinates);
-        for (Land land : fieldsAroundCorner) {
-            if (land.getResource() != null) {
-                return true;
-            }
-        }
-        return false;
+    protected void finalizeBuild() {
+        owner.incrementStructureCounterFor(getStructureType());
     }
 
     /**
@@ -76,5 +77,15 @@ public abstract class AbstractInfrastructure {
 
     public Point getPosition() {
         return position;
+    }
+
+    /**
+     * Overrides toString() so it displays faction in letters on board.
+     *
+     * @return player faction representation in  letters
+     */
+    @Override
+    public String toString() {
+        return owner.getPlayerFaction().toString();
     }
 }

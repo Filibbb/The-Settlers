@@ -1,57 +1,41 @@
 package ch.zhaw.catan.commands;
 
 import ch.zhaw.catan.board.SettlersBoard;
+import ch.zhaw.catan.commands.build.BuildCityCommand;
+import ch.zhaw.catan.commands.build.BuildRoadCommand;
+import ch.zhaw.catan.commands.build.BuildSettlementCommand;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
-import org.beryx.textio.TextIO;
-import org.beryx.textio.TextIoFactory;
-import org.beryx.textio.TextTerminal;
+import ch.zhaw.catan.player.Player;
 
 /**
  * Handles all Commands.
+ *
+ * @author abuechi
  */
 public class CommandHandler {
-    private final TextIO textIO = TextIoFactory.getTextIO();
-    private final TextTerminal<?> textTerminal = textIO.getTextTerminal();
-    private final TurnOrderHandler turnOrderHandler;
-    private final SettlersBoard settlersBoard;
 
-    public CommandHandler(TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
-        this.turnOrderHandler = turnOrderHandler;
-        this.settlersBoard = settlersBoard;
+    /**
+     * Executes a command based on what was entered
+     *
+     * @param selectedCommand the user inputted command
+     */
+    public void executeCommand(Commands selectedCommand, TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
+        final Command commandToExecute = getSelectedCommand(selectedCommand, turnOrderHandler, settlersBoard);
+        commandToExecute.execute();
     }
 
-    public void executeCommand(Commands command) {
-        switch (command) {
-            case SHOW_BOARD:
-                ShowBoardCommand showBoardCommand = new ShowBoardCommand(settlersBoard);
-                showBoardCommand.execute();
-                break;
-            case SHOW_HAND:
-                ShowHandCommand showHandCommand = new ShowHandCommand(turnOrderHandler);
-                showHandCommand.execute();
-                break;
-            case BUILD_SETTLEMENT:
-                BuildSettlementCommand buildSettlementCommand = new BuildSettlementCommand(turnOrderHandler, settlersBoard);
-                buildSettlementCommand.execute();
-                break;
-            case BUILD_ROAD:
-                BuildRoadCommand buildRoadCommand = new BuildRoadCommand(turnOrderHandler, settlersBoard);
-                buildRoadCommand.execute();
-                break;
-            case BUILD_CITY:
-                BuildCityCommand buildCityCommand = new BuildCityCommand(turnOrderHandler, settlersBoard);
-                buildCityCommand.execute();
-                break;
-            case END_TURN:
-                final EndTurnCommand endTurnCommand = new EndTurnCommand(turnOrderHandler);
-                endTurnCommand.execute();
-            case SHOW_COMMANDS:
-                final ShowCommand showCommand = new ShowCommand();
-                showCommand.execute();
-                break;
-            default:
-                textTerminal.println("This command is not available. Use 'SHOW COMMANDS' for available commands.");
-                break;
-        }
+    private Command getSelectedCommand(Commands selectedCommand, TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
+        final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
+        return switch (selectedCommand) {
+            case SHOW_BOARD -> new ShowBoardCommand(settlersBoard);
+            case SHOW_HAND -> new ShowHandCommand(currentPlayer);
+            case BUILD_SETTLEMENT -> new BuildSettlementCommand(currentPlayer, settlersBoard);
+            case BUILD_ROAD -> new BuildRoadCommand(currentPlayer, settlersBoard);
+            case BUILD_CITY -> new BuildCityCommand(currentPlayer, settlersBoard);
+            case END_TURN -> new EndTurnCommand(turnOrderHandler);
+            case EXIT_COMMAND -> new QuitGameCommand();
+            case SHOW_COMMANDS -> new ShowCommand();
+            case TRADE_WITH_BANK -> new TradeWithBankCommand(currentPlayer);
+        };
     }
 }

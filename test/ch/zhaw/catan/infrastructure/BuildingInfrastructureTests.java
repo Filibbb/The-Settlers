@@ -4,9 +4,9 @@ import ch.zhaw.catan.board.Resource;
 import ch.zhaw.catan.board.SettlersBoard;
 import ch.zhaw.catan.game.logic.DiceResult;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
-import ch.zhaw.catan.games.ThreePlayerStandard;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
+import ch.zhaw.catan.utilities.ThreePlayerStandard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,14 +14,14 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.zhaw.catan.board.Structure.ROAD;
-import static ch.zhaw.catan.board.Structure.SETTLEMENT;
-import static ch.zhaw.catan.games.ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS;
-import static ch.zhaw.catan.games.ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS;
 import static ch.zhaw.catan.infrastructure.Road.build;
 import static ch.zhaw.catan.infrastructure.Road.initialRoadBuild;
 import static ch.zhaw.catan.infrastructure.Settlement.build;
 import static ch.zhaw.catan.infrastructure.Settlement.initialSettlementBuild;
+import static ch.zhaw.catan.infrastructure.Structure.ROAD;
+import static ch.zhaw.catan.infrastructure.Structure.SETTLEMENT;
+import static ch.zhaw.catan.utilities.ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS;
+import static ch.zhaw.catan.utilities.ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -72,6 +72,8 @@ public class BuildingInfrastructureTests {
         currentPlayer = turnOrderHandler.getCurrentPlayer();
         assertTrue(initialSettlementBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, settlersBoard));
         assertTrue(initialRoadBuild(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(faction).second, INITIAL_ROAD_ENDPOINTS.get(faction).second, settlersBoard));
+
+        turnOrderHandler.switchToPreviousPlayer();
     }
 
     /**
@@ -108,6 +110,7 @@ public class BuildingInfrastructureTests {
     @Test
     public void requirementBuildRoad() {
         setupInitialPhase();
+        addResourcesToPlayers();
         final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
         assertTrue(build(currentPlayer, new Point(6, 6), new Point(6, 4), settlersBoard));
         assertTrue(build(currentPlayer, new Point(6, 4), new Point(7, 3), settlersBoard));
@@ -148,6 +151,7 @@ public class BuildingInfrastructureTests {
     @Test
     public void requirementBuildSettlement() {
         setupInitialPhase();
+        turnOrderHandler.switchToNextPlayer();
         final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
         assertTrue(build(currentPlayer, new Point(9, 15), new Point(9, 13), settlersBoard));
         assertTrue(build(currentPlayer, new Point(9, 13), settlersBoard));
@@ -167,6 +171,11 @@ public class BuildingInfrastructureTests {
     public void requirementBuildCity() {
         setupInitialPhase();
         final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
-        assertFalse(true); //TODO implement test once building city is done
+        assertTrue(City.build(currentPlayer, INITIAL_SETTLEMENT_POSITIONS.get(currentPlayer.getPlayerFaction()).first, settlersBoard));
+        assertEquals(currentPlayer.getResourceCardCountFor(Resource.ORE), 2);
+        assertEquals(currentPlayer.getResourceCardCountFor(Resource.GRAIN), 3);
+        assertEquals(currentPlayer.getResourceCardCountFor(Resource.LUMBER), 5);
+        assertEquals(currentPlayer.getResourceCardCountFor(Resource.BRICK), 5);
+        assertEquals(currentPlayer.getResourceCardCountFor(Resource.WOOL), 5);
     }
 }

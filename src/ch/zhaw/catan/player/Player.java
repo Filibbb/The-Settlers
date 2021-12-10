@@ -1,9 +1,13 @@
 package ch.zhaw.catan.player;
 
 import ch.zhaw.catan.board.Resource;
-import ch.zhaw.catan.board.Structure;
+import ch.zhaw.catan.infrastructure.Structure;
 
 import java.util.*;
+
+import static ch.zhaw.catan.infrastructure.Structure.*;
+import static ch.zhaw.catan.io.CommandLineHandler.printMessage;
+import static java.lang.Math.toIntExact;
 
 /**
  * This class manages the player data and faction.
@@ -12,7 +16,7 @@ import java.util.*;
  */
 public class Player {
     private final Faction playerFaction;
-    private final Map<Structure, Integer> builtStructuresCounter = new HashMap<>(Map.of(Structure.ROAD, 0, Structure.SETTLEMENT, 0, Structure.CITY, 0));
+    private final Map<Structure, Integer> builtStructuresCounter = new HashMap<>(Map.of(ROAD, 0, SETTLEMENT, 0, CITY, 0));
     private final Map<Resource, Integer> resourceCardsInHand = new HashMap<>();
     private int winningPointCounter = 0;
 
@@ -33,15 +37,6 @@ public class Player {
     }
 
     /**
-     * Increments the total winning points of a player
-     *
-     * @param winningPoints increments winning point counter by specified winningPoints
-     */
-    public void incrementWinningPoints(int winningPoints) {
-        winningPointCounter = winningPointCounter + winningPoints;
-    }
-
-    /**
      * Check if the current player has enough structures remaining of that type to build specified structure
      *
      * @param structure the structure the player wants to build
@@ -52,17 +47,15 @@ public class Player {
     public boolean hasEnoughInStructureStock(Structure structure) {
         switch (structure) {
             case ROAD -> {
-                return (builtStructuresCounter.get(Structure.ROAD) < Structure.ROAD.getStockPerPlayer());
+                return builtStructuresCounter.get(ROAD) < ROAD.getStockPerPlayer();
             }
             case SETTLEMENT -> {
-                return (builtStructuresCounter.get(Structure.SETTLEMENT) < Structure.SETTLEMENT.getStockPerPlayer());
+                return builtStructuresCounter.get(SETTLEMENT) < SETTLEMENT.getStockPerPlayer();
             }
             case CITY -> {
-                return (builtStructuresCounter.get(Structure.CITY) < Structure.CITY.getStockPerPlayer());
+                return builtStructuresCounter.get(CITY) < CITY.getStockPerPlayer();
             }
-            default -> {
-                throw new RuntimeException("Unknown structure type " + structure);
-            }
+            default -> throw new RuntimeException("Unknown structure type " + structure);
         }
     }
 
@@ -73,65 +66,36 @@ public class Player {
      * @return true if player has enough resources, false otherwise.
      * @author weberph5
      */
-    public boolean checkLiquidity(Structure structure) {
-        Map<Resource, Integer> resourceCards = getResourceCardsInHand();
-        final Integer lumberResourceCount = resourceCards.get(Resource.LUMBER);
-        final Integer brickResourceCount = resourceCards.get(Resource.BRICK);
-        final Integer grainResourceCount = resourceCards.get(Resource.GRAIN);
-        switch (structure) {
-            case CITY -> {
-                final Integer oreResourceCount = resourceCards.get(Resource.ORE);
-                return oreResourceCount != null && oreResourceCount >= 3 && grainResourceCount != null && grainResourceCount >= 2;
-            }
-            case ROAD -> {
-                return lumberResourceCount != null && lumberResourceCount >= 1 && brickResourceCount != null && brickResourceCount >= 1;
-            }
-            case SETTLEMENT -> {
-                final Integer woolResourceCount = resourceCards.get(Resource.WOOL);
-                return lumberResourceCount != null && lumberResourceCount >= 1 && grainResourceCount != null && grainResourceCount >= 1 && brickResourceCount != null && brickResourceCount >= 1 && woolResourceCount != null && woolResourceCount >= 1;
-            }
-        }
-        return false;
+    public boolean hasEnoughLiquidityFor(Structure structure) {
+        final Map<Resource, Integer> resourceCards = getResourceCardsInHand();
+        return structure.getCostsAsMap().entrySet().stream().
+                allMatch(structureResourceCost -> resourceCards.get(structureResourceCost.getKey()) != null &&
+                        resourceCards.get(structureResourceCost.getKey()) >= toIntExact(structureResourceCost.getValue()));
     }
+
 
     /**
      * Increases the build counter for the structure by 1.
      *
-     * @param structure the structure the player built.
+     * @param structureType the structure the player built.
      * @author weberph5
      */
-    public void increaseBuiltStructures(Structure structure) {
-        switch (structure) {
-            case ROAD -> incrementCounterFor(Structure.ROAD);
-            case SETTLEMENT -> incrementCounterFor(Structure.SETTLEMENT);
-            case CITY -> incrementCounterFor(Structure.CITY);
-            default -> throw new RuntimeException("FATAL! Unexpected structure type " + structure + " . Please contact developers to update.");
-        }
+    public void incrementStructureCounterFor(Structure structureType) {
+        Integer currentCounter = builtStructuresCounter.get(structureType);
+        currentCounter = currentCounter != null ? currentCounter : 0;
+        builtStructuresCounter.put(structureType, currentCounter + 1);
     }
 
     /**
      * Decreases the build counter for the structure by 1.
      * This is used to put a settlement back into the stock when it is upgraded to a city.
      *
-     * @param structure the structure the player removes.
+     * @param structureType the structure the player removes.
      * @author weberph5
      */
-    public void decreaseBuiltStructures(Structure structure) {
-        switch (structure) {
-            case ROAD -> decreaseCounterFor(Structure.ROAD);
-            case SETTLEMENT -> decreaseCounterFor(Structure.SETTLEMENT);
-            case CITY -> decreaseCounterFor(Structure.CITY);
-            default -> throw new RuntimeException("FATAL! Unexpected structure type " + structure + " . Please contact developers to update.");
-        }
-    }
-
-    private void incrementCounterFor(Structure structureType) {
-        final Integer currentCounter = builtStructuresCounter.get(structureType);
-        builtStructuresCounter.put(structureType, currentCounter + 1);
-    }
-
-    private void decreaseCounterFor(Structure structureType) {
-        final Integer currentCounter = builtStructuresCounter.get(structureType);
+    public void decreaseStructureCounterFor(Structure structureType) {
+        Integer currentCounter = builtStructuresCounter.get(structureType);
+        currentCounter = currentCounter != null ? currentCounter : 0;
         builtStructuresCounter.put(structureType, currentCounter - 1);
     }
 
@@ -198,7 +162,7 @@ public class Player {
     }
 
     private void addResource(Resource resource, int count) {
-        if (count > 0) {
+        if (count >= 0) {
             if (resourceCardsInHand.containsKey(resource)) {
                 final Integer cardCount = resourceCardsInHand.get(resource);
                 resourceCardsInHand.put(resource, cardCount + count);
@@ -214,11 +178,10 @@ public class Player {
      * Removes exactly one of the specified resource to the hand of the player
      *
      * @param resource the resource type you want to add to the hand.
-     * @return returns true if removal was successful or false if removal didnt take place.
      * @author abuechi
      */
-    public boolean removeResourceCardFromHand(Resource resource) {
-        return removeResource(resource, 1);
+    public void removeResourceCardFromHand(Resource resource) {
+        removeResource(resource, 1);
     }
 
     /**
@@ -226,20 +189,17 @@ public class Player {
      *
      * @param resource the resource type you want to add to the hand.
      * @param count    the count on how many resource cards are required to be added
-     * @return returns true if removal was successful or false if removal didnt take place.
      * @author abuechi
      */
-    public boolean removeResourceCardFromHand(Resource resource, int count) {
-        return removeResource(resource, count);
+    public void removeResourceCardFromHand(Resource resource, int count) {
+        removeResource(resource, count);
     }
 
-    private boolean removeResource(Resource resource, int count) {
+    private void removeResource(Resource resource, int count) {
         if (resourceCardsInHand.containsKey(resource)) {
             final Integer cardCount = resourceCardsInHand.get(resource);
             resourceCardsInHand.put(resource, Math.max(cardCount - count, 0));
-            return true;
         }
-        return false;
     }
 
     /**
@@ -269,10 +229,33 @@ public class Player {
         return builtStructuresCounter;
     }
 
+    /**
+     * Selects a random resource from the current players hand
+     *
+     * @return a random resource of the player
+     * @author fupat002
+     */
     public Resource getRandomResourceInHand() {
-        Random random = new Random();
-        Set<Resource> resourceSet = getResourceCardsInHand().keySet();
-        List<Resource> resourcesInHand = new ArrayList<>(resourceSet);
-        return resourcesInHand.get(random.nextInt(resourcesInHand.size()));
+        final Random random = new Random();
+        final List<Resource> resourcesInHand = new ArrayList<>(resourceCardsInHand.keySet());
+        if (!resourcesInHand.isEmpty()) {
+            return resourcesInHand.get(random.nextInt(resourcesInHand.size()));
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Pays the resource cost of the structure built by the player
+     *
+     * @param structureType the type that requires payment
+     * @author abuechi
+     */
+    public void payForStructure(Structure structureType) {
+        if (hasEnoughLiquidityFor(structureType)) {
+            structureType.getCostsAsMap().forEach((resource, count) -> removeResourceCardFromHand(resource, toIntExact(count)));
+        } else {
+            printMessage("Not enough resources to build specified structure " + structureType);
+        }
     }
 }

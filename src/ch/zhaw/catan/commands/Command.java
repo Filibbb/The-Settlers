@@ -6,7 +6,6 @@ package ch.zhaw.catan.commands;
  * @author abuechi
  */
 public interface Command {
-
     /**
      * the execute method that every command must have in order to execute its functionality
      */

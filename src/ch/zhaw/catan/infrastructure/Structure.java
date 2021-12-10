@@ -1,9 +1,13 @@
-package ch.zhaw.catan.board;
+package ch.zhaw.catan.infrastructure;
+
+import ch.zhaw.catan.board.Resource;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 /**
  * This enum models the different structures that can be built.
@@ -11,6 +15,8 @@ import java.util.stream.Collectors;
  * The enum provides information about the cost of a structure and how many of
  * these structures are available per player.
  * </p>
+ *
+ * @author tebe, abuechi
  */
 public enum Structure {
     SETTLEMENT(List.of(Resource.LUMBER, Resource.BRICK, Resource.WOOL, Resource.GRAIN), 5),
@@ -27,25 +33,12 @@ public enum Structure {
 
     /**
      * Returns the build costs of this structure.
-     * <p>
-     * Each list entry represents a resource card. The value of an entry (e.g., {@link Resource#LUMBER})
-     * identifies the resource type of the card.
-     * </p>
-     *
-     * @return the build costs
-     */
-    public List<Resource> getCosts() {
-        return costs;
-    }
-
-    /**
-     * Returns the build costs of this structure.
      *
      * @return the build costs in terms of the number of resource cards per resource type
      */
     public Map<Resource, Long> getCostsAsMap() {
         return costs.stream()
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+                .collect(groupingBy(Function.identity(), Collectors.counting()));
     }
 
     /**
