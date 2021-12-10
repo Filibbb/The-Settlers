@@ -19,8 +19,7 @@ Starten kannst du die Siedler von Catan entweder durch starten von Application.j
 
 # Klassendiagramm
 
-![]https://phweber.ch/ZHAW/class-diagram-settlers.png
---> In voller Auflösung hier: https://phweber.ch/ZHAW/class-diagram-settlers.png
+https://phweber.ch/ZHAW/class-diagram-settlers.png
 
 # Disclaimer
 
