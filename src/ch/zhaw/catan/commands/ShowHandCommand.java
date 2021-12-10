@@ -16,7 +16,7 @@ public class ShowHandCommand implements Command {
     /**
      * Creates an instance of ShowHandCommand
      *
-     * @param turnOrderHandler the current turnOrderHandler
+     * @param currentPlayer the current player
      * @author weberph5
      */
     public ShowHandCommand(Player currentPlayer) {
