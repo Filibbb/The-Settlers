@@ -64,14 +64,9 @@ public class ThiefTest {
             gameBankHandler.handoutResourcesOfTheRolledField(i, model.getSettlersBoard());
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
-                Faction.values()[0], Map.of(Resource.GRAIN, 1, Resource.WOOL, 1,
-                        Resource.BRICK, 1, Resource.ORE, 0, Resource.LUMBER, 1),
-                Faction.values()[1],
-                Map.of(Resource.GRAIN, 1, Resource.WOOL, 3, Resource.BRICK, 0,
-                        Resource.ORE, 0, Resource.LUMBER, 0),
-                Faction.values()[2],
-                Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
-                        Resource.ORE, 0, Resource.LUMBER, 1));
+                Faction.RED, Map.of(Resource.GRAIN, 1, Resource.WOOL, 1, Resource.BRICK, 1, Resource.ORE, 0, Resource.LUMBER, 1),
+                Faction.BLUE, Map.of(Resource.GRAIN, 1, Resource.WOOL, 3, Resource.BRICK, 0, Resource.ORE, 0, Resource.LUMBER, 0),
+                Faction.GREEN, Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1, Resource.ORE, 0, Resource.LUMBER, 1));
         assertPlayerResourceCardStockEquals(model, expected);
     }
 

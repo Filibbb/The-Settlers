@@ -153,5 +153,4 @@ class PlayerTest {
         player.deletesHalfOfResources();
         assertEquals(player.getTotalResourceCardCount(), 3);
     }
-
 }
