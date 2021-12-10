@@ -92,6 +92,16 @@ public class TurnOrderHandler {
         return maxValue;
     }
 
+    /**
+     * Checks if player did not change from previous current player
+     *
+     * @param player the player to check if its the same as the current
+     * @return boolean if is equal
+     */
+    public boolean currentPlayerDidNotChange(Player player) {
+        return player.equals(currentPlayer);
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }

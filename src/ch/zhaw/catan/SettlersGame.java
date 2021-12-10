@@ -62,10 +62,16 @@ public class SettlersGame {
     }
 
     private void startMainPhase() {
+        Player previousPlayer = turnOrderHandler.getCurrentPlayer();
         while (!hasWinner()) {
-            final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
-            printMessage("It's " + currentPlayer.getPlayerFaction() + " turn.");
-            rollDice.rollDice();
+            printMessage("It's " + previousPlayer.getPlayerFaction() + " turn.");
+            if (!turnOrderHandler.currentPlayerDidNotChange(previousPlayer)) {
+                final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
+                final int playerIndex = turnOrderHandler.getPlayerTurnOrder().indexOf(previousPlayer);
+                previousPlayer = turnOrderHandler.getPlayerTurnOrder().get(playerIndex);
+                printMessage("It's " + currentPlayer.getPlayerFaction() + " turn.");
+                rollDice.rollDice();
+            }
             printMessage("Choose your actions down below:");
             printMessage("If you are done with your turn, enter END TURN command.");
             commandHandler.executeCommand(SHOW_COMMANDS, turnOrderHandler, settlersBoard);
@@ -80,7 +86,6 @@ public class SettlersGame {
             commandHandler.executeCommand(commandByRepresentation, turnOrderHandler, settlersBoard);
         } else {
             printMessage("This command is not available. Use 'SHOW COMMANDS' for available commands.");
-            playerActionPhase();
         }
     }
 
