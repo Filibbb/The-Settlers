@@ -96,10 +96,10 @@ public class TurnOrderHandler {
      * Checks if player did not change from previous current player
      *
      * @param player the player to check if its the same as the current
-     * @return boolean if is equal
+     * @return boolean if is changed
      */
-    public boolean currentPlayerDidNotChange(Player player) {
-        return player.equals(currentPlayer);
+    public boolean currentPlayerDidChange(Player player) {
+        return !currentPlayer.equals(player);
     }
 
     public Player getCurrentPlayer() {

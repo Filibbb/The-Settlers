@@ -62,16 +62,13 @@ public class SettlersGame {
     }
 
     private void startMainPhase() {
-        Player previousPlayer = turnOrderHandler.getCurrentPlayer();
+        Player previousPlayer = null;
         while (!hasWinner()) {
-            printMessage("It's " + previousPlayer.getPlayerFaction() + " turn.");
-            if (!turnOrderHandler.currentPlayerDidNotChange(previousPlayer)) {
-                final Player currentPlayer = turnOrderHandler.getCurrentPlayer();
-                final int playerIndex = turnOrderHandler.getPlayerTurnOrder().indexOf(previousPlayer);
-                previousPlayer = turnOrderHandler.getPlayerTurnOrder().get(playerIndex);
-                printMessage("It's " + currentPlayer.getPlayerFaction() + " turn.");
+            if (turnOrderHandler.currentPlayerDidChange(previousPlayer)) {
+                previousPlayer = turnOrderHandler.getCurrentPlayer();
                 rollDice.rollDice();
             }
+            printMessage("It's " + turnOrderHandler.getCurrentPlayer().getPlayerFaction() + " turn.");
             printMessage("Choose your actions down below:");
             printMessage("If you are done with your turn, enter END TURN command.");
             commandHandler.executeCommand(SHOW_COMMANDS, turnOrderHandler, settlersBoard);
