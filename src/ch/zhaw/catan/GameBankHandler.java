@@ -75,7 +75,8 @@ public class GameBankHandler {
         } else {
             printMessage("Something went wrong. Corner has invalid placement");
         }
-        printMessage(owner.getPlayerFaction() + " has a settlement on on this field.");
+        printMessage(owner.getPlayerFaction() + " has a settlement on this field.");
         printMessage("This resource: " + resourceOfRolledField + " got added to your hand.");
+        printMessage("");
     }
 }
