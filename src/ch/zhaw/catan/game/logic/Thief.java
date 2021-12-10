@@ -9,10 +9,20 @@ import java.awt.*;
 import static ch.zhaw.catan.io.CommandLineHandler.printMessage;
 import static ch.zhaw.catan.io.CommandLineHandler.promptCoordinates;
 
+/**
+ * A thief class for the thief utility
+ *
+ * @author fupat002
+ */
 public class Thief {
     private final SettlersBoard settlersBoard;
     private Point thiefPosition;
 
+    /**
+     * Creates an instance of the thief
+     *
+     * @param settlersBoard the board instance
+     */
     public Thief(SettlersBoard settlersBoard) {
         this.settlersBoard = settlersBoard;
     }
@@ -63,6 +73,11 @@ public class Thief {
         this.thiefPosition = thiefPosition;
     }
 
+    /**
+     * Steal card from refactoring
+     *
+     * @param turnOrderHandler the current instance of the turnorderhandler
+     */
     public void stealCardFromNeighbor(TurnOrderHandler turnOrderHandler) {
         Player currentPlayer = turnOrderHandler.getCurrentPlayer();
         if (settlersBoard.hasNeighborWithResource(thiefPosition, currentPlayer)) {
