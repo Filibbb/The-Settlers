@@ -23,7 +23,6 @@ public class City extends AbstractInfrastructure {
      */
     private City(Player owner, Point position) {
         super(owner, position);
-
     }
 
     /**

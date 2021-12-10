@@ -79,13 +79,13 @@ public class Settlement extends AbstractInfrastructure {
     @Override
     protected boolean canBuild(SettlersBoard board) {
         final Player owner = getOwner();
-        return (board.hasCorner(getPosition()) &&
-                board.getCorner(getPosition()) == null &&
-                board.getNeighboursOfCorner(getPosition()).isEmpty() &&
-                hasOwnRoadAdjacent(getPosition(), board) &&
-                owner.hasEnoughLiquidityFor(SETTLEMENT) &&
-                owner.hasEnoughInStructureStock(SETTLEMENT)) &&
-                board.isCornerNotSurroundedByWater(getPosition());
+        return board.hasCorner(getPosition())
+                && board.getCorner(getPosition()) == null
+                && board.getNeighboursOfCorner(getPosition()).isEmpty()
+                && hasOwnRoadAdjacent(getPosition(), board)
+                && owner.hasEnoughLiquidityFor(SETTLEMENT)
+                && owner.hasEnoughInStructureStock(SETTLEMENT)
+                && board.isCornerNotSurroundedByWater(getPosition());
     }
 
     /**

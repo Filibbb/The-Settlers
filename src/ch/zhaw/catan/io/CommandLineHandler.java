@@ -19,6 +19,9 @@ public class CommandLineHandler {
     private static final TextIO TEXT_IO = TextIoFactory.getTextIO();
     private static final TextTerminal<?> TEXT_TERMINAL = TEXT_IO.getTextTerminal();
 
+    private CommandLineHandler() {
+    }
+
     /**
      * A static helper method that prompts the user to enter an x and y coordinate
      *
