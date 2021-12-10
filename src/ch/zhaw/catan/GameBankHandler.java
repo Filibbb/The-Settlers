@@ -28,18 +28,16 @@ public class GameBankHandler {
      * The trade only works when bank and player possess the resource cards
      * for the trade before the trade is executed.
      *
-     * @param offer offered type
-     * @param want  wanted type
-     * @return true, if the trade was successful
+     * @param offer  offered type
+     * @param want   wanted type
+     * @param player the player who wants to trade
      * @author abuechi
      */
-    public boolean tradeWithBankFourToOne(Resource offer, Resource want, final Player player) {
+    public void tradeWithBankFourToOne(Resource offer, Resource want, final Player player) {
         if (player.getResourceCardCountFor(offer) >= FOUR_TO_ONE_TRADE_OFFER) {
             player.removeResourceCardFromHand(offer, FOUR_TO_ONE_TRADE_OFFER);
             player.addResourceCardToHand(want, FOUR_TO_ONE_TRADE_WANT);
-            return true;
         }
-        return false;
     }
 
     /**

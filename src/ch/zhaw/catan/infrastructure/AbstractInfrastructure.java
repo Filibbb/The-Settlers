@@ -36,6 +36,7 @@ public abstract class AbstractInfrastructure {
     /**
      * Abstract method to check if structure can be built
      *
+     * @param board current board instance
      * @return boolean if structure can be built
      */
     protected abstract boolean canBuild(SettlersBoard board);
