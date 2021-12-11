@@ -69,10 +69,6 @@ public class Thief {
         return thiefPosition != null && thiefPosition.equals(field);
     }
 
-    public void setThiefPosition(Point thiefPosition) {
-        this.thiefPosition = thiefPosition;
-    }
-
     /**
      * Steal card from refactoring
      *
@@ -83,6 +79,10 @@ public class Thief {
         if (settlersBoard.hasNeighborWithResource(thiefPosition, currentPlayer)) {
             stealRandomCard(turnOrderHandler.getCurrentPlayer(), settlersBoard.getRandomNeighbor(thiefPosition, currentPlayer));
         }
+    }
+
+    public void setThiefPosition(Point thiefPosition) {
+        this.thiefPosition = thiefPosition;
     }
 
     private void printConsequencesOfThiefPlacement() {
