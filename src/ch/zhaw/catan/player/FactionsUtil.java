@@ -14,6 +14,9 @@ import java.util.Random;
 public class FactionsUtil {
     private static final List<Faction> ALL_AVAILABLE_FACTIONS = new ArrayList<>(Arrays.asList(Faction.values()));
 
+    private FactionsUtil() {
+    }
+
     /**
      * Retrieves a pseudo-random faction based on all available factions.
      *
@@ -21,7 +24,7 @@ public class FactionsUtil {
      * @author abuechi
      */
     public static Faction getRandomAvailableFaction() {
-        Random randomizer = new Random();
+        final Random randomizer = new Random();
         final int randomFactionIndex = randomizer.nextInt(ALL_AVAILABLE_FACTIONS.size());
         final Faction selectedFaction = ALL_AVAILABLE_FACTIONS.get(randomFactionIndex);
         ALL_AVAILABLE_FACTIONS.remove(selectedFaction);

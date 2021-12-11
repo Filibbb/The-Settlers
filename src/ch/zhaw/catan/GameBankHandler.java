@@ -56,7 +56,7 @@ public class GameBankHandler {
                 final ArrayList<Point> occupiedCornersOfField = board.getOccupiedCornerCoordinatesOfField(field);
                 for (Point occupiedCorner : occupiedCornersOfField) {
                     AbstractInfrastructure buildingOnCorner = board.getBuildingOnCorner(occupiedCorner);
-                    handOutResourceToBuildingOwner(buildingOnCorner, resourceOfRolledField, occupiedCorner);
+                    handOutResourceToBuildingOwner(buildingOnCorner, resourceOfRolledField);
                 }
             } else {
                 thief.printInfoOfFieldOccupiedByThief();
@@ -64,7 +64,7 @@ public class GameBankHandler {
         }
     }
 
-    private void handOutResourceToBuildingOwner(final AbstractInfrastructure buildingOnCorner, final Resource resourceOfRolledField, Point occupiedCorner) {
+    private void handOutResourceToBuildingOwner(final AbstractInfrastructure buildingOnCorner, final Resource resourceOfRolledField) {
         final Player owner = buildingOnCorner.getOwner();
         if (buildingOnCorner instanceof Settlement) {
             owner.addResourceCardToHand(resourceOfRolledField);
