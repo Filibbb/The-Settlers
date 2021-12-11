@@ -38,7 +38,6 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
         thief.setThiefPosition(INITIAL_THIEF_POSITION);
     }
 
-
     public Map<Point, Integer> getDiceNumberPlacements() {
         return diceNumberPlacements;
     }

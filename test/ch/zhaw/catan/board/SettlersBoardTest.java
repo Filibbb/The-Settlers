@@ -12,10 +12,10 @@ import java.awt.*;
 import java.util.Map;
 
 import static ch.zhaw.catan.board.BoardUtil.getDefaultLandTilePlacement;
+import static ch.zhaw.catan.board.Resource.WOOL;
 import static ch.zhaw.catan.utilities.ThreePlayerStandard.INITIAL_SETTLEMENT_POSITIONS;
 import static ch.zhaw.catan.utilities.ThreePlayerStandard.getAfterSetupPhase;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {Settlerboard}
@@ -23,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author abuechi, tebe
  */
 class SettlersBoardTest {
+    private final static Point WATER_FIELD = new Point(13, 11);
+    private final static Point LAND_FIELD =  new Point(8, 14);
     private final static int DEFAULT_NUMBER_OF_PLAYERS = 3;
     private SettlersBoard settlersBoard;
 
@@ -62,5 +64,27 @@ class SettlersBoardTest {
             assertNotNull(settlersBoard.getEdge(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).first, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(playerFaction).first));
             assertNotNull(settlersBoard.getEdge(INITIAL_SETTLEMENT_POSITIONS.get(playerFaction).second, ThreePlayerStandard.INITIAL_ROAD_ENDPOINTS.get(playerFaction).second));
         }
+    }
+
+    /**
+     * Tests whether a field is water or not.
+     */
+    @Test
+    public void testsIfAFieldIsWater(){
+        assertTrue(settlersBoard.isWater(WATER_FIELD));
+        assertFalse(settlersBoard.isWater(LAND_FIELD));
+    }
+
+    /**
+     * Test whether a player has a neighbor with resources or not.
+     */
+    @Test
+    public void testIfAPlayerHasANeighborWithResources(){
+        final GameDataContainer model = getAfterSetupPhase();
+        final Player currentPlayer = model.getTurnOrderHandler().getCurrentPlayer();
+        final Player playerTwo = model.getTurnOrderHandler().getPlayerTurnOrder().get(1);
+        playerTwo.addResourceCardToHand(WOOL, 5);
+        assertTrue(model.getSettlersBoard().hasNeighborWithResource(new Point(10, 14), currentPlayer));
+        assertFalse(model.getSettlersBoard().hasNeighborWithResource(new Point(3, 11), playerTwo));
     }
 }
