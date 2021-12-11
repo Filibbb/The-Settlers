@@ -22,7 +22,8 @@ Starten kannst du die Siedler von Catan entweder durch starten von Application.j
 
 # Klassendiagramm
 
-TBD
+Das Klassendiagram ist hier im Wiki zu finden: 
+https://github.zhaw.ch/PM1-IT21taWIN-kars-pero-tebe/gruppec-papp-projekt3-siedler-von-catan/wiki
 
 # Disclaimer
 
