@@ -6,7 +6,6 @@ import ch.zhaw.catan.game.logic.DiceResult;
 import ch.zhaw.catan.game.logic.TurnOrderHandler;
 import ch.zhaw.catan.player.Faction;
 import ch.zhaw.catan.player.Player;
-import ch.zhaw.catan.utilities.ThreePlayerStandard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -165,7 +164,6 @@ public class BuildingInfrastructureTests {
 
     /**
      * Tests whether player one can build a city starting in game state
-     * {@link ThreePlayerStandard#getAfterSetupPhaseAlmostEmptyBank()}.
      */
     @Test
     public void requirementBuildCity() {
