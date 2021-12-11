@@ -48,9 +48,9 @@ public class GameBankHandlerTest {
             gameBankHandler.handoutResourcesOfTheRolledField(i, model.getSettlersBoard());
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
-                Faction.values()[0], Map.of(GRAIN, 1, WOOL, 1, BRICK, 1, ORE, 1, LUMBER, 1),
-                Faction.values()[1], Map.of(GRAIN, 1, WOOL, 3, BRICK, 0, ORE, 0, LUMBER, 0),
-                Faction.values()[2], Map.of(GRAIN, 0, WOOL, 0, BRICK, 1, ORE, 0, LUMBER, 1));
+                Faction.RED, Map.of(GRAIN, 1, WOOL, 1, BRICK, 1, ORE, 1, LUMBER, 1),
+                Faction.BLUE, Map.of(GRAIN, 1, WOOL, 3, BRICK, 0, ORE, 0, LUMBER, 0),
+                Faction.GREEN, Map.of(GRAIN, 0, WOOL, 0, BRICK, 1, ORE, 0, LUMBER, 1));
         assertPlayerResourceCardStockEquals(model, expected);
     }
 
@@ -65,9 +65,9 @@ public class GameBankHandlerTest {
             gameBankHandler.handoutResourcesOfTheRolledField(diceValue, model.getSettlersBoard());
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
-                Faction.values()[0], Map.of(GRAIN, 0, WOOL, 0, BRICK, 0, ORE, 6, LUMBER, 0),
-                Faction.values()[1], Map.of(GRAIN, 0, WOOL, 0, BRICK, 0, ORE, 0, LUMBER, 0),
-                Faction.values()[2], Map.of(GRAIN, 0, WOOL, 0, BRICK, 3, ORE, 0, LUMBER, 0));
+                Faction.RED, Map.of(GRAIN, 0, WOOL, 0, BRICK, 0, ORE, 6, LUMBER, 0),
+                Faction.BLUE, Map.of(GRAIN, 0, WOOL, 0, BRICK, 0, ORE, 0, LUMBER, 0),
+                Faction.GREEN, Map.of(GRAIN, 0, WOOL, 0, BRICK, 3, ORE, 0, LUMBER, 0));
         assertPlayerResourceCardStockEquals(model, expected);
     }
 

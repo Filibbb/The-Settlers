@@ -15,10 +15,12 @@ import java.util.Map;
 import static ch.zhaw.catan.infrastructure.Settlement.initialSettlementBuild;
 import static ch.zhaw.catan.utilities.PlayerResourceStockUtility.assertPlayerResourceCardStockEquals;
 import static ch.zhaw.catan.utilities.ThreePlayerStandard.getAfterSetupPhase;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ThiefTest {
     private final static Point THIEF_POSITION = new Point(6, 8);
+    private final static Point WRONG_THIEF_POSITION = new Point(10, 14);
     private final GameBankHandler gameBankHandler = new GameBankHandler();
     private GameDataContainer model;
     private Thief thief;
@@ -64,14 +66,9 @@ public class ThiefTest {
             gameBankHandler.handoutResourcesOfTheRolledField(i, model.getSettlersBoard());
         }
         Map<Faction, Map<Resource, Integer>> expected = Map.of(
-                Faction.values()[0], Map.of(Resource.GRAIN, 1, Resource.WOOL, 1,
-                        Resource.BRICK, 1, Resource.ORE, 0, Resource.LUMBER, 1),
-                Faction.values()[1],
-                Map.of(Resource.GRAIN, 1, Resource.WOOL, 3, Resource.BRICK, 0,
-                        Resource.ORE, 0, Resource.LUMBER, 0),
-                Faction.values()[2],
-                Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
-                        Resource.ORE, 0, Resource.LUMBER, 1));
+                Faction.RED, Map.of(Resource.GRAIN, 1, Resource.WOOL, 1, Resource.BRICK, 1, Resource.ORE, 0, Resource.LUMBER, 1),
+                Faction.BLUE, Map.of(Resource.GRAIN, 1, Resource.WOOL, 3, Resource.BRICK, 0, Resource.ORE, 0, Resource.LUMBER, 0),
+                Faction.GREEN, Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1, Resource.ORE, 0, Resource.LUMBER, 1));
         assertPlayerResourceCardStockEquals(model, expected);
     }
 
@@ -96,5 +93,15 @@ public class ThiefTest {
                 Map.of(Resource.GRAIN, 0, Resource.WOOL, 0, Resource.BRICK, 1,
                         Resource.ORE, 0, Resource.LUMBER, 1));
         assertPlayerResourceCardStockEquals(model, expected);
+    }
+
+    /**
+     * Tests whether the thief is on the set field or not.
+     */
+    @Test
+    public void testIfTheThiefIsOnTheSetField(){
+        thief.setThiefPosition(THIEF_POSITION);
+        assertTrue(thief.isThiefOnField(THIEF_POSITION));
+        assertFalse(thief.isThiefOnField(WRONG_THIEF_POSITION));
     }
 }

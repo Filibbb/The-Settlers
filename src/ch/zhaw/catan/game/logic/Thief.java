@@ -51,10 +51,11 @@ public class Thief {
      */
     public void printInfoOfFieldOccupiedByThief() {
         printMessage("The thief is on this field (" + thiefPosition + ").");
-        printMessage("This Factions don't get any " + settlersBoard.getResourceOfField(thiefPosition) + ":");
+        printMessage("These Factions don't get any " + settlersBoard.getResourceOfField(thiefPosition) + ":");
         for (Point occupiedCorner : settlersBoard.getOccupiedCornerCoordinatesOfField(thiefPosition)) {
             printMessage(settlersBoard.getBuildingOnCorner(occupiedCorner).getOwner().getPlayerFaction().toString());
         }
+        printMessage("");
     }
 
     /**
@@ -66,10 +67,6 @@ public class Thief {
      */
     public boolean isThiefOnField(Point field) {
         return thiefPosition != null && thiefPosition.equals(field);
-    }
-
-    public void setThiefPosition(Point thiefPosition) {
-        this.thiefPosition = thiefPosition;
     }
 
     /**
@@ -84,11 +81,16 @@ public class Thief {
         }
     }
 
+    public void setThiefPosition(Point thiefPosition) {
+        this.thiefPosition = thiefPosition;
+    }
+
     private void printConsequencesOfThiefPlacement() {
         if (!settlersBoard.getOccupiedCornerCoordinatesOfField(thiefPosition).isEmpty()) {
             printInfoOfFieldOccupiedByThief();
         } else {
             printMessage("So far nobody has been affected with this placement.");
+            printMessage("");
         }
     }
 
