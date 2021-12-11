@@ -17,7 +17,9 @@ public class CommandHandler {
     /**
      * Executes a command based on what was entered
      *
-     * @param selectedCommand the user inputted command
+     * @param selectedCommand  the user inputted command
+     * @param turnOrderHandler the current instance of the turnorder handler
+     * @param settlersBoard    the current instance of settlers board
      */
     public void executeCommand(Commands selectedCommand, TurnOrderHandler turnOrderHandler, SettlersBoard settlersBoard) {
         final Command commandToExecute = getSelectedCommand(selectedCommand, turnOrderHandler, settlersBoard);

@@ -1,5 +1,7 @@
 package ch.zhaw.catan.board;
 
+import static ch.zhaw.catan.board.Resource.*;
+
 /**
  * This {@link Enum} specifies the available lands in the game. Some land types
  * produce resources (e.g., {@link Land#FOREST}, others do not (e.g.,
@@ -8,11 +10,11 @@ package ch.zhaw.catan.board;
  * @author tebe
  */
 public enum Land {
-    FOREST(Resource.LUMBER),
-    PASTURE(Resource.WOOL),
-    FIELDS(Resource.GRAIN),
-    MOUNTAIN(Resource.ORE),
-    HILLS(Resource.BRICK),
+    FOREST(LUMBER),
+    PASTURE(WOOL),
+    FIELDS(GRAIN),
+    MOUNTAIN(ORE),
+    HILLS(BRICK),
     WATER("~~"),
     DESERT("--");
 

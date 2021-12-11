@@ -115,8 +115,8 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
      * @return a random neighbor on the field
      */
     public Player getRandomNeighbor(Point field, Player currentPlayer) {
-        Random random = new Random();
-        List<AbstractInfrastructure> neighbors = getNeighborsWithResources(field, currentPlayer);
+        final Random random = new Random();
+        final List<AbstractInfrastructure> neighbors = getNeighborsWithResources(field, currentPlayer);
         if (neighbors.size() > 1) {
             return neighbors.get(random.nextInt(neighbors.size())).getOwner();
         } else {
@@ -125,8 +125,8 @@ public class SettlersBoard extends HexBoard<Land, AbstractInfrastructure, Road, 
     }
 
     private List<AbstractInfrastructure> getNeighborsWithResources(Point field, Player currentPlayer) {
-        List<Point> occupiedCorners = getOccupiedCornerCoordinatesOfField(field);
-        List<AbstractInfrastructure> neighbors = new ArrayList<>();
+        final List<Point> occupiedCorners = getOccupiedCornerCoordinatesOfField(field);
+        final List<AbstractInfrastructure> neighbors = new ArrayList<>();
         for (Point occupiedCorner : occupiedCorners) {
             Player neighbor = getBuildingOnCorner(occupiedCorner).getOwner();
             if (!currentPlayer.equals(neighbor) && neighbor.getTotalResourceCardCount() > 0) {

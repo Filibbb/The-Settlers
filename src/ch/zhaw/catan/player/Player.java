@@ -45,18 +45,8 @@ public class Player {
      * @author weberph5
      */
     public boolean hasEnoughInStructureStock(Structure structure) {
-        switch (structure) {
-            case ROAD -> {
-                return builtStructuresCounter.get(ROAD) < ROAD.getStockPerPlayer();
-            }
-            case SETTLEMENT -> {
-                return builtStructuresCounter.get(SETTLEMENT) < SETTLEMENT.getStockPerPlayer();
-            }
-            case CITY -> {
-                return builtStructuresCounter.get(CITY) < CITY.getStockPerPlayer();
-            }
-            default -> throw new RuntimeException("Unknown structure type " + structure);
-        }
+        final Integer structureCounter = builtStructuresCounter.get(structure);
+        return structureCounter != null && structureCounter < structure.getStockPerPlayer();
     }
 
     /**
@@ -69,8 +59,8 @@ public class Player {
     public boolean hasEnoughLiquidityFor(Structure structure) {
         final Map<Resource, Integer> resourceCards = getResourceCardsInHand();
         return structure.getCostsAsMap().entrySet().stream().
-                allMatch(structureResourceCost -> resourceCards.get(structureResourceCost.getKey()) != null &&
-                        resourceCards.get(structureResourceCost.getKey()) >= toIntExact(structureResourceCost.getValue()));
+                allMatch(structureResourceCost -> resourceCards.get(structureResourceCost.getKey()) != null
+                        && resourceCards.get(structureResourceCost.getKey()) >= toIntExact(structureResourceCost.getValue()));
     }
 
 

@@ -25,6 +25,7 @@ public class CommandLineHandler {
     /**
      * A static helper method that prompts the user to enter an x and y coordinate
      *
+     * @param coordinateContext context printed to coordinates
      * @return a point with the entered coordinates
      * @author abuechi
      */
@@ -70,6 +71,7 @@ public class CommandLineHandler {
     /**
      * Prints the given message as is.
      *
+     * @param message the string to print as is
      * @author abuechi
      */
     public static void printMessage(String message) {

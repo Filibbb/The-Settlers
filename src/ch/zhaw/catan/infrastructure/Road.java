@@ -55,6 +55,7 @@ public class Road extends AbstractInfrastructure {
      * @param owner      player to whom the road should be assigned to.
      * @param startPoint start point where the road is being set to.
      * @param endPoint   end point where the road is being set to.
+     * @param board      current board instance
      * @return true if successfully built, false if not.
      * @author weberph5
      */
