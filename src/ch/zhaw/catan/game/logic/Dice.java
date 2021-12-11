@@ -16,6 +16,7 @@ import static ch.zhaw.catan.io.CommandLineHandler.promptNextUserAction;
  * @version 1.0.0
  */
 public class Dice {
+    private static final int MAX_BOUND = 6;
     private final Random random = new Random();
 
     /**
@@ -48,8 +49,8 @@ public class Dice {
      * @return the pseudo random value of the dice result.
      */
     public int throwDice() {
-        int firstDice = 1 + random.nextInt(6);
-        int secondDice = 1 + random.nextInt(6);
+        int firstDice = 1 + random.nextInt(MAX_BOUND);
+        int secondDice = 1 + random.nextInt(MAX_BOUND);
         return firstDice + secondDice;
     }
 }

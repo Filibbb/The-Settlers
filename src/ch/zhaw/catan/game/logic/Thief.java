@@ -34,9 +34,9 @@ public class Thief {
      */
     public void placeThiefOnField() {
         printMessage("You rolled a seven. Where do you want to place the thief?");
-        Point thiefPosition = promptCoordinates("Center of Field");
-        if (isValidThiefPlacement(thiefPosition)) {
-            setThiefPosition(thiefPosition);
+        final Point thiefCoordinates = promptCoordinates("Center of Field");
+        if (isValidThiefPlacement(thiefCoordinates)) {
+            thiefPosition = thiefCoordinates;
         } else {
             printMessage("Place the thief in the Center of a Field!");
             placeThiefOnField();

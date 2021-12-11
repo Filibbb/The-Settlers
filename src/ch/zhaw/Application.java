@@ -9,7 +9,7 @@ import ch.zhaw.catan.SettlersGame;
  * @version 1.0.0
  */
 public class Application {
-    private static final int WIN_POINTS = 5;
+    private static final int WIN_POINTS = 7;
 
     /**
      * Main Method to start the game. No arguments needed.
