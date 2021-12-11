@@ -18,12 +18,15 @@ Java basiertes Projekt von einer abgespeckten Version von die Siedler von Catan.
 Starten kannst du die Siedler von Catan entweder durch starten von Application.java#main in einer Entwicklungsumgebung oder du lädts dir die kompilierte .jar-Datei hier oder durch die Release Section herunter und führst sie auf deinem System (Java muss natürlich installiert sein) mit dem Befehl java -jar Siedler_PAPP.jar aus.
 
 # Klassendiagramm
-
 Das Klassendiagram ist hier im Wiki zu finden: 
 https://github.zhaw.ch/PM1-IT21taWIN-kars-pero-tebe/gruppec-papp-projekt3-siedler-von-catan/wiki
 
-# Disclaimer
+# Tests
+Die Unit-Tests wurden in JUnit-5 geschrieben und entsprechend möglichst prägnant benamst und mit einem kurzen Satz beschrieben was der Test genau testet. Die Tests wurden aufgeteilt pro Klasse für die sie die Logik testeten (siehe Testordner Struktur und Klassennamen). Nach Möglichkeit testen die Tests sowohl positive Testfälle als auch negative Testfälle. D.h. es wird auch getestet, was passiert bei "fehlerhaften" Inputs oder verwendungen von Logik. Der Test ist dann entsprechend benammst oder es ist vermerkt in den J-Docs. Wir versuchten mit unseren Tests, über wohldefinierte Schnittstellen möglichst sowohl die essentielle Spiellogik, als auch die Hilfsmethoden und das Board zu testen.
 
+**Alle Tests wurden am 12.12.2021 um 00:50 ausgeführt und liefen erfolgreich durch. **
+
+# Disclaimer
 ## Refactorings
 Wir haben versucht den bestehenden Code möglichst so zu refactoren, dass er einigermassen verwendbar ist. Allerdings konnten wir bei weitem nicht alles des bestehenden Codes refactoren gerade `HexBoard.java` ist kaum angefasst worden aus zeitlichen Gründen.
 
