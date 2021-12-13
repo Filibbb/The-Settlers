@@ -17,7 +17,7 @@ Java basiertes Projekt von einer abgespeckten Version von die Siedler von Catan.
 # Spiel starten
 Starten kannst du die Siedler von Catan durch starten von Application.java#main in einer Entwicklungsumgebung.
 Um das Projekt zu kompilieren kannst du javac benutzen: javac Application.java
-Danach kann das Projekt mit java Application.java gestartet werden
+Danach kann das Projekt mit java Application.class gestartet werden
 
 # Klassendiagramm
 Das Klassendiagram ist hier im Wiki zu finden: 
